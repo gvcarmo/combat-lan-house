@@ -115,7 +115,7 @@ export const News = () => {
         if (selectedFile) {
             formData.append('midia', selectedFile);
         } else {
-            formData.append('midia', editingPost.video_url);
+            formData.append('video_url', editingPost.video_url);
         }
 
         try {
