@@ -226,7 +226,7 @@ export const News = () => {
                 </div>
             )}
 
-            <div className="mb-2.5 flex items-center justify-center relative">
+            <div className="my-2.5 flex items-center justify-center relative">
 
                 <button
                     onClick={prevSlide}
