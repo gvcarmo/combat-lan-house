@@ -10,7 +10,7 @@ export const novoReview = async (req: Request, res: Response) => {
                 nome: nome || "Anônimo",
                 stars: Number(stars) || 5,
                 descricao: descricao || "",
-                avatar: req.file ? req.file.filename : ""
+                avatar: req.file ? req.file.path : ""
             }
         });
         return res.status(201).json(reviewCriado)
@@ -44,7 +44,7 @@ export const editReview = async (req: Request, res: Response) => {
         }
 
         if (req.file) {
-            reviewAtual.avatar = req.file.filename;
+            reviewAtual.avatar = req.file.path;
         } else if (avatar !== undefined) {
             reviewAtual.avatar = avatar;
         }

@@ -1,5 +1,5 @@
 import { AuthContext } from "../../contexts/AuthContext";
-import { useContext, useEffect, useState, type ReactHTMLElement, type ReactNode } from "react";
+import { useContext, useEffect, useState } from "react";
 import api from "../../services/api";
 import { ServiceItem } from "./ServiceItem";
 

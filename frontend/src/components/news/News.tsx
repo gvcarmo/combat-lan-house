@@ -2,12 +2,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import api from "../../services/api";
 import { AuthContext } from "../../contexts/AuthContext";
 
-const posts = [
-    { postedBy: '@combatlanhouse', date: 'postado 01 de Fevereiro de 2026', video: (<img src="./posts/post-01-02.png" width="250" height="444" />), description: 'A poeira interna, prejudica os coolers, fazendo com que ele esquente mais, e suas peças tenham de trabalhar dobrado! O seu computador também merece uma limpeza! Traga aqui na Combat que resolvemos tudo pra você, trocamos a pasta térmica e limpamos todas as peças, para melhorar o desempenho da máquina, sua fluidez, e valorizando sua vida útil!', link: '' },
-
-    { postedBy: '@combatlanhouse', date: 'postado 17 de Dezembro de 2025', video: (<iframe title="vimeo-player2" src="https://player.vimeo.com/video/1147430791?h=1b79dd185f" width="250" height="444" referrerPolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"></iframe>), description: 'Não deixe que suas folhas, ou documentos amassem ou rasguem! Acabou de emitir sua certidão, ou tem aquele documento que vai precisar guardar? Ou até mesmo uma folha que precisa ser preservada pelo seu conteúdo? Venha até nossa loja, e faça sua plastificação, e deixe seu documento novinho! =D', link: 'https://www.instagram.com/p/DSXzvoBETE0/' }
-]
-
 interface Post {
     id: string;
     data: string;

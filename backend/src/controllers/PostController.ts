@@ -5,7 +5,7 @@ export const novoPost = async (req: Request, res: Response) => {
     try {
         const { data, video_url, descricao, post_link } = req.body;
 
-        const midiaFinal = req.file ? req.file.filename : (video_url || "");
+        const midiaFinal = req.file ? req.file.path : (video_url || "");
 
         const postCriado = await prisma.post.create({
             data: {
@@ -49,7 +49,7 @@ export const editarPost = async (req: Request, res: Response) => {
         let midiaFinal = postAtual.video_url;
 
         if (req.file) {
-            midiaFinal = req.file.filename;
+            midiaFinal = req.file.path;
         } else if (video_url !== undefined) {
             midiaFinal = video_url;
         }

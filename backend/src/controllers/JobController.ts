@@ -16,7 +16,7 @@ export const listarServicos = async (req: Request, res: Response) => {
 
 export const postarServico = async (req: Request, res: Response) => {
     const { nome, descricao, infos_uteis } = req.body;
-    const icone = req.file ? req.file.filename : "";
+    const icone = req.file ? req.file.path : "";
 
     try {
         const ultimoJob = await prisma.job.findFirst({
@@ -58,7 +58,7 @@ export const editarServico = async (req: Request, res: Response) => {
         }
 
         if (req.file) {
-            dadosParaAtualizar.icone = req.file.filename;
+            dadosParaAtualizar.icone = req.file.path;
         }
 
         const jobAtualizado = await prisma.job.update({
