@@ -273,7 +273,7 @@ export const News = () => {
                                                 <input type="text"
                                                     className="w-37.5 bg-black border border-gray-600 p-1 text-sm text-gray-400"
                                                     value={editingPost.post_link}
-                                                    onChange={e => setEditingPost({ ...post, descricao: e.target.value })}
+                                                    onChange={e => setEditingPost({ ...post, post_link: e.target.value })}
                                                 />
                                             </div>
                                         </div>
