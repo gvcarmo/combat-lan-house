@@ -39,9 +39,16 @@ export const editarPost = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { data, video_url, descricao, post_link } = req.body;
 
-    try {
+    console.log("Editando ID:", id, "Body:", req.body, "File:", req.file?.path);
+
+try {
+        const idNumber = Number(id);
+        if (isNaN(idNumber)) {
+            return res.status(400).json({ message: "ID inválido" });
+        }
+
         const postAtual = await prisma.post.findUnique({
-            where: { id: Number(id) }
+            where: { id: idNumber }
         });
 
         if (!postAtual) {
@@ -50,24 +57,33 @@ export const editarPost = async (req: Request, res: Response) => {
 
         let midiaFinal = postAtual.video_url;
 
+        // Se houver novo arquivo (imagem/vídeo upload), usa o novo path do Cloudinary
         if (req.file) {
             midiaFinal = req.file.path;
-        } else if (video_url !== undefined) {
+        } 
+        // Se for um link de vídeo manual (YouTube/etc)
+        else if (video_url) {
             midiaFinal = video_url;
         }
 
         const postAtualizado = await prisma.post.update({
-            where: { id: Number(id) },
+            where: { id: idNumber },
             data: {
-                data: data ?? postAtual.data,
-                descricao: descricao ?? postAtual.descricao,
-                post_link: post_link ?? postAtual.post_link,
+                // Usamos o operador OR para manter o valor atual caso o novo venha vazio
+                data: data || postAtual.data,
+                descricao: descricao || postAtual.descricao,
+                post_link: post_link || postAtual.post_link,
                 video_url: midiaFinal
             }
         });
-        res.status(200).json(postAtualizado);
-    } catch (error) {
-        return res.status(500).send({ message: "Erro ao atualizar post." });
+
+        return res.status(200).json(postAtualizado);
+    } catch (error: any) {
+        console.error("ERRO NO UPDATE:", error);
+        return res.status(500).send({ 
+            message: "Erro ao atualizar post.",
+            error: error.message // Isso ajuda a debugar no Network do navegador
+        });
     }
 }
 
