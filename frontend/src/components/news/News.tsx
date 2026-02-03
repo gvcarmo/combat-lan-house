@@ -97,7 +97,7 @@ export const News = () => {
         }
     }
 
-    const handleEditPost = async (e: React.FormEvent) => {
+    const handleEditPost = async (id: number) => {
         e.preventDefault();
 
         if (!editingPost || !editingPost.id) {
@@ -119,7 +119,11 @@ export const News = () => {
         }
 
         try {
-            await api.put(`/posts/${editingPost.id}`, formData);
+            await api.put(`/posts/${id}`, formData {
+                headers: {
+                    'Content-type': 'multipart/form-data'
+                }
+            })
             alert("Post atualizado com sucesso!");
             setEditingPost(null);
             fetchPosts();
