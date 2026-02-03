@@ -1,0 +1,57 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Usuario {
+  id            Int       @id @default(autoincrement())
+  nick          String    @unique @db.VarChar(16)
+  nome_completo String    @db.VarChar(50)
+  email         String    @unique @db.VarChar(50)
+  senha         String    @db.VarChar(255)
+  nivel_acesso  String?   @default("user") @db.VarChar(20)
+  criado_em     DateTime? @default(now()) @db.Timestamp(6)
+  birthday      DateTime? @db.Date
+
+  @@map("usuarios")
+}
+
+model Job {
+  id          Int    @id @default(autoincrement())
+  icone       String @db.VarChar(16)
+  nome        String @unique @db.VarChar(50)
+  descricao   String @unique @db.VarChar(425)
+  infos_uteis String @db.VarChar(100)
+  ordem       Int    @default(0)
+
+  @@map("jobs")
+}
+
+model Post {
+  id        Int    @id @default(autoincrement())
+  data      String @db.VarChar(50)
+  video_url String @db.VarChar(100)
+  descricao String @db.VarChar(425)
+  post_link String @db.VarChar(100)
+
+  @@map("posts")
+}
+
+model Review {
+  id        Int    @id @default(autoincrement())
+  avatar    String @db.VarChar(100)
+  nome      String @db.VarChar(100)
+  stars     Int?   @default(1)
+  descricao String @db.VarChar(425)
+
+  @@map("reviews")
+}
