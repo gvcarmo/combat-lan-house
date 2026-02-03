@@ -141,7 +141,7 @@ export const News = () => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center">
+        <div className="mt-2.5 flex flex-col items-center justify-center">
             {isAdmin ?
                 <div className="my-2.5 py-5 flex flex-col items-center justify-center bg-neutral-dark-grayish min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71">
 
