@@ -312,7 +312,7 @@ export const Reviews = () => {
                                                 />
                                             </div>
 
-                                            <div className="flex flex-col gap-1 md:col-span-1">
+                                            <div className="flex gap-1 md:col-span-1">
                                                 <label className="text-xs text-gray-400 ml-1 font-bold">Avatar</label>
                                                 <div className="flex items-center gap-4 p-3 bg-neutral-grayish border border-gray-700">
                                                     <input
