@@ -106,7 +106,7 @@ export const Reviews = () => {
         formData.append('stars', String(newReview.stars));
         formData.append('descricao', newReview.descricao);
 
-        if (file) formData.append('avatar', file);
+        if (file) formData.append('midia', file);
 
         try {
             await api.post('/reviews', formData);
@@ -142,9 +142,9 @@ export const Reviews = () => {
         formData.append('descricao', editingReview.descricao);
 
         if (file) {
-            formData.append('avatar', file);
+            formData.append('midia', file);
         } else {
-            formData.append('avatar', editingReview.avatar);
+            formData.append('midia', editingReview.avatar);
         }
 
         try {
