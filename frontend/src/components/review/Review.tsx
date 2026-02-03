@@ -283,7 +283,7 @@ export const Reviews = () => {
                             <div key={review.id} className="min-[320px]:w-71 flex gap-5 p-5 max-[610px]:p-2 text-white bg-neutral-grayish border border-neutral-very-light-grayish "
                                 style={{ flex: `0 0 ${100}%` }}>
                                 {editingReview?.id === review.id ? (
-                                    <div className="text-white flex max-[610px]:flex-col  max-[610px]:gap-2 justify-between">
+                                    <div className="text-white flex flex-col  max-[610px]:gap-2 justify-between">
                                         <div className="flex flex-col gap-2">
                                             <div className="flex gap-2">
                                                 <label htmlFor="">Nome:</label>
