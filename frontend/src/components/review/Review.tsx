@@ -314,7 +314,7 @@ export const Reviews = () => {
 
                                             <div className="flex gap-1 md:col-span-1">
                                                 <label className="text-xs text-gray-400 ml-1 font-bold">Avatar</label>
-                                                <div className="flex items-center gap-4 p-3 bg-neutral-grayish border border-gray-700">
+                                                <div className="flex items-center gap-4 bg-neutral-grayish border border-gray-700">
                                                     <input
                                                         type="file"
                                                         accept="image/*"
