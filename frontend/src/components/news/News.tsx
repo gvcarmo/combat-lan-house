@@ -108,14 +108,14 @@ export const News = () => {
 
         const formData = new FormData();
 
-        formData.append('data', String(editingPost.data || ""));
-        formData.append('descricao', editingPost.descricao || "");
-        formData.append('post_link', editingPost.post_link || "");
+        formData.append('data', String(editingPost.data));
+        formData.append('descricao', editingPost.descricao);
+        formData.append('post_link', editingPost.post_link);
 
         if (selectedFile) {
             formData.append('midia', selectedFile);
         } else {
-            formData.append('video_url', editingPost.video_url);
+            formData.append('midia', editingPost.video_url);
         }
 
         try {

@@ -41,7 +41,7 @@ export const editarPost = async (req: Request, res: Response) => {
 
     console.log("Editando ID:", id, "Body:", req.body, "File:", req.file?.path);
 
-try {
+    try {
         const idNumber = Number(id);
         if (isNaN(idNumber)) {
             return res.status(400).json({ message: "ID inválido" });
@@ -59,7 +59,7 @@ try {
 
         if (req.file) {
             midiaFinal = req.file.path;
-        } 
+        }
         else if (video_url) {
             midiaFinal = video_url;
         }
@@ -77,7 +77,7 @@ try {
         return res.status(200).json(postAtualizado);
     } catch (error: any) {
         console.error("ERRO NO UPDATE:", error);
-        return res.status(500).send({ 
+        return res.status(500).send({
             message: "Erro ao atualizar post.",
             error: error.message
         });
