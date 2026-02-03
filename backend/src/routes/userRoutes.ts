@@ -59,8 +59,8 @@ routes.put('/jobs/:id', editarServico);
 routes.delete('/jobs/:id', deletarServico);
 
 routes.get('/reviews', getReviews);
-routes.post('/reviews', upload.single('avatar'), novoReview);
-routes.put('/reviews/:id', upload.single('avatar'), editReview);
+routes.post('/reviews', upload.single('midia'), novoReview);
+routes.put('/reviews/:id', upload.single('midia'), editReview);
 routes.put('/reviews/:id', editReview);
 routes.delete('/reviews/:id', deletarReview);
 
