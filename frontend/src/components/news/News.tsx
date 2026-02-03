@@ -141,7 +141,7 @@ export const News = () => {
     }
 
     return (
-        <div className="mt-2.5 flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center">
             {isAdmin ?
                 <div className="my-2.5 py-5 flex flex-col items-center justify-center bg-neutral-dark-grayish min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71">
 
@@ -169,7 +169,7 @@ export const News = () => {
                             />
                         </div>
                         <div className="flex flex-col gap-1">
-                            <label className="text-xs text-gray-400 ml-1">URL do Vídeo</label>
+                            <label className="text-xs text-gray-400 ml-1">URL do Vídeo ou Imagem</label>
                             <input
                                 className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
                                 placeholder="Ex: https://player.vimeo.com/video/1147430791?h=1b79dd185f"
@@ -178,7 +178,7 @@ export const News = () => {
                             />
                             <div className="flex gap-4 mb-2">
                                 <button type="button" onClick={() => setIsImageUpload(false)} className={!isImageUpload ? "text-orange-combat" : ""}>Link Vídeo</button>
-                                <button type="button" onClick={() => setIsImageUpload(true)} className={isImageUpload ? "text-orange-combat" : ""}>Upload Imagem</button>
+                                <button type="button" onClick={() => setIsImageUpload(true)} className={isImageUpload ? "text-orange-combat" : ""}>Upload Img (248x442)</button>
                             </div>
                             {isImageUpload ? (
                                 <input type="file" onChange={(e) => setSelectedFile(e.target.files?.[0] || null)} className="" />
