@@ -7,10 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Role {
-  USER
-}
-
 model Usuario {
   id            Int       @id @default(autoincrement())
   nick          String    @unique @db.VarChar(16)
@@ -26,11 +22,11 @@ model Usuario {
 
 model Job {
   id          Int    @id @default(autoincrement())
-  icone       String @db.VarChar(16)
+  icone       String @db.VarChar(500)
   nome        String @unique @db.VarChar(50)
   descricao   String @unique @db.VarChar(425)
-  infos_uteis String @db.VarChar(100)
-  ordem       Int    @default(0)
+  infos_uteis String @db.VarChar(200)
+  ordem       Int?   @default(0)
 
   @@map("jobs")
 }
@@ -38,7 +34,7 @@ model Job {
 model Post {
   id        Int    @id @default(autoincrement())
   data      String @db.VarChar(50)
-  video_url String @db.VarChar(100)
+  video_url String @db.VarChar(500)
   descricao String @db.VarChar(425)
   post_link String @db.VarChar(100)
 
