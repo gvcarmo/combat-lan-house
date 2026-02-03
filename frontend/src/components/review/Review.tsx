@@ -311,6 +311,30 @@ export const Reviews = () => {
                                                     onChange={e => setEditingReview({ ...review, descricao: e.target.value })}
                                                 />
                                             </div>
+
+                                            <div className="flex flex-col gap-1 md:col-span-1">
+                                                <label className="text-xs text-gray-400 ml-1 font-bold">Avatar</label>
+                                                <div className="flex items-center gap-4 p-3 bg-neutral-grayish border border-gray-700">
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={handleFileChange}
+                                                        className="hidden"
+                                                        id="file-upload"
+                                                    />
+                                                    <label
+                                                        htmlFor="file-upload"
+                                                        className="cursor-pointer bg-orange-combat px-4 py-1 text-xs font-bold hover:bg-white hover:text-orange-combat transition-all"
+                                                    >
+                                                        ESCOLHER ARQUIVO
+                                                    </label>
+
+                                                    {preview && (
+                                                        <img src={preview} alt="Preview" className="w-10 h-10 object-contain border border-gray-600" />
+                                                    )}
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         <div className="flex gap-2">
