@@ -238,16 +238,16 @@ export const Jobs = () => {
                         {jobs.slice(0, showList).map((job: any) => (
                             <ServiceItem key={job.id} job={job} isAdmin={!!isAdmin} onUpdate={fetchJobs} />
                         ))}
-                        <div className="flex flex-col items-center gap-5">
+                        <div className="flex justify-center items-center gap-2 max-[610px]:gap-0">
                             <button
                                 onClick={showMore}
-                                className="cursor-pointer ml-4 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-bold w-40"
+                                className="cursor-pointer ml-4 max-[610px]:ml-0 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 max-[610px]:px-2 py-2 font-semibold w-40"
                             >
                                 Mostrar mais
                             </button>
                             <button
                                 onClick={showLess}
-                                className="cursor-pointer ml-4 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-bold w-40"
+                                className="cursor-pointer ml-4 max-[610px]:ml-2 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-semibold w-40"
                             >
                                 Recolher
                             </button>
