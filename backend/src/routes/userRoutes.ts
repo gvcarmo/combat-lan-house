@@ -17,7 +17,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: async (req, file) => {
         return {
-            folder: 'combat_uploads',
+            folder: 'uploads',
             allowed_formats: ['jpg', 'png', 'jpeg', 'svg'],
             public_id: Date.now() + '-' + file.originalname.split('.')[0],
         };
