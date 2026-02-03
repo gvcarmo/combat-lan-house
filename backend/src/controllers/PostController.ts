@@ -57,11 +57,9 @@ try {
 
         let midiaFinal = postAtual.video_url;
 
-        // Se houver novo arquivo (imagem/vídeo upload), usa o novo path do Cloudinary
         if (req.file) {
             midiaFinal = req.file.path;
         } 
-        // Se for um link de vídeo manual (YouTube/etc)
         else if (video_url) {
             midiaFinal = video_url;
         }
@@ -69,7 +67,6 @@ try {
         const postAtualizado = await prisma.post.update({
             where: { id: idNumber },
             data: {
-                // Usamos o operador OR para manter o valor atual caso o novo venha vazio
                 data: data || postAtual.data,
                 descricao: descricao || postAtual.descricao,
                 post_link: post_link || postAtual.post_link,
@@ -82,7 +79,7 @@ try {
         console.error("ERRO NO UPDATE:", error);
         return res.status(500).send({ 
             message: "Erro ao atualizar post.",
-            error: error.message // Isso ajuda a debugar no Network do navegador
+            error: error.message
         });
     }
 }

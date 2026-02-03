@@ -48,6 +48,7 @@ routes.post('/usuarios', registrarUsuario);
 
 routes.get('/posts', getPosts);
 routes.post('/posts', upload.single('midia'), novoPost);
+routes.put('/posts/:id', upload.single('midia'), editarPost);
 routes.put('/posts/:id', editarPost);
 routes.delete('/posts/:id', deletarPost);
 
