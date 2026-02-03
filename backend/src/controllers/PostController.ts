@@ -17,8 +17,10 @@ export const novoPost = async (req: Request, res: Response) => {
         });
         return res.status(201).json(postCriado)
     } catch (error: any) {
-        console.error("ERRO NO BACKEND:", error);
-        return res.status(500).send({ message: "Falha ao cadastrar um post." })
+        console.error("ERRO DETALHADO NO BACKEND:", JSON.stringify(error, Object.getOwnPropertyNames(error)));
+        return res.status(500).send({
+            message: "Falha ao cadastrar um serviço.", debug: error.message
+        })
     }
 }
 
@@ -76,8 +78,8 @@ export const deletarPost = async (req: Request, res: Response) => {
         await prisma.post.delete({
             where: { id: Number(id) }
         });
-        return res.status(200).json({ message: "Post deletado com sucesso!"});
+        return res.status(200).json({ message: "Post deletado com sucesso!" });
     } catch (error) {
-        return res.status(500).json({ message: "Erro ao deletar post."})
+        return res.status(500).json({ message: "Erro ao deletar post." })
     }
 }

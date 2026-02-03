@@ -36,8 +36,8 @@ export const postarServico = async (req: Request, res: Response) => {
         return res.status(201).json(novoJob);
 
     } catch (error: any) {
-        console.error("ERRO DETALHADO NO BACKEND:", error);
-        return res.status(500).send({ message: "Falha ao cadastrar um serviço." })
+        console.error("ERRO DETALHADO NO BACKEND:", JSON.stringify(error, Object.getOwnPropertyNames(error)));
+        return res.status(500).send({ message: "Falha ao cadastrar um serviço.", debug: error.message })
     }
 };
 
