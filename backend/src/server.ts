@@ -36,4 +36,16 @@ setInterval(async () => {
     }
 }, 840000)
 
+app.use((err: any, req: any, res: any, next: any) => {
+  console.error("🔥 ERRO DO MIDDLEWARE:");
+  console.error("Mensagem:", err.message);
+  console.error("Stack:", err.stack);
+
+  res.status(500).json({
+    message: "Erro interno no servidor",
+    error: err.message, // Isso vai aparecer no seu navegador agora!
+    stack: err.stack
+  });
+});
+
 export default prisma
