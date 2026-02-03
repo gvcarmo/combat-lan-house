@@ -13,7 +13,7 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>("");
 
-    const API_URL = "http://localhost:3000/uploads/"
+//    const API_URL = "http://localhost:3000/uploads/"
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -89,13 +89,13 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
                         <label className="cursor-pointer flex flex-col items-center justify-center w-full h-full">
                             <input type="file" className="hidden" onChange={handleFileChange} />
                             {preview || job.icone ? (
-                                <img src={preview || `${API_URL}/${job.icone}`} className="w-10 h-10 object-contain opacity-50" />
+                                <img src={preview || job.icone} className="w-10 h-10 object-contain opacity-50" />
                             ) : <span className="text-[10px]">Upload</span>}
                             <span className="absolute bottom-0 text-[8px] bg-orange-combat w-full text-center">TROCAR</span>
                         </label>
                     ) : (                        
                         <img
-                            src={job.icone ? `${API_URL}${job.icone}` : "./icons/default-icon.svg"}
+                            src={job.icone ? job.icone : "./icons/default-icon.svg"}
                             alt={job.nome}
                             className="w-12 h-12 object-contain"
                         />
