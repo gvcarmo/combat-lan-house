@@ -87,11 +87,12 @@ export function Login() {
     const [senha, setSenha] = useState('');
     const navigate = useNavigate();
 
-    const { isLogged, isAdmin, user, login, logout } = useContext(AuthContext);
+    const { isLogged, isAdmin, user, login, logout, setGlobalLoading } = useContext(AuthContext);
 
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
 
+        setGlobalLoading(true);
         try {
             const response = await api.post('/login', { nick, senha });
 
@@ -111,6 +112,8 @@ export function Login() {
         } catch (error) {
             console.error(error);
             alert('Usuário ou senha incorretos.');
+        } finally {
+            setGlobalLoading(false);
         }
     }
 

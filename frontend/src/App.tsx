@@ -16,8 +16,8 @@ function App() {
 
   useEffect(() => {
     const acordarServidor = async () => {
-      setGlobalLoading(true);
 
+      setGlobalLoading(true);
       try {
         await api.get('/posts');
         await api.get('/jobs');
