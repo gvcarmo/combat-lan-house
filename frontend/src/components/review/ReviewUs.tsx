@@ -13,7 +13,7 @@ export const ReviewUs = () => {
                             <img className="w-6 h-6" src="./icons/star.png" alt="Star" />
                             <img className="w-6 h-6 mr-2.5" src="./icons/star.png" alt="Star" />
                         </div>
-                        <p>34 avaliações no Google</p>
+                        <p>36 avaliações no Google</p>
                     </div>
                 </div>
                     <a href="https://g.page/r/CfQRv300e4KLEAE/review" target="_blank" className="hover:bg-white hover:text-orange-combat duration-300 ease-in-out transition-all cursor-pointer text-white mr-10 max-[1140px]:ml-10 bg-orange-combat border border-neutral-dark-grayish hover:border-neutral-grayish px-10 py-5 font-bold text-[20px] hover:scale-103 max-[1140px]:my-5">Avalie-nos no Google!</a>
