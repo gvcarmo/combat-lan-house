@@ -22,7 +22,8 @@ export const News = () => {
     const [editingPost, setEditingPost] = useState<Post | null>(null);
     const [isEditing, setIsEditing] = useState(false);
 
-    const { isAdmin } = useContext(AuthContext);
+    const { isAdmin, setGlobalLoading } = useContext(AuthContext);
+    
 
     const totalItems = posts.length
 
@@ -82,6 +83,7 @@ export const News = () => {
             formData.append('midia', newPost.video_url);
         }
 
+        setGlobalLoading(true);
         try {
             await api.post('/posts', formData);
 
@@ -94,6 +96,7 @@ export const News = () => {
             alert("Erro ao cadastrar post.")
         } finally {
             setIsSending(false);
+            setGlobalLoading(false);
         }
     }
 
@@ -118,24 +121,31 @@ export const News = () => {
             formData.append('midia', editingPost.video_url);
         }
 
+        setGlobalLoading(true);
         try {
             await api.put(`/posts/${editingPost.id}`, formData);
             alert("Post atualizado com sucesso!");
-            setEditingPost(null);
             fetchPosts();
+            setEditingPost(null);
         } catch (err) {
             alert("Erro ao editar o post.");
+        } finally {
+            setGlobalLoading(false);
         }
     };
 
     const handleDelete = async (id: number | string) => {
         if (window.confirm(`Tem certeza que deseja excluir este post?`)) {
+
+            setGlobalLoading(true);
             try {
                 await api.delete(`/posts/${id}`);
                 alert("Post excluído!");
                 fetchPosts();
             } catch (err) {
                 alert("Erro ao excluir post.");
+            } finally {
+                setGlobalLoading(false);
             }
         }
     }

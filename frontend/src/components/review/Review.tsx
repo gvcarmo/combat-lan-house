@@ -2,19 +2,6 @@ import { useRef, useEffect, useState, useContext } from "react";
 import api from "../../services/api";
 import { AuthContext } from "../../contexts/AuthContext";
 
-// const review = [
-//     { icon: './test/01.svg', name: 'Antonio Carlos Alvino', stars: 5, description: 'Top ! atendimento nota 10 sempre' },
-//     { icon: './test/03.svg', name: 'Gustavo Donizetti', stars: 5, description: 'Excelente' },
-//     { icon: './test/02.svg', name: 'Eliana Lemos', stars: 5, description: 'Ótima!' },
-//     { icon: './test/04.png', name: 'Luzia Ferreira Sampaio', stars: 5, description: 'Ótimo atendimento' },
-//     { icon: './test/05.png', name: 'Matheus Cassimiro dias', stars: 5, description: 'Muito bom' },
-//     { icon: './test/06.png', name: 'Emanuel Carlos', stars: 5, description: 'Melhor que tem' },
-//     { icon: './test/07.png', name: 'Andre11 Rodrigues', stars: 5, description: 'Excelente qualidade' },
-//     { icon: './test/08.png', name: 'Luiz Humberto', stars: 5, description: 'Ótima' },
-//     { icon: './test/09.png', name: 'Vanessa Jeremias Rodrigues', stars: 5, description: 'Excelente' },
-//     { icon: './test/10.png', name: 'Henrique Ferraz', stars: 5, description: 'Pessoas boas e gentis' },
-// ]
-
 interface Review {
     id: number;
     avatar: string;
@@ -34,8 +21,7 @@ export const Reviews = () => {
     const [editingReview, setEditingReview] = useState<Review | null>(null);
     const [isEditing, setIsEditing] = useState(false);
 
-
-    const { isAdmin } = useContext(AuthContext);
+    const { isAdmin, setGlobalLoading } = useContext(AuthContext);
 
     const totalItems = reviews.length
     let itemsVisible = 3;
@@ -60,17 +46,30 @@ export const Reviews = () => {
     }
 
     const canPrev = currentIndex > 0
-    const canNext = currentIndex < maxIndex
+    const canNext = totalItems > itemsVisible;
 
     const containerRef = useRef(null);
 
     useEffect(() => {
+        api.get('/reviews').then(res => setReviews(res.data));
+    });
+
+    useEffect(() => {
+        fetchReviews();
+    }, []);
+
+    useEffect(() => {
+        if (isEditing || showAddForm || editingReview !== null || totalItems <= itemsVisible) {
+            return;
+        }
+
         const timer = setInterval(() => {
             nextSlide();
         }, 4000);
 
         return () => clearInterval(timer);
-    }, [currentIndex]);
+
+    }, [currentIndex, isEditing, showAddForm, editingReview, totalItems]);
 
     const [newReview, setNewReview] = useState({
         avatar: '',
@@ -86,10 +85,6 @@ export const Reviews = () => {
             setPreview(URL.createObjectURL(selectedFile));
         }
     }
-
-    useEffect(() => {
-        api.get('/reviews').then(res => setReviews(res.data));
-    }, []);
 
     const fetchReviews = async () => {
         const res = await api.get('/reviews');
@@ -108,6 +103,7 @@ export const Reviews = () => {
 
         if (file) formData.append('midia', file);
 
+        setGlobalLoading(true);
         try {
             await api.post('/reviews', formData);
 
@@ -123,6 +119,7 @@ export const Reviews = () => {
             alert("Erro no upload.");
         } finally {
             setIsSending(false);
+            setGlobalLoading(false);
         }
     }
 
@@ -147,6 +144,7 @@ export const Reviews = () => {
             formData.append('midia', editingReview.avatar);
         }
 
+        setGlobalLoading(true);
         try {
             await api.put(`/reviews/${editingReview.id}`, formData);
             alert("Avaliação atualizada com sucesso!");
@@ -154,17 +152,23 @@ export const Reviews = () => {
             fetchReviews();
         } catch (err) {
             alert("Erro ao editar o avaliação.");
+        } finally {
+            setGlobalLoading(false);
         }
     }
 
     const handleDelete = async (id: number | string) => {
         if (window.confirm(`Tem certeza que deseja excluir esta avaliação?`)) {
+
+            setGlobalLoading(true);
             try {
                 await api.delete(`/reviews/${id}`);
                 alert("Avaliação excluída!");
                 fetchReviews();
             } catch (err) {
                 alert("Erro ao excluir avaliação.")
+            } finally {
+                setGlobalLoading(false);
             }
         }
     }
@@ -276,7 +280,7 @@ export const Reviews = () => {
                 </button>
 
                 <div className="min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71 overflow-hidden flex mb-2.5" ref={containerRef}>
-                    <div className="min-[1139px]:w-92.5 min-[610px]:w-69 min-[320px]:w-70 carousel-list flex gap-2.5 h-47.5 border border-neutral-very-light-grayish"
+                    <div className="min-[1139px]:w-92.5 min-[610px]:w-69 min-[320px]:w-70 carousel-list flex gap-2.5 h-47.5 border border-neutral-very-light-grayish transition-transform duration-500 ease-in-out"
                         style={{ transform: `translateX(-${currentIndex * (102.8)}%)` }}>
 
                         {reviews.map((review) => (

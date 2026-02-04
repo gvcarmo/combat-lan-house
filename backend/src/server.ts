@@ -43,7 +43,7 @@ app.use((err: any, req: any, res: any, next: any) => {
 
   res.status(500).json({
     message: "Erro interno no servidor",
-    error: err.message, // Isso vai aparecer no seu navegador agora!
+    error: err.message,
     stack: err.stack
   });
 });

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import api from "../../services/api";
+import { AuthContext } from "../../contexts/AuthContext";
 
 interface JobProps {
     job: any;
@@ -13,7 +14,9 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>("");
 
-//    const API_URL = "http://localhost:3000/uploads/"
+    const { setGlobalLoading } = useContext(AuthContext);
+
+    //    const API_URL = "http://localhost:3000/uploads/"
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -30,9 +33,10 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
         formData.append('nome', editData.nome || "");
         formData.append('descricao', editData.descricao || "");
         formData.append('infos_uteis', editData.infos_uteis || "");
-        
+
         if (selectedFile) formData.append('icone', selectedFile);
 
+        setGlobalLoading(true);
         try {
             await api.put(`/jobs/${job.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
@@ -44,27 +48,37 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
         } catch (err: any) {
             console.error("Erro na resposta da API:", err.response?.data || err.message);
             alert("Erro ao atualizar serviço.");
+        } finally {
+            setGlobalLoading(false);
         }
     };
 
     const handleDelete = async () => {
         if (window.confirm(`Tem certeza que deseja excluir o serviço "${job.nome}"?`)) {
+
+            setGlobalLoading(true);
             try {
                 await api.delete(`/jobs/${job.id}`);
                 onUpdate();
                 alert("Serviço excluído!");
             } catch (err) {
                 alert("Erro ao excluir serviço.");
+            } finally {
+                setGlobalLoading(false);
             }
         }
     };
 
     const handleMover = async (direcao: 'subir' | 'descer') => {
+
+        setGlobalLoading(true);
         try {
             await api.patch(`/jobs/${job.id}/ordem`, { direcao });
             onUpdate();
         } catch (err) {
             console.error("Erro ao mover item");
+        } finally {
+            setGlobalLoading(false);
         }
     };
 
@@ -93,7 +107,7 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
                             ) : <span className="text-[10px]">Upload</span>}
                             <span className="absolute bottom-0 text-[8px] bg-orange-combat w-full text-center">TROCAR</span>
                         </label>
-                    ) : (                        
+                    ) : (
                         <img
                             src={job.icone ? job.icone : "./icons/default-icon.svg"}
                             alt={job.nome}

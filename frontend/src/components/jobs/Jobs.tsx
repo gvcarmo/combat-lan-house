@@ -14,7 +14,7 @@ interface Job {
 
 export const Jobs = () => {
 
-    const { isAdmin } = useContext(AuthContext);
+    const { isAdmin, setGlobalLoading } = useContext(AuthContext);
     const [jobs, setJobs] = useState<Job[]>([]);
     const [showAddForm, setShowAddForm] = useState(false);
 
@@ -80,6 +80,7 @@ export const Jobs = () => {
         formData.append('infos_uteis', newJob.infos_uteis);
         if (file) formData.append('icone', file);
 
+        setGlobalLoading(true);
         try {
             const response = await api.post('/jobs', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
@@ -99,6 +100,7 @@ export const Jobs = () => {
             alert("Erro no upload");
         } finally {
             setIsSending(false);
+            setGlobalLoading(false);
         }
     }
 

@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, type ReactNode } from 'react';
+import { Loader } from '../components/loader/Loader';
 
 interface User {
     id: number;
@@ -12,12 +13,16 @@ interface AuthContextData {
     isAdmin: boolean;
     login: (userData: User) => void;
     logout: () => void;
+    globalLoading: boolean;
+    setGlobalLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState< User | null>(null);
+    const [user, setUser] = useState<User | null>(null);
+
+    const [globalLoading, setGlobalLoading] = useState(false);
 
     useEffect(() => {
 
@@ -33,16 +38,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = (userData: User) => {
         setUser(userData);
+        
+        localStorage.setItem('@CombatLan:user', JSON.stringify(userData));
     };
 
     const logout = () => {
         localStorage.removeItem('@CombatLan:token');
         localStorage.removeItem('@CombatLan:user');
-        setUser(null);        
+        setUser(null);
     }
 
     return (
-        <AuthContext.Provider value={{ user, isLogged, isAdmin, login, logout }}>
+        <AuthContext.Provider value={{ user, isLogged, isAdmin, login, logout, globalLoading, setGlobalLoading }}>
+            {globalLoading && <Loader />}
             {children}
         </AuthContext.Provider>
     )
