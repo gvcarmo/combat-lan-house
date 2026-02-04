@@ -11,7 +11,7 @@ export const Footer = () => {
                         <div className="w-74.25 h-37.5 border border-neutral-border-light-color text-center ">
                             <p className="font-bold mt-4.75 mb-2.5">HORÁRIO DE FUNCIONAMENTO</p>
                             <p>DE <span className="font-bold ">SEGUNDA</span> À <span className="font-bold">SEXTA</span><br /> DAS <span className="font-bold">9H</span> AO <span className="font-bold">12H</span><br />
-                                DAS <span className="font-bold">13H</span> ÀS <span className="font-bold">18H</span></p>
+                                DAS <span className="font-bold">13H30</span> ÀS <span className="font-bold">18H</span></p>
                         </div>
 
                         <div className="w-74.25 h-37.5 border border-neutral-border-light-color text-center ">
