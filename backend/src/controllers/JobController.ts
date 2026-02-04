@@ -22,7 +22,7 @@ export const postarServico = async (req: Request, res: Response) => {
         const ultimoJob = await prisma.job.findFirst({
             orderBy: { ordem: 'desc' }
         });
-        const proximaOrdem = ultimoJob ? ultimoJob.ordem + 1 : 1;
+        const proximaOrdem = ultimoJob ? (ultimoJob.ordem ?? 0) + 1 : 1;
         const novoJob = await prisma.job.create({
             data: {
                 nome: String(nome),
@@ -93,9 +93,11 @@ export const trocarOrdem = async (req: Request, res: Response) => {
         const jobAtual = await prisma.job.findUnique({ where: { id: Number(id) } });
         if (!jobAtual) return res.status(404).send("Não encontrado");
 
+        const ordemAtual = jobAtual.ordem ?? 0;
+
         const vizinho = await prisma.job.findFirst({
             where: {
-                ordem: direcao === 'subir' ? { lt: jobAtual.ordem } : { gt: jobAtual.ordem }
+                ordem: direcao === 'subir' ? { lt: ordemAtual } : { gt: ordemAtual }
             },
             orderBy: {
                 ordem: direcao === 'subir' ? 'desc' : 'asc'
