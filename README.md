@@ -9,7 +9,7 @@ Logo em seguida, temos uma parte destinada a avaliações para o cliente avaliar
 e um breve carrocel de avaliações que também são feitas de acordo com a vontade da cliente, ela pode adicionar, editar ou excluir (quando logada como administradora)
 e por ultimo nosso rodapé, com os créditos, horário de funcionamento, contato e localização da loja.
 
-![Gif do website](./combat-lan-house.gif)
+![Gif do website](combat-lan-house.gif)
 
 ## Tecnologias utilizadas
 ### Frontend:
