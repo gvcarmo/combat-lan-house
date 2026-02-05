@@ -9,7 +9,14 @@ Logo em seguida, temos uma parte destinada a avaliações para o cliente avaliar
 e um breve carrocel de avaliações que também são feitas de acordo com a vontade da cliente, ela pode adicionar, editar ou excluir (quando logada como administradora)
 e por ultimo nosso rodapé, com os créditos, horário de funcionamento, contato e localização da loja.
 
-![Gif do website](combat-lan-house.gif)
+O site está em desenvolvimento, e estou trabalhando nele diariamente com a dona atual da loja e minha cliente. O site foi hospedado gratuitamente nas plataformas:
+- Git / Github - aqui está o projeto com ambas as partes, frontend e backend;
+- Railway - onde injetei o banco de dados;
+- Vercel - onde está sendo hospedado o frontend;
+- Render - aqui estou hospedando o backend do site;
+- Cloudinary - aqui é onde está sendo carregada as imagens que estão recebendo upload no site, nas Notícias, Serviços e Avaliações
+- 
+![Gif do website](./images/combat-lan-house.gif)
 
 ## Tecnologias utilizadas
 ### Frontend:
@@ -25,10 +32,3 @@ e por ultimo nosso rodapé, com os créditos, horário de funcionamento, contato
 - PostgreSQL
 - Render / Cloudinary
 - Git / Github
-
-O site está em desenvolvimento, e estou trabalhando nele diariamente com a dona atual da loja e minha cliente. O site foi hospedado gratuitamente nas plataformas:
-- Git / Github - aqui está o projeto com ambas as partes, frontend e backend;
-- Railway - onde injetei o banco de dados;
-- Vercel - onde está sendo hospedado o frontend;
-- Render - aqui estou hospedando o backend do site;
-- Cloudinary - aqui é onde está sendo carregada as imagens que estão recebendo upload no site, nas Notícias, Serviços e Avaliações
