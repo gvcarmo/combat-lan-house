@@ -15,8 +15,8 @@ O site está em desenvolvimento, e estou trabalhando nele diariamente com a dona
 - Vercel - onde está sendo hospedado o frontend;
 - Render - aqui estou hospedando o backend do site;
 - Cloudinary - aqui é onde está sendo carregada as imagens que estão recebendo upload no site, nas Notícias, Serviços e Avaliações
-- 
-![Gif do website](./images/combat-lan-house.gif)
+
+![Gif do website](./combat-lan-house.gif)
 
 ## Tecnologias utilizadas
 ### Frontend:
