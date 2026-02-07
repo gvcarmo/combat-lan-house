@@ -5,7 +5,6 @@ import { PrismaClient } from '@prisma/client/index.js'
 import { PrismaPg } from '@prisma/adapter-pg'
 import routes from './routes/userRoutes.js';
 import cors from 'cors';
-import path from 'path';
 import axios from 'axios';
 
 const port = 3000
@@ -23,7 +22,7 @@ app.listen(port, () => {
     console.log("Servidor rodando na porta 3000")
 })
 
-const APP_URL = process.env.APP_URL
+const APP_URL = 'https://combat-lan-house.onrender.com'
 
 setInterval(async () => {
     if(APP_URL) {
@@ -35,17 +34,5 @@ setInterval(async () => {
         }
     }
 }, 840000)
-
-app.use((err: any, req: any, res: any, next: any) => {
-  console.error("🔥 ERRO DO MIDDLEWARE:");
-  console.error("Mensagem:", err.message);
-  console.error("Stack:", err.stack);
-
-  res.status(500).json({
-    message: "Erro interno no servidor",
-    error: err.message,
-    stack: err.stack
-  });
-});
 
 export default prisma

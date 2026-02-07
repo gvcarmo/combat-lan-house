@@ -155,7 +155,7 @@ export const News = () => {
             {isAdmin ?
                 <div className="my-2.5 py-5 flex flex-col items-center justify-center bg-neutral-dark-grayish min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71">
 
-                    <button className="ml-4 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-bold" onClick={() => setShowAddForm(!showAddForm)}>{showAddForm ? "Fechar" : "+ Novo Post"}</button>
+                    <button className="cursor-pointer ml-4 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-bold" onClick={() => setShowAddForm(!showAddForm)}>{showAddForm ? "Fechar" : "+ Novo Post"}</button>
                 </div>
 
                 : ''
@@ -220,14 +220,14 @@ export const News = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowAddForm(false)}
-                                className="px-6 py-2 border border-gray-600 hover:bg-gray-800 transition-all uppercase text-sm"
+                                className="cursor-pointer px-6 py-2 border border-gray-600 hover:bg-gray-800 transition-all uppercase text-sm"
                             >
                                 Cancelar
                             </button>
                             <button
                                 disabled={isSending}
                                 type="submit"
-                                className={`px-10 py-2 bg-orange-combat hover:bg-white hover:text-orange-combat font-bold transition-all uppercase text-sm ${isSending ? 'opacity-50' : ''}`}
+                                className={`cursor-pointer px-10 py-2 bg-orange-combat hover:bg-white hover:text-orange-combat font-bold transition-all uppercase text-sm ${isSending ? 'opacity-50' : ''}`}
                             >
                                 {isSending ? 'Salvando...' : 'Salvar Post'}
                             </button>
@@ -289,8 +289,8 @@ export const News = () => {
                                         </div>
 
                                         <div className="flex gap-2">
-                                            <button className="bg-green-700 text-white px-3 py-1 text-[10px] font-bold h-5" onClick={handleEditPost}>SALVAR</button>
-                                            <button onClick={() => setEditingPost(null)} className="bg-gray-700 text-white px-3 py-1 text-[10px] font-bold h-5">CANCELAR</button>
+                                            <button className="cursor-pointer bg-green-700 text-white px-3 py-1 text-[10px] font-bold h-5 hover:bg-green-400 transition-all duration-250 ease-in-out" onClick={handleEditPost}>SALVAR</button>
+                                            <button onClick={() => setEditingPost(null)} className="cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-400 bg-gray-700 text-white px-3 py-1 text-[10px] font-bold h-5">CANCELAR</button>
                                         </div>
                                     </div>
                                 ) : (
@@ -301,13 +301,13 @@ export const News = () => {
                                             {isAdmin && !isEditing && (
                                                 <>
                                                     <button onClick={() => setEditingPost({ ...post })}
-                                                        className="text-[10px] bg-white text-black px-2 py-1 font-bold hover:bg-orange-combat hover:text-white transition-all"
+                                                        className="cursor-pointer text-[10px] bg-white text-black px-2 py-1 font-bold hover:bg-orange-combat hover:text-white transition-all"
                                                     >
                                                         EDITAR
                                                     </button>
 
                                                     <button onClick={() => handleDelete(post.id)}
-                                                        className="text-[10px] bg-red-600 text-white px-2 py-1 font-bold hover:bg-white hover:text-red-600 transition-all"
+                                                        className="cursor-pointer text-[10px] bg-red-600 text-white px-2 py-1 font-bold hover:bg-white hover:text-red-600 transition-all"
                                                     >
                                                         EXCLUIR
                                                     </button>
@@ -344,8 +344,9 @@ export const News = () => {
 
                                     <div className="w-62.5 text-white flex flex-col justify-between">
                                         <p className="mt-2.5">{post.descricao}</p>
-                                        <div>
-                                            <span className="font-semibold">Instagram: </span><a className="hover:text-orange-combat transition-all duration-150 ease-in-out" href={post.post_link} target="_blank">@combatlanhouse</a>
+                                        <div className="flex items-center gap-1">
+                                            <img className="w-5" src="./icons/insta.svg" alt="Insta" />
+                                            <span className="font-semibold">Insta: </span><a className="hover:text-orange-combat transition-all duration-150 ease-in-out" href={post.post_link} target="_blank">@combatlanhouse</a>
                                         </div>
                                     </div>
                                 </div>
