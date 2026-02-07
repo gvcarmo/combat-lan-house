@@ -52,7 +52,7 @@ export const Reviews = () => {
 
     useEffect(() => {
         api.get('/reviews').then(res => setReviews(res.data));
-    });
+    }, []);
 
     useEffect(() => {
         fetchReviews();

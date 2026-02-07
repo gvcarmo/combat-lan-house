@@ -80,7 +80,7 @@ export const News = () => {
         if (isImageUpload && selectedFile) {
             formData.append('midia', selectedFile);
         } else {
-            formData.append('midia', newPost.video_url);
+            formData.append('video_url', newPost.video_url);
         }
 
         setGlobalLoading(true);
@@ -118,7 +118,7 @@ export const News = () => {
         if (selectedFile) {
             formData.append('midia', selectedFile);
         } else {
-            formData.append('midia', editingPost.video_url);
+            formData.append('video_url', editingPost.video_url);
         }
 
         setGlobalLoading(true);
@@ -324,6 +324,7 @@ export const News = () => {
                                         {post.video_url.startsWith('http') ? (
                                             <iframe
                                                 allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                                                referrerPolicy="strict-origin-when-cross-origin"
                                                 src={post.video_url}
                                                 className="w-full h-full pointer-events-none"
                                                 title="Video post"
@@ -337,7 +338,6 @@ export const News = () => {
                                                     e.currentTarget.onerror = null;
 
                                                     e.currentTarget.src = "https://placehold.co/250x444?text=Sem+Imagem";
-
                                                 }}
                                             />
                                         )}
@@ -351,7 +351,6 @@ export const News = () => {
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         ))}
                     </div>
