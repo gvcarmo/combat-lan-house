@@ -324,7 +324,7 @@ export const News = () => {
                                         {post.video_url.startsWith('https') ? (
                                             <iframe 
                                                 src={post.video_url}
-                                                className="w-full h-full pointer-events-none"
+                                                className="pointer-events-none"
                                                 width="250" height="444"
                                                 allow="autoplay; fullscreen"
                                                 allowFullScreen
