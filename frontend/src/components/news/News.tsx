@@ -321,13 +321,12 @@ export const News = () => {
 
                                 <div className="p-4 flex min-[320px]:flex-col min-[610px]:flex-row gap-4 bg-neutral-grayish border border-neutral-very-light-grayish">
                                     <div className="w-62.5 h-111 flex items-center justify-center overflow-hidden border border-gray-800">
-                                        {post.video_url.startsWith('https') ? (
-                                            <iframe 
+                                        {post.video_url.startsWith('http') ? (
+                                            <iframe
+                                                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                                                 src={post.video_url}
-                                                className="pointer-events-none"
-                                                width="250" height="444"
-                                                allow="autoplay; fullscreen"
-                                                allowFullScreen
+                                                className="w-full h-full pointer-events-none"
+                                                title="Video post"
                                             />
                                         ) : (
                                             <img
