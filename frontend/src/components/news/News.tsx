@@ -23,7 +23,7 @@ export const News = () => {
     const [isEditing, setIsEditing] = useState(false);
 
     const { isAdmin, setGlobalLoading } = useContext(AuthContext);
-    
+
 
     const totalItems = posts.length
 
@@ -321,11 +321,13 @@ export const News = () => {
 
                                 <div className="p-4 flex min-[320px]:flex-col min-[610px]:flex-row gap-4 bg-neutral-grayish border border-neutral-very-light-grayish">
                                     <div className="w-62.5 h-111 flex items-center justify-center overflow-hidden border border-gray-800">
-                                        {post.video_url.startsWith('http') ? (
-                                            <iframe
+                                        {post.video_url.startsWith('https') ? (
+                                            <iframe 
                                                 src={post.video_url}
                                                 className="w-full h-full pointer-events-none"
                                                 title="Video post"
+                                                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                                                referrerPolicy="strict-origin-when-cross-origin"
                                             />
                                         ) : (
                                             <img
