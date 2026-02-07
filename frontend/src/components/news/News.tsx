@@ -325,9 +325,9 @@ export const News = () => {
                                             <iframe 
                                                 src={post.video_url}
                                                 className="w-full h-full pointer-events-none"
-                                                title="Video post"
-                                                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                                                referrerPolicy="strict-origin-when-cross-origin"
+                                                width="250" height="444"
+                                                allow="autoplay; fullscreen"
+                                                allowFullScreen
                                             />
                                         ) : (
                                             <img
