@@ -101,6 +101,14 @@ export const Reviews = () => {
         formData.append('stars', String(newReview.stars));
         formData.append('descricao', newReview.descricao);
 
+
+        if (!file) {
+            alert("Erro ao cadastrar avaliação, é obrigatório carregar uma imagem.");
+            setIsSending(false);
+            setGlobalLoading(false);
+            return;
+        }
+
         if (file) formData.append('midia', file);
 
         setGlobalLoading(true);
