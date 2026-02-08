@@ -286,6 +286,26 @@ export const News = () => {
                                                     onChange={e => setEditingPost({ ...post, post_link: e.target.value })}
                                                 />
                                             </div>
+
+                                            <div className="flex flex-col gap-1">
+                                                <label className="text-xs text-gray-400 ml-1">Alterar URL ou Imagem</label>
+                                                <input
+                                                    className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
+                                                    placeholder="Ex: https://player.vimeo.com/video/1147430791?h=1b79dd185f"
+                                                    value={editingPost.video_url}
+                                                    onChange={e => setNewPost({ ...editingPost, video_url: e.target.value })}
+                                                />
+                                                <div className="flex gap-4 mb-2">
+                                                    <button type="button" onClick={() => setIsImageUpload(false)} className={!isImageUpload ? "text-orange-combat" : ""}>Link Vídeo</button>
+                                                    <button type="button" onClick={() => setIsImageUpload(true)} className={isImageUpload ? "text-orange-combat" : ""}>Upload Img (248x442)</button>
+                                                </div>
+                                                {isImageUpload ? (
+                                                    <input type="file" onChange={(e) => setSelectedFile(e.target.files?.[0] || null)} className="" />
+                                                ) : (
+                                                    <input value={editingPost.video_url} onChange={(e) => setNewPost({ ...editingPost, video_url: e.target.value })} placeholder="URL do Vídeo" className="..." />
+                                                )}
+                                            </div>
+
                                         </div>
 
                                         <div className="flex gap-2">
@@ -320,15 +340,13 @@ export const News = () => {
                                 )}
 
                                 <div className="p-4 flex min-[320px]:flex-col min-[610px]:flex-row gap-4 bg-neutral-grayish border border-neutral-very-light-grayish">
-                                    <div className="w-62.5 h-111 flex items-center justify-center overflow-hidden border border-gray-800">
+                                    <div className="relative w-62.5 h-111 flex items-center justify-center overflow-hidden border border-gray-800">
                                         {post.video_url.startsWith('http') ? (
-                                            <iframe
-                                                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                                                referrerPolicy="strict-origin-when-cross-origin"
-                                                src={post.video_url}
-                                                className="w-full h-full pointer-events-none"
-                                                title="Video post"
-                                            />
+
+                                            <iframe src={post.video_url}
+                                            className="w-full h-full" 
+                                            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerPolicy="strict-origin-when-cross-origin" title="pub_17-12"></iframe>
+
                                         ) : (
                                             <img
                                                 src={post.video_url.startsWith('http') ? post.video_url : `${post.video_url}`}
