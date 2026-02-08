@@ -245,7 +245,7 @@ export const Jobs = () => {
                                 onClick={showMore}
                                 className="cursor-pointer ml-4 max-[610px]:ml-0 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 max-[610px]:px-2 py-2 font-semibold w-40"
                             >
-                                Mostrar mais
+                                Mostrar + 5
                             </button>
                             <button
                                 onClick={showLess}
