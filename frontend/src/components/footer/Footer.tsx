@@ -5,7 +5,7 @@ export const Footer = () => {
                 <div className="min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71 h-full flex min-[1139px]:flex-row min-[320px]:flex-col justify-center items-center gap-8 my-2.5">
                     <div className="text-white flex items-center">
                         <img className="hover:scale-105 transition-all uration-300 ease-in-out" src="./logo-c.svg" alt="Logo-C" />
-                        <p className="pt-4.5 pl-5">Copyright © <span className="text-orange-combat">Combat Lan House</span><br /> Todos os direitos e conteúdos reservado<br /> à marca Combat e a seus respectivos donos. <span className="text-[12px]">Website criado por: <a href="https://wa.me/+5534998641993" target="_blank"  className="hover:text-orange-combat transition-all duration-300 ease-in-out">Giovanni Vittorazze do Carmo</a></span></p>
+                        <p className="pt-4.5 pl-5">Copyright © <span className="text-orange-combat">Combat Lan House</span><br /> Todos os direitos e conteúdos reservado<br /> à marca Combat e a seus respectivos donos.</p>
                     </div>
                     <div className="text-white">
                         <div className="w-74.25 h-37.5 border border-neutral-border-light-color text-center ">
