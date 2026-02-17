@@ -1,21 +1,23 @@
 export const Footer = () => {
     return (
         <footer id="contact">
-            <div className="w-full flex justify-center h-75 min-[320px]:h-auto bg-linear-to-b from-[#2A2A2A] to-[#121111] border-t border-neutral-very-light-grayish">
+            <div className="w-full bottom-0 flex justify-center h-75 min-[320px]:h-auto bg-linear-to-b from-[#2A2A2A] to-[#121111] border-t border-neutral-very-light-grayish">
                 <div className="min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71 h-full flex min-[1139px]:flex-row min-[320px]:flex-col justify-center items-center gap-8 my-2.5">
                     <div className="text-white flex items-center">
-                        <img className="hover:scale-105 transition-all uration-300 ease-in-out" src="./logo-c.svg" alt="Logo-C" />
-                        <p className="pt-4.5 pl-5">Copyright © <span className="text-orange-combat">Combat Lan House</span><br /> Todos os direitos e conteúdos reservado<br /> à marca Combat e a seus respectivos donos. <span className="text-[12px]">Website criado por: <a href="https://wa.me/+5534998641993" target="_blank"  className="hover:text-orange-combat transition-all duration-300 ease-in-out">Giovanni Vittorazze do Carmo</a></span></p>
+                        <a href="/">
+                            <img className="w-16 h-21.25 hover:scale-105 transition-all uration-300 ease-in-out" src="./logo-c.svg" alt="Logo Combat Lan House - C" />
+                        </a>
+                        <p className="pt-4.5 pl-5">Copyright © <span className="text-orange-combat">Combat Lan House</span><br /> Todos os direitos e conteúdos reservado<br /> à marca Combat e a seus respectivos donos.</p>
                     </div>
                     <div className="text-white">
-                        <div className="w-74.25 h-37.5 border border-neutral-border-light-color text-center ">
-                            <p className="font-bold mt-4.75 mb-2.5">HORÁRIO DE FUNCIONAMENTO</p>
+                        <div className="w-74.25 h-37.5 border border-neutral-border-light-color text-center">
+                            <p className="font-bold mt-2.75 mb-2.5">HORÁRIO DE FUNCIONAMENTO DA <span className="text-orange-combat">LOJA PRESENCIAL</span></p>
                             <p>DE <span className="font-bold ">SEGUNDA</span> À <span className="font-bold">SEXTA</span><br /> DAS <span className="font-bold">9H</span> AO <span className="font-bold">12H</span><br />
                                 DAS <span className="font-bold">13H30</span> ÀS <span className="font-bold">18H</span></p>
                         </div>
 
                         <div className="w-74.25 h-37.5 border border-neutral-border-light-color text-center ">
-                            <p className="font-bold mt-4.75 mb-2.5 pb-2">CONTATE-NOS</p>
+                            <p className="font-bold mt-4.75 mb-2.5 pb-2">CONTATE A <span className="text-orange-combat">LOJA PRESENCIAL</span></p>
                             <div className="flex justify-center gap-9">
                                 <a className="flex flex-col items-center" href="https://instagram.com/combatlanhouse" target="_blank">
                                     <svg width="85" height="61" viewBox="0 0 85 61" fill="none" xmlns="http://www.w3.org/2000/svg">

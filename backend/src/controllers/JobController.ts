@@ -15,7 +15,7 @@ export const listarServicos = async (req: Request, res: Response) => {
 }
 
 export const postarServico = async (req: Request, res: Response) => {
-    const { nome, descricao, infos_uteis } = req.body;
+    const { nome, descricao, infos_uteis, genero, preco, desc, total } = req.body;
     const icone = req.file ? req.file.path : "";
 
     try {
@@ -29,7 +29,11 @@ export const postarServico = async (req: Request, res: Response) => {
                 descricao: String(descricao),
                 infos_uteis: String(infos_uteis || ""),
                 icone: icone,
-                ordem: Number(proximaOrdem)
+                ordem: Number(proximaOrdem),
+                genero: genero,
+                preco: preco,
+                desc: desc,
+                total: total
             }
         });
 
@@ -44,13 +48,17 @@ export const postarServico = async (req: Request, res: Response) => {
 export const editarServico = async (req: Request, res: Response) => {
 
         const { id } = req.params;
-        const { nome, descricao, infos_uteis, ordem } = req.body
+        const { nome, descricao, infos_uteis, ordem, genero, preco, desc, total } = req.body
 
     try {
         const dadosParaAtualizar: any = {
             nome: nome,
             descricao: descricao,
             infos_uteis: infos_uteis || "",
+            genero: genero,
+            preco: preco,
+            desc: desc,
+            total: total
         };
 
         if (ordem !== undefined && ordem !== null) {

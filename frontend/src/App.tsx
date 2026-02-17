@@ -1,29 +1,36 @@
-import { BrowserRouter } from 'react-router-dom'
-import { CarouselJobs } from "./components/carouselJobs/CarouselJobs"
-import { Footer } from "./components/footer/Footer"
-import { Jobs } from "./components/jobs/Jobs"
-import { Menu } from "./components/menu/Menu"
-import { News } from "./components/news/News"
-import { Reviews } from "./components/review/Review"
-import { ReviewUs } from "./components/review/ReviewUs"
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
+import { HomePage } from './components/homePage/HomePage'
+import { Register } from './components/register/Register'
+import { ControlPanel } from './components/controlPanel/ControlPanel'
+import { ForgotPassword, ResetPassword } from './components/forgotPassword/ForgotPassword'
+import { FormularioDinamico } from './components/formularioDinamico/FormularioDinamico'
+import { RegisterPage } from './components/register/RegisterPage'
+import { MeusPedidos } from './components/controlPanel/MeusPedidos'
+import { VisualizarPedidoCurriculo } from './components/servicosForm/curriculo'
+import { AcessarPedido } from './components/controlPanelAdmin/AcessarPedido'
+import { EnviarMensagem } from './components/controlPanel/EnviarMensagem'
 
 function App() {
 
   return (
-    <section className="relative min-h-screen w-full bg-linear-to-r from-[#FF3300] via-[#FF5900] to-[#803100]">
       <AuthProvider>
         <BrowserRouter>
-          <Menu />
-          <CarouselJobs />
-          <News />
-          <Jobs />
-          <ReviewUs />
-          <Reviews />
-          <Footer />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<RegisterPage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/resetpassword/:token" element={<ResetPassword />} />
+            <Route path="/:nick" element={<ControlPanel />} />
+            <Route path="/meus-pedidos" element={<MeusPedidos />} />
+            <Route path="/pedido/:id" element={<AcessarPedido />} />
+            <Route path="/formulario/:serviceName" element={<FormularioDinamico />} />
+            <Route path="/formulario/:id/view" element={<VisualizarPedidoCurriculo />} />
+            <Route path="/messages" element={<EnviarMensagem />} />
+          </Routes>
         </BrowserRouter>
       </AuthProvider>
-    </section>
   )
 }
 

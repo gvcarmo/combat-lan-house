@@ -1,22 +1,24 @@
 import { useContext, useState } from "react";
 import api from "../../services/api";
 import { AuthContext } from "../../contexts/AuthContext";
+import { useNavigate } from 'react-router-dom';
 
 interface JobProps {
     job: any;
-    isAdmin: boolean;
     onUpdate?: any;
 }
 
-export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
+export const ServiceItem = ({ job, onUpdate }: JobProps) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState({ ...job });
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>("");
 
+    const { isAdmin, user, isLogged } = useContext(AuthContext);
+
     const { setGlobalLoading } = useContext(AuthContext);
 
-    //    const API_URL = "http://localhost:3000/uploads/"
+    const navigate = useNavigate();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -33,6 +35,10 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
         formData.append('nome', editData.nome || "");
         formData.append('descricao', editData.descricao || "");
         formData.append('infos_uteis', editData.infos_uteis || "");
+        formData.append('genero', editData.genero || "");
+        formData.append('preco', editData.preco || "");
+        formData.append('desc', editData.desc || "");
+        formData.append('total', editData.total || "");
 
         if (selectedFile) formData.append('icone', selectedFile);
 
@@ -82,6 +88,20 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
         }
     };
 
+    const createSlug = (text: string) => {
+        return text
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^\w\s-]/g, "")
+            .replace(/\s+/g, "-");
+    };
+
+    const handleSelectService = () => {
+        const slug = createSlug(job.nome);
+        navigate(`/formulario/${slug}`);
+    }
+
     return (
         <div className="max-w-262.5 border-b border-gray-800 p-4 max-[610px]:p-0 hover:bg-[#1a1a1a] transition-colors">
             <div className="flex items-center gap-4 max-[610px]:gap-0">
@@ -116,7 +136,6 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
                     )}
                 </div>
 
-                {/* ÁREA DE TEXTO */}
                 <div className="flex-1">
                     {isEditing ? (
 
@@ -138,6 +157,32 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
                                 value={editData.descricao}
                                 onChange={e => setEditData({ ...editData, descricao: e.target.value })}
                             />
+                            <div className="flex gap-3">
+                                <input
+                                    className="bg-black border border-gray-600 p-1 text-sm text-orange-combat"
+                                    value={editData.preco}
+                                    onChange={e => setEditData({ ...editData, preco: e.target.value })}
+                                />
+                                <input
+                                    className="bg-black border border-gray-600 p-1 text-sm text-orange-combat"
+                                    value={editData.desc}
+                                    onChange={e => setEditData({ ...editData, desc: e.target.value })}
+                                />
+                                <input
+                                    className="bg-black border border-gray-600 p-1 text-sm text-orange-combat"
+                                    value={editData.total}
+                                    onChange={e => setEditData({ ...editData, total: e.target.value })}
+                                />
+                            </div>
+                            <select
+                                className="bg-black border border-gray-600 p-1 text-sm text-white"
+                                value={editData.genero}
+                                onChange={e => setEditData({ ...editData, genero: e.target.value })}
+                            >
+                                <option value="">Selecione um gênero</option>
+                                <option value="fisico">Presencial</option>
+                                <option value="online">On-line</option>
+                            </select>
                             <input
                                 className="bg-black border border-gray-600 p-1 text-[10px] text-orange-pailed italic"
                                 value={editData.infos_uteis}
@@ -151,18 +196,28 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
                     ) : (
                         <>
                             <div className="flex min-w-0 justify-between items-start">
-                                <h3 className="text-xl font-bold text-orange-combat uppercase">{job.nome}</h3>
+                                <div className="flex items-center gap-3">
+                                    <h3 className="text-xl font-bold text-orange-combat uppercase">{job.nome}</h3>
+                                    {job.genero === 'online' && (
+                                        <button
+                                            onClick={handleSelectService}
+                                            className="cursor-pointer text-[12px] bg-white text-black px-2 h-5 font-bold hover:bg-orange-combat hover:text-white transition-all"
+                                        >
+                                            PEDIR
+                                        </button>
+                                    )}
+                                </div>
                                 {isAdmin && !isEditing && (
                                     <>
                                         <button
                                             onClick={() => setIsEditing(true)}
-                                            className="text-[10px] bg-white text-black px-2 py-1 font-bold hover:bg-orange-combat hover:text-white transition-all"
+                                            className="cursor-pointer text-[10px] bg-white text-black px-2 py-1 font-bold hover:bg-orange-combat hover:text-white transition-all"
                                         >
                                             EDITAR
                                         </button>
                                         <button
                                             onClick={handleDelete}
-                                            className="text-[10px] bg-red-600 text-white px-2 py-1 font-bold hover:bg-white hover:text-red-600 transition-all"
+                                            className="cursor-pointer text-[10px] bg-red-600 text-white px-2 py-1 font-bold hover:bg-white hover:text-red-600 transition-all"
                                         >
                                             EXCLUIR
                                         </button>
@@ -176,6 +231,18 @@ export const ServiceItem = ({ job, isAdmin, onUpdate }: JobProps) => {
                         </>
                     )}
                 </div>
+                <div>
+                    {isLogged && user ? (
+                        <div className="flex flex-col items-end gap-1.5">
+                            <p className="text-center text-[12px] "><span className="bg-orange-combat text-white px-2 py-px w-23.5 font-semibold">R$ {job.preco}</span></p>
+                            <p className="text-center text-[12px] "><span className="bg-orange-combat text-white px-2 py-px w-23.5 font-semibold">- {job.desc}</span></p>
+                            <p className="text-center text-[12px] "><span className="bg-orange-combat text-white px-2 py-px w-23.5 font-semibold">= {job.total}</span></p>
+                        </div>
+                    ) : (
+                        ''
+                    )}
+                </div>
+
             </div>
         </div>
     );

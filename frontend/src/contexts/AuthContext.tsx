@@ -15,6 +15,7 @@ interface AuthContextData {
     logout: () => void;
     globalLoading: boolean;
     setGlobalLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    checkingAuth: boolean;
 }
 
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -24,6 +25,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const [globalLoading, setGlobalLoading] = useState(false);
 
+    const [checkingAuth, setCheckingAuth] = useState(true);
+
     useEffect(() => {
 
         const storagedUser = localStorage.getItem('@CombatLan:user');
@@ -31,6 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (storagedUser) {
             setUser(JSON.parse(storagedUser));
         }
+        setCheckingAuth(false);
     }, []);
 
     const isLogged = !!user;
@@ -38,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = (userData: User) => {
         setUser(userData);
-        
+
         localStorage.setItem('@CombatLan:user', JSON.stringify(userData));
     };
 
@@ -49,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     return (
-        <AuthContext.Provider value={{ user, isLogged, isAdmin, login, logout, globalLoading, setGlobalLoading }}>
+        <AuthContext.Provider value={{ user, isLogged, isAdmin, login, logout, globalLoading, setGlobalLoading, checkingAuth }}>
             {globalLoading && <Loader />}
             {children}
         </AuthContext.Provider>

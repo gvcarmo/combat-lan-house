@@ -8,25 +8,37 @@ datasource db {
 }
 
 model Usuario {
-  id            Int       @id @default(autoincrement())
-  nick          String    @unique @db.VarChar(16)
-  nome_completo String    @db.VarChar(50)
-  email         String    @unique @db.VarChar(50)
-  senha         String    @db.VarChar(255)
-  nivel_acesso  String?   @default("user") @db.VarChar(20)
-  criado_em     DateTime? @default(now()) @db.Timestamp(6)
-  birthday      DateTime? @db.Date
+  id                   Int       @id @default(autoincrement())
+  nick                 String    @unique @db.VarChar(16)
+  nome_completo        String    @db.VarChar(50)
+  email                String    @unique @db.VarChar(50)
+  senha                String    @db.VarChar(255)
+  nivel_acesso         String?   @default("user") @db.VarChar(20)
+  criado_em            DateTime? @default(now()) @db.Timestamp(6)
+  birthday             DateTime? @db.Date
+  passwordResetToken   String?
+  passwordResetExpires DateTime?
+  refreshToken         String?  @db.Text
+
+  pedidos  Pedido[]
+  messages Message[]
 
   @@map("usuarios")
 }
 
 model Job {
-  id          Int    @id @default(autoincrement())
-  icone       String @db.VarChar(500)
-  nome        String @unique @db.VarChar(50)
-  descricao   String @unique @db.VarChar(425)
-  infos_uteis String @db.VarChar(200)
-  ordem       Int?   @default(0)
+  id          Int     @id @default(autoincrement())
+  icone       String  @db.VarChar(500)
+  nome        String  @unique @db.VarChar(50)
+  descricao   String  @db.VarChar(425)
+  infos_uteis String  @db.VarChar(200)
+  ordem       Int?    @default(0)
+  preco       String?
+  desc        String?
+  total       String?
+  genero      String?
+
+  pedidos Pedido[]
 
   @@map("jobs")
 }
@@ -49,4 +61,43 @@ model Review {
   descricao String @db.VarChar(425)
 
   @@map("reviews")
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+
+  usuarioId Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  assunto      String   @db.VarChar(100)
+  mensagem     Json
+  status       String   @default("em espera")
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+
+  enviarArquivo Json? @default("[]")
+
+  @@map("messages")
+}
+
+model Pedido {
+  id Int @id @default(autoincrement())
+
+  usuarioId Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  jobId Int
+  job   Job @relation(fields: [jobId], references: [id])
+
+  dadosForm Json
+
+  arquivosEnviados Json? @default("[]")
+
+  arquivosFinal Json? @default("[]")
+
+  status       String   @default("pendente")
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+
+  @@map("pedidos")
 }

@@ -13,8 +13,13 @@ const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL })
 const adapter = new PrismaPg(pool)
 const prisma = new PrismaClient({ adapter });
 
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true}))
 app.use(routes)
 app.use('/uploads', express.static('uploads'));
 
@@ -22,7 +27,7 @@ app.listen(port, () => {
     console.log("Servidor rodando na porta 3000")
 })
 
-const APP_URL = 'https://combat-lan-house.onrender.com'
+const APP_URL = process.env.APP_URL
 
 setInterval(async () => {
     if(APP_URL) {
@@ -34,5 +39,7 @@ setInterval(async () => {
         }
     }
 }, 840000)
+
+
 
 export default prisma

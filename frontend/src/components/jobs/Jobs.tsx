@@ -10,6 +10,10 @@ interface Job {
     infos_uteis: string;
     icone: string;
     ordem: number;
+    genero: string;
+    preco: string;
+    desc: string;
+    total: string;
 }
 
 export const Jobs = () => {
@@ -27,6 +31,17 @@ export const Jobs = () => {
 
     const [showList, setShowList] = useState<number>(5);
 
+    const [filtroAtivo, setFiltroAtivo] = useState<'presencial' | 'online'>('presencial');
+
+    const [mostrarLegenda, setMostrarLegenda] = useState(false);
+
+    const jobsFiltrados = jobs.filter((job: any) => {
+
+        if (!job.genero) return false;
+
+        return job.genero.toLowerCase() === filtroAtivo.toLowerCase();
+    })
+
     const showMore = () => {
         setShowList((prev) => Math.min(prev + 5, jobs.length))
     }
@@ -35,21 +50,27 @@ export const Jobs = () => {
         setShowList((prev) => Math.min(prev, prev = 5))
     }
 
-    const filteredJobs = jobs.filter(job => {
+    const filteredJobs = jobs.filter((job) => {
         const search = searchTerm.toLowerCase();
 
-        return (
+        const matchesCategory = job.genero?.toLowerCase() === filtroAtivo.toLowerCase();
+
+        const matchesSearch =
             job.nome?.toLowerCase().includes(search) ||
-            job.descricao?.toLowerCase().includes(search) ||
-            job.infos_uteis?.toLowerCase().includes(search)
-        );
+            job.descricao?.toLowerCase().includes(search);
+
+        return matchesCategory && matchesSearch;
     });
 
     const [newJob, setNewJob] = useState({
         icone: '',
         nome: '',
         descricao: '',
-        infos_uteis: ''
+        infos_uteis: '',
+        genero: '',
+        preco: '',
+        desc: '',
+        total: '',
     });
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,6 +99,10 @@ export const Jobs = () => {
         formData.append('nome', newJob.nome);
         formData.append('descricao', newJob.descricao);
         formData.append('infos_uteis', newJob.infos_uteis);
+        formData.append('genero', newJob.genero);
+        formData.append('preco', newJob.preco);
+        formData.append('desc', newJob.desc);
+        formData.append('total', newJob.total);
         if (file) formData.append('icone', file);
 
         setGlobalLoading(true);
@@ -89,7 +114,7 @@ export const Jobs = () => {
             if (response.status === 201 || response.status === 200) {
                 alert("Serviço cadastrado com sucesso!");
 
-                setNewJob({ icone: '', nome: '', descricao: '', infos_uteis: '' });
+                setNewJob({ icone: '', nome: '', descricao: '', infos_uteis: '', genero: '', preco: '', desc: '', total: '' });
 
                 setFile(null);
                 setPreview('');
@@ -134,7 +159,7 @@ export const Jobs = () => {
                                     </p>
                                 ) : filteredJobs.length > 0 ? (
                                     filteredJobs.map(job => (
-                                        <ServiceItem key={job.id} job={job} isAdmin={isAdmin} />
+                                        <ServiceItem key={job.id} job={job} />
                                     ))
                                 ) : (
                                     <p className="text-gray-500 text-center py-10">
@@ -147,7 +172,7 @@ export const Jobs = () => {
                         {isAdmin && (
                             <button
                                 onClick={() => setShowAddForm(!showAddForm)}
-                                className="ml-4 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-bold"
+                                className="cursor-pointer ml-4 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-bold"
                             >
                                 {showAddForm ? "Fechar" : "+ Novo Serviço"}
                             </button>
@@ -172,8 +197,22 @@ export const Jobs = () => {
                                     />
                                 </div>
 
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-xs text-gray-400 ml-1">Gênero do Serviço</label>
+                                    <select
+                                        required
+                                        className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors resize-none"
+                                        value={newJob.genero}
+                                        onChange={e => setNewJob({ ...newJob, genero: e.target.value })}
+                                    >
+                                        <option value="null">Selecione o gênero</option>
+                                        <option value="presencial">Presencial</option>
+                                        <option value="online">On-line</option>
+                                    </select>
+                                </div>
+
                                 <div className="flex flex-col gap-1 md:col-span-1">
-                                    <label className="text-xs text-gray-400 ml-1 font-bold">Ícone do Serviço</label>
+                                    <label className="text-xs text-gray-400 ml-1">Ícone do Serviço</label>
                                     <div className="flex items-center gap-4 p-3 bg-neutral-grayish border border-gray-700">
                                         <input
                                             type="file"
@@ -193,6 +232,36 @@ export const Jobs = () => {
                                             <img src={preview} alt="Preview" className="w-10 h-10 object-contain border border-gray-600" />
                                         )}
                                     </div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-xs text-gray-400 ml-1">Preço</label>
+                                    <input
+                                        required
+                                        className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
+                                        placeholder="Ex.: 2,00"
+                                        value={`${newJob.preco}`}
+                                        onChange={e => setNewJob({ ...newJob, preco: e.target.value })}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-xs text-gray-400 ml-1">Desconto:</label>
+                                    <input
+                                        required
+                                        className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
+                                        placeholder="Ex.: 0,50"
+                                        value={`${newJob.desc}`}
+                                        onChange={e => setNewJob({ ...newJob, desc: e.target.value })}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-xs text-gray-400 ml-1">Total:</label>
+                                    <input
+                                        required
+                                        className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
+                                        placeholder="Ex.: 1,50"
+                                        value={`${newJob.total}`}
+                                        onChange={e => setNewJob({ ...newJob, total: e.target.value })}
+                                    />
                                 </div>
                                 <div className="flex flex-col gap-1 md:col-span-2">
                                     <label className="text-xs text-gray-400 ml-1">Descrição</label>
@@ -227,7 +296,7 @@ export const Jobs = () => {
                                     <button
                                         disabled={isSending}
                                         type="submit"
-                                        className={`px-10 py-2 bg-orange-combat hover:bg-white hover:text-orange-combat font-bold transition-all uppercase text-sm ${isSending ? 'opacity-50' : ''}`}
+                                        className={`cursor-pointer px-10 py-2 bg-orange-combat hover:bg-white hover:text-orange-combat font-bold transition-all uppercase text-sm ${isSending ? 'opacity-50' : ''}`}
                                     >
                                         {isSending ? 'Salvando...' : 'Salvar Serviço'}
                                     </button>
@@ -237,9 +306,80 @@ export const Jobs = () => {
                     )}
 
                     <div className="grid grid-cols-1 gap-4">
-                        {jobs.slice(0, showList).map((job: any) => (
-                            <ServiceItem key={job.id} job={job} isAdmin={!!isAdmin} onUpdate={fetchJobs} />
-                        ))}
+                        <div>
+                            <div className="flex flex-col gap-4 mb-6 justify-center">
+                                <div className="flex flex-col gap-4">
+                                    <div className="flex gap-4">
+                                        <button
+                                            onClick={() => setFiltroAtivo('presencial')}
+                                            className={`cursor-pointer hover:bg-white hover:text-orange-combat px-6 py-1 font-bold transition-all ${filtroAtivo === 'presencial' ? 'bg-orange-combat text-white' : 'bg-gray-700 text-gray-300'}`}
+                                        >
+                                            PRESENCIAL
+                                        </button>
+                                        <button
+                                            onClick={() => setFiltroAtivo('online')}
+                                            className={`cursor-pointer px-6 py-1 font-bold transition-all hover:bg-white hover:text-orange-combat ${filtroAtivo === 'online' ? 'bg-orange-combat text-white' : 'bg-gray-700 text-gray-300'}`}
+                                        >
+                                            ONLINE
+                                        </button>
+                                    </div>
+
+                                    <div className="flex justify-end">
+                                        <button onClick={() => setMostrarLegenda(!mostrarLegenda)} className="cursor-pointer px-4 py-1 w-fit bg-orange-combat hover:bg-gray-700 transition-all font-semibold">
+                                            {mostrarLegenda ? "Legenda ▲" : "Legenda ▼"}
+                                        </button>
+                                    </div>
+
+                                    <div className={`legenda ${mostrarLegenda ? 'active' : ''} border border-orange-combat shadow-sm flex flex-col gap-2  max-[610px]:gap-3`}>
+                                        <p>Os serviços:</p>
+                                        <div className="flex gap-3 items-center max-[610px]:flex-col">
+                                            <p className={`h-fit px-2 py-1 text-xs max-[610px]:text-[11.5px] font-bold uppercase bg-orange-combat`}>
+                                                PRESENCIAIS
+                                            </p>
+                                            <div className="text-xs">
+                                                <p>* São realizados apenas presencialmente e pelo Whatsapp;</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex gap-3 items-center max-[610px]:flex-col">
+                                            <p className={`h-fit px-2 py-1 text-xs font-bold uppercase bg-orange-combat`}>
+                                                ONLINE
+                                            </p>
+                                            <div className="text-xs">
+                                                <p>* Basta pedir pelo site, clique no botão PEDIR;</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex gap-3 items-center max-[610px]:flex-col">
+                                            <p className={`h-fit px-2 py-1 text-xs font-bold uppercase bg-green-100 text-green-800`}>
+                                                WHATSAPP
+                                            </p>
+                                            <div className="text-xs">
+                                                <p>* O Whatsapp é EXCLUSIVO da loja presencial.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex gap-3 items-center max-[610px]:flex-col">
+                                            <p className={`h-fit px-2 py-1 text-xs font-bold uppercase bg-white text-gray-700`}>
+                                                Chat
+                                            </p>
+                                            <div className="text-xs">
+                                                <p>* O CHAT é EXCLUSIVO para serviços online.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                            </div>
+
+                            {jobsFiltrados.slice(0, showList).map((job: any) => (
+                                <ServiceItem key={job.id} job={job} onUpdate={fetchJobs} />
+                            ))}
+
+                        </div>
                         <div className="flex justify-center items-center gap-2 max-[610px]:gap-0">
                             <button
                                 onClick={showMore}

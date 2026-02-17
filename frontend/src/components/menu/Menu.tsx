@@ -1,13 +1,15 @@
 import { menuLinks } from "../../data/linksMenuData";
 import { useState, useContext, useRef, useEffect } from "react";
 import api from '../../services/api'
-import { useNavigate } from 'react-router-dom'
 import { AuthContext } from "../../contexts/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Menu = () => {
     const [isOpen, setIsOpen] = useState(false);
-
     const [loginIsOpen, setLoginIsOpen] = useState(false);
+
+    const { isLogged, user } = useContext(AuthContext);
+
 
     const loginRef = useRef<HTMLDivElement>(null);
 
@@ -35,20 +37,36 @@ export const Menu = () => {
 
     return (
         <header className="relative w-full flex justify-center h-22.5 bg-linear-[29deg,#101010_0%,#131313_23%,#131313_83%,#101010_100%] border-b  border-[#000000]">
-            <div className="w-285 max-[1150px]:w-191.75 max-[767px]:w-93.5 h-full mx-auto flex items-center justify-between">
-                <a onClick={toggleLogin} href="#login" className="flex items-center gap-2 mb-3">
-                    <img className="h-15 ml-5 hover:scale-105 transition-all uration-300 ease-in-out" src="./logo.svg" alt="Logo Combat Lan House" />
-                </a>
+            <div className="w-285 max-[1150px]:w-191.75 max-[769px]:w-93.5 h-full mx-auto flex items-center justify-between max-[700px]:justify-start max-[700px]:gap-4">
+                <Link to="/" className="flex items-center gap-2 mb-3">
+                    <img className="max-[700px]:h-12 h-13 ml-5 max-[769px]:ml-3 hover:scale-105 transition-all uration-300 ease-in-out" src="./logo.svg" alt="Logo Combat" />
+                </Link>
 
-                <div className="flex max-[767px]:hidden">
-                    {menuLinks.map((link, index) => (
-                        <a className="menuLink" key={index} href={link.href}>
-                            {link.svgPath}
-                        </a>
-                    ))}
+                <div className="flex items-center">
+                    <div className="flex max-[769px]:hidden items-center">
+                        {menuLinks.map((link, index) => (
+                            <a className="menuLink" key={index} href={link.href}>
+                                {link.svgPath}
+                            </a>
+                        ))}
+                    </div>
+
+                    <div className="ml-2.5">
+                        {isLogged ? (
+                            <div onClick={toggleLogin} className="cursor-pointer w-8 h-8 bg-orange-combat pr-px hover:bg-white transition-all duration-300 ease-in-out rounded-full flex items-center justify-center">
+                                <svg className="w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path fill="#ffffff" d="M320 312C386.3 312 440 258.3 440 192C440 125.7 386.3 72 320 72C253.7 72 200 125.7 200 192C200 258.3 253.7 312 320 312zM290.3 368C191.8 368 112 447.8 112 546.3C112 562.7 125.3 576 141.7 576L498.3 576C514.7 576 528 562.7 528 546.3C528 447.8 448.2 368 349.7 368L290.3 368z" /></svg>
+                            </div>
+                        ) : (
+                            <a onClick={toggleLogin} className="menuLogin" href="#login">
+                                <svg width="93" height="30" viewBox="0 0 93 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M39.76 16.24C39.76 16.56 39.74 16.8933 39.7 17.24H31.96C32.0133 17.9333 32.2333 18.4667 32.62 18.84C33.02 19.2 33.5067 19.38 34.08 19.38C34.9333 19.38 35.5267 19.02 35.86 18.3H39.5C39.3133 19.0333 38.9733 19.6933 38.48 20.28C38 20.8667 37.3933 21.3267 36.66 21.66C35.9267 21.9933 35.1067 22.16 34.2 22.16C33.1067 22.16 32.1333 21.9267 31.28 21.46C30.4267 20.9933 29.76 20.3267 29.28 19.46C28.8 18.5933 28.56 17.58 28.56 16.42C28.56 15.26 28.7933 14.2467 29.26 13.38C29.74 12.5133 30.4067 11.8467 31.26 11.38C32.1133 10.9133 33.0933 10.68 34.2 10.68C35.28 10.68 36.24 10.9067 37.08 11.36C37.92 11.8133 38.5733 12.46 39.04 13.3C39.52 14.14 39.76 15.12 39.76 16.24ZM36.26 15.34C36.26 14.7533 36.06 14.2867 35.66 13.94C35.26 13.5933 34.76 13.42 34.16 13.42C33.5867 13.42 33.1 13.5867 32.7 13.92C32.3133 14.2533 32.0733 14.7267 31.98 15.34H36.26ZM48.3642 10.72C49.6709 10.72 50.7109 11.1467 51.4842 12C52.2709 12.84 52.6642 14 52.6642 15.48V22H49.2642V15.94C49.2642 15.1933 49.0709 14.6133 48.6842 14.2C48.2976 13.7867 47.7776 13.58 47.1242 13.58C46.4709 13.58 45.9509 13.7867 45.5642 14.2C45.1776 14.6133 44.9842 15.1933 44.9842 15.94V22H41.5642V10.84H44.9842V12.32C45.3309 11.8267 45.7976 11.44 46.3842 11.16C46.9709 10.8667 47.6309 10.72 48.3642 10.72ZM61.2608 19.1V22H59.5208C58.2808 22 57.3141 21.7 56.6208 21.1C55.9274 20.4867 55.5808 19.4933 55.5808 18.12V13.68H54.2208V10.84H55.5808V8.12H59.0008V10.84H61.2408V13.68H59.0008V18.16C59.0008 18.4933 59.0808 18.7333 59.2408 18.88C59.4008 19.0267 59.6674 19.1 60.0408 19.1H61.2608ZM66.5858 12.7C66.9858 12.0867 67.4858 11.6067 68.0858 11.26C68.6858 10.9 69.3524 10.72 70.0858 10.72V14.34H69.1458C68.2924 14.34 67.6524 14.5267 67.2258 14.9C66.7991 15.26 66.5858 15.9 66.5858 16.82V22H63.1658V10.84H66.5858V12.7ZM71.0405 16.4C71.0405 15.2533 71.2538 14.2467 71.6805 13.38C72.1205 12.5133 72.7138 11.8467 73.4605 11.38C74.2071 10.9133 75.0405 10.68 75.9605 10.68C76.7471 10.68 77.4338 10.84 78.0205 11.16C78.6205 11.48 79.0805 11.9 79.4005 12.42V10.84H82.8205V22H79.4005V20.42C79.0671 20.94 78.6005 21.36 78.0005 21.68C77.4138 22 76.7271 22.16 75.9405 22.16C75.0338 22.16 74.2071 21.9267 73.4605 21.46C72.7138 20.98 72.1205 20.3067 71.6805 19.44C71.2538 18.56 71.0405 17.5467 71.0405 16.4ZM79.4005 16.42C79.4005 15.5667 79.1605 14.8933 78.6805 14.4C78.2138 13.9067 77.6405 13.66 76.9605 13.66C76.2805 13.66 75.7005 13.9067 75.2205 14.4C74.7538 14.88 74.5205 15.5467 74.5205 16.4C74.5205 17.2533 74.7538 17.9333 75.2205 18.44C75.7005 18.9333 76.2805 19.18 76.9605 19.18C77.6405 19.18 78.2138 18.9333 78.6805 18.44C79.1605 17.9467 79.4005 17.2733 79.4005 16.42ZM88.7147 12.7C89.1147 12.0867 89.6147 11.6067 90.2147 11.26C90.8147 10.9 91.4814 10.72 92.2147 10.72V14.34H91.2747C90.4214 14.34 89.7814 14.5267 89.3547 14.9C88.928 15.26 88.7147 15.9 88.7147 16.82V22H85.2947V10.84H88.7147V12.7Z" fill="white" />
+                                    <path d="M13.0625 10.5714H15.4375C16.0943 10.5714 16.625 11.146 16.625 11.8571V22.1429C16.625 22.854 16.0943 23.4286 15.4375 23.4286H13.0625C12.4057 23.4286 11.875 24.0031 11.875 24.7143C11.875 25.4254 12.4057 26 13.0625 26H15.4375C17.4043 26 19 24.2723 19 22.1429V11.8571C19 9.72768 17.4043 8 15.4375 8H13.0625C12.4057 8 11.875 8.57455 11.875 9.28571C11.875 9.99688 12.4057 10.5714 13.0625 10.5714ZM12.7137 17.908C13.1775 17.4058 13.1775 16.5902 12.7137 16.0879L7.96367 10.9451C7.4998 10.4429 6.74648 10.4429 6.28262 10.9451C5.81875 11.4473 5.81875 12.2629 6.28262 12.7652L9.00645 15.7143H1.1875C0.530664 15.7143 0 16.2888 0 17C0 17.7112 0.530664 18.2857 1.1875 18.2857H9.00645L6.28262 21.2348C5.81875 21.7371 5.81875 22.5527 6.28262 23.0549C6.74648 23.5571 7.4998 23.5571 7.96367 23.0549L12.7137 17.9121V17.908Z" fill="white" />
+                                </svg>
+                            </a>)}
+                    </div>
                 </div>
 
-                <button onClick={toggleMenu} className={`hamburgerButton cursor-pointer max-[767px]:block max-[450px]:p-10 hidden flex-col justify-between w-30 h-26`}>
+                <button onClick={toggleMenu} className={`hamburgerButton cursor-pointer max-[769px]:block max-[450px]:p-0 hidden flex-col justify-between`}>
                     <svg width="30" height="26" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect y="21" width="30" height="5" fill="white" />
                         <rect y="11" width="30" height="5" fill="white" />
@@ -56,14 +74,14 @@ export const Menu = () => {
                     </svg>
                 </button>
 
-                <div className={`hamburgerMenu ${isOpen ? 'active' : ''} flex items-center flex-col min-[767px]:hidden absolute top-22.5 right-0 w-full h-screen z-50 bg-linear-[29deg,#101010_0%,#131313_23%,#131313_83%,#101010_100%] border-b  border-b-[#000000]`}>
+                <div className={`hamburgerMenu ${isOpen ? 'active' : ''} flex items-center flex-col min-[769px]:hidden absolute top-22.5 right-0 w-full h-screen z-50 bg-linear-[29deg,#101010_0%,#131313_23%,#131313_83%,#101010_100%] border-b  border-b-[#000000]`}>
                     {menuLinks.map((link, index) => (
                         <a onClick={() => setIsOpen(false)} className="menuLink" key={index} href={link.href}>
                             {link.svgPath}
                         </a>
                     ))}
                 </div>
-            </div>
+            </div >
 
             <a className="fixed flex items-center justify-center z-50 bottom-8 right-8 w-20 h-20 rounded-full bg-neutral-dark-grayish border border-neutral-very-light-grayish cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out max-[510px]:bottom-3 max-[510px]:right-3 max-[510px]:w-15 max-[510px]:h-15" href="https://wa.me/+5534" target="_blank">
                 <svg width="40" height="40" viewBox="0 0 448 448" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -71,23 +89,42 @@ export const Menu = () => {
                 </svg>
             </a>
 
-            <div ref={loginRef} className={`userLogin ${loginIsOpen ? 'active' : ''} w-92.5 h-75 bg-neutral-grayish border border-neutral-light-grayish absolute top-23.5 left-1 z-30 shadow-2xs text-white p-5 flex flex-col items-center`}>
-                <p className="font-semibold text-[18px] mt-5 mb-7.5">Login de Usuário</p>
-                    <button onClick={toggleLogin} className={`cursor-pointer bg-neutral-light-grayish text-white rounded-full px-2 border border-neutral-dark-grayish absolute right-6 hover:bg-orange-combat duration-300 transition-all ease-in-out`} >x</button>
+            <div ref={loginRef} className={`userLogin ${loginIsOpen ? 'active' : ''} w-92.5 h-78 bg-neutral-grayish border border-neutral-light-grayish absolute top-23.5 right-1 z-30 shadow-2xs text-white p-5 flex flex-col items-center justify-center`}>
+
+                {isLogged && user ? (
+                    ''
+                ) : (
+                    <p className="font-semibold text-[18px] mt-2.5 mb-5">Login de Usuário</p>
+                )}
+
+                <button onClick={toggleLogin} className={`cursor-pointer bg-neutral-light-grayish text-white rounded-full px-2 border border-neutral-dark-grayish absolute right-6 hover:bg-orange-combat duration-300 transition-all ease-in-out top-5`} >x</button>
                 <Login />
 
-            </div>
+                {isLogged && user ? (
+                    ''
+                ) : (
+                    <div>
 
-        </header>
+                        <div className={`pt-2 text-[14px]`}>
+                            <p className="text-center"><Link to="/forgotpassword" className={`text-orange-combat hover:text-white cursor-pointer duration-300 ease-in-out transition-all`}>Esqueci minha senha</Link></p>
+                        </div>
+
+                        <div className={`pt-2 text-[14px] `}>
+                            <p className="text-center">Já é cadastrado? <Link to="/register" className={`text-orange-combat hover:text-white cursor-pointer duration-300 ease-in-out transition-all`}>Novo Cadastro</Link></p>
+                        </div>
+                    </div>
+                )}
+            </div >
+        </header >
     )
 };
 
 export function Login() {
     const [nick, setNick] = useState('');
     const [senha, setSenha] = useState('');
-    const navigate = useNavigate();
-
     const { isLogged, isAdmin, user, login, logout, setGlobalLoading } = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
@@ -96,9 +133,10 @@ export function Login() {
         try {
             const response = await api.post('/login', { nick, senha });
 
-            const { token, user: userData } = response.data;
+            const { token, user: userData, refreshToken } = response.data;
 
             localStorage.setItem('@CombatLan:token', token);
+            localStorage.setItem('@CombatLan:refreshToken', refreshToken);
             localStorage.setItem('@CombatLan:user', JSON.stringify(userData));
 
             if (login) {
@@ -108,7 +146,9 @@ export function Login() {
             }
 
             alert('Login realizado com sucesso!');
-            navigate('/');
+
+            navigate(`/${nick}`);
+
         } catch (error) {
             console.error(error);
             alert('Usuário ou senha incorretos.');
@@ -118,32 +158,36 @@ export function Login() {
     }
 
     return (
-        <>
-            <div className="flex flex-col items-center">
-                {isLogged && user ? (
-                    <div className="flex flex-col items-center gap-2">
-                        <h1>Combat Lan House</h1>
-                        <span>Bem-vindo, <strong>{user.nick}</strong>!</span>
+        <div className="flex flex-col items-center">
+            {isLogged && user ? (
+                <div className="flex flex-col items-center gap-3">
+                    <span>Bem-vindo, <strong>{user.nick}</strong>!</span>
 
-                        {isAdmin && (
-                            <p>Você está logado como <span className="text-orange-combat font-semibold">Administrador</span>.</p>
-                        )}
+                    {isAdmin && (
+                        <p>Você está logado como <span className="text-orange-combat font-semibold">Administrador</span>.</p>
+                    )}
 
-                        <button onClick={logout} className="mt-5 py-2.5 px-10 bg-orange-combat border border-neutral-dark-grayish hover:bg-white hover:text-orange-combat duration-300 ease-in-out transition-all cursor-pointer">Sair</button>
+                    <Link to={`/${user.nick}`} className="flex w-80 gap-2 cursor-pointer bg-orange-combat hover:bg-white border border-neutral-dark-grayish py-2 items-center justify-center">
+                        <svg width="213" height="30" viewBox="0 0 213 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M31.66 12.42C31.9933 11.9 32.4533 11.48 33.04 11.16C33.6267 10.84 34.3133 10.68 35.1 10.68C36.02 10.68 36.8533 10.9133 37.6 11.38C38.3467 11.8467 38.9333 12.5133 39.36 13.38C39.8 14.2467 40.02 15.2533 40.02 16.4C40.02 17.5467 39.8 18.56 39.36 19.44C38.9333 20.3067 38.3467 20.98 37.6 21.46C36.8533 21.9267 36.02 22.16 35.1 22.16C34.3267 22.16 33.64 22 33.04 21.68C32.4533 21.36 31.9933 20.9467 31.66 20.44V27.32H28.24V10.84H31.66V12.42ZM36.54 16.4C36.54 15.5467 36.3 14.88 35.82 14.4C35.3533 13.9067 34.7733 13.66 34.08 13.66C33.4 13.66 32.82 13.9067 32.34 14.4C31.8733 14.8933 31.64 15.5667 31.64 16.42C31.64 17.2733 31.8733 17.9467 32.34 18.44C32.82 18.9333 33.4 19.18 34.08 19.18C34.76 19.18 35.34 18.9333 35.82 18.44C36.3 17.9333 36.54 17.2533 36.54 16.4ZM41.1342 16.4C41.1342 15.2533 41.3476 14.2467 41.7742 13.38C42.2142 12.5133 42.8076 11.8467 43.5542 11.38C44.3009 10.9133 45.1342 10.68 46.0542 10.68C46.8409 10.68 47.5276 10.84 48.1142 11.16C48.7142 11.48 49.1742 11.9 49.4942 12.42V10.84H52.9142V22H49.4942V20.42C49.1609 20.94 48.6942 21.36 48.0942 21.68C47.5076 22 46.8209 22.16 46.0342 22.16C45.1276 22.16 44.3009 21.9267 43.5542 21.46C42.8076 20.98 42.2142 20.3067 41.7742 19.44C41.3476 18.56 41.1342 17.5467 41.1342 16.4ZM49.4942 16.42C49.4942 15.5667 49.2542 14.8933 48.7742 14.4C48.3076 13.9067 47.7342 13.66 47.0542 13.66C46.3742 13.66 45.7942 13.9067 45.3142 14.4C44.8476 14.88 44.6142 15.5467 44.6142 16.4C44.6142 17.2533 44.8476 17.9333 45.3142 18.44C45.7942 18.9333 46.3742 19.18 47.0542 19.18C47.7342 19.18 48.3076 18.9333 48.7742 18.44C49.2542 17.9467 49.4942 17.2733 49.4942 16.42ZM57.1084 9.68C56.5084 9.68 56.0151 9.50667 55.6284 9.16C55.2551 8.8 55.0684 8.36 55.0684 7.84C55.0684 7.30667 55.2551 6.86667 55.6284 6.52C56.0151 6.16 56.5084 5.98 57.1084 5.98C57.6951 5.98 58.1751 6.16 58.5484 6.52C58.9351 6.86667 59.1284 7.30667 59.1284 7.84C59.1284 8.36 58.9351 8.8 58.5484 9.16C58.1751 9.50667 57.6951 9.68 57.1084 9.68ZM58.8084 10.84V22H55.3884V10.84H58.8084ZM68.0869 10.72C69.3935 10.72 70.4335 11.1467 71.2069 12C71.9935 12.84 72.3869 14 72.3869 15.48V22H68.9869V15.94C68.9869 15.1933 68.7935 14.6133 68.4069 14.2C68.0202 13.7867 67.5002 13.58 66.8469 13.58C66.1935 13.58 65.6735 13.7867 65.2869 14.2C64.9002 14.6133 64.7069 15.1933 64.7069 15.94V22H61.2869V10.84H64.7069V12.32C65.0535 11.8267 65.5202 11.44 66.1069 11.16C66.6935 10.8667 67.3535 10.72 68.0869 10.72ZM85.2834 16.24C85.2834 16.56 85.2634 16.8933 85.2234 17.24H77.4834C77.5368 17.9333 77.7568 18.4667 78.1434 18.84C78.5434 19.2 79.0301 19.38 79.6034 19.38C80.4568 19.38 81.0501 19.02 81.3834 18.3H85.0234C84.8368 19.0333 84.4968 19.6933 84.0034 20.28C83.5234 20.8667 82.9168 21.3267 82.1834 21.66C81.4501 21.9933 80.6301 22.16 79.7234 22.16C78.6301 22.16 77.6568 21.9267 76.8034 21.46C75.9501 20.9933 75.2834 20.3267 74.8034 19.46C74.3234 18.5933 74.0834 17.58 74.0834 16.42C74.0834 15.26 74.3168 14.2467 74.7834 13.38C75.2634 12.5133 75.9301 11.8467 76.7834 11.38C77.6368 10.9133 78.6168 10.68 79.7234 10.68C80.8034 10.68 81.7634 10.9067 82.6034 11.36C83.4434 11.8133 84.0968 12.46 84.5634 13.3C85.0434 14.14 85.2834 15.12 85.2834 16.24ZM81.7834 15.34C81.7834 14.7533 81.5834 14.2867 81.1834 13.94C80.7834 13.5933 80.2834 13.42 79.6834 13.42C79.1101 13.42 78.6234 13.5867 78.2234 13.92C77.8368 14.2533 77.5968 14.7267 77.5034 15.34H81.7834ZM90.5077 7.2V22H87.0877V7.2H90.5077ZM96.5444 16.4C96.5444 15.2533 96.7577 14.2467 97.1844 13.38C97.6244 12.5133 98.2177 11.8467 98.9644 11.38C99.711 10.9133 100.544 10.68 101.464 10.68C102.198 10.68 102.864 10.8333 103.464 11.14C104.078 11.4467 104.558 11.86 104.904 12.38V7.2H108.324V22H104.904V20.4C104.584 20.9333 104.124 21.36 103.524 21.68C102.938 22 102.251 22.16 101.464 22.16C100.544 22.16 99.711 21.9267 98.9644 21.46C98.2177 20.98 97.6244 20.3067 97.1844 19.44C96.7577 18.56 96.5444 17.5467 96.5444 16.4ZM104.904 16.42C104.904 15.5667 104.664 14.8933 104.184 14.4C103.718 13.9067 103.144 13.66 102.464 13.66C101.784 13.66 101.204 13.9067 100.724 14.4C100.258 14.88 100.024 15.5467 100.024 16.4C100.024 17.2533 100.258 17.9333 100.724 18.44C101.204 18.9333 101.784 19.18 102.464 19.18C103.144 19.18 103.718 18.9333 104.184 18.44C104.664 17.9467 104.904 17.2733 104.904 16.42ZM121.319 16.24C121.319 16.56 121.299 16.8933 121.259 17.24H113.519C113.572 17.9333 113.792 18.4667 114.179 18.84C114.579 19.2 115.065 19.38 115.639 19.38C116.492 19.38 117.085 19.02 117.419 18.3H121.059C120.872 19.0333 120.532 19.6933 120.039 20.28C119.559 20.8667 118.952 21.3267 118.219 21.66C117.485 21.9933 116.665 22.16 115.759 22.16C114.665 22.16 113.692 21.9267 112.839 21.46C111.985 20.9933 111.319 20.3267 110.839 19.46C110.359 18.5933 110.119 17.58 110.119 16.42C110.119 15.26 110.352 14.2467 110.819 13.38C111.299 12.5133 111.965 11.8467 112.819 11.38C113.672 10.9133 114.652 10.68 115.759 10.68C116.839 10.68 117.799 10.9067 118.639 11.36C119.479 11.8133 120.132 12.46 120.599 13.3C121.079 14.14 121.319 15.12 121.319 16.24ZM117.819 15.34C117.819 14.7533 117.619 14.2867 117.219 13.94C116.819 13.5933 116.319 13.42 115.719 13.42C115.145 13.42 114.659 13.5867 114.259 13.92C113.872 14.2533 113.632 14.7267 113.539 15.34H117.819ZM126.681 16.42C126.681 15.26 126.914 14.2467 127.381 13.38C127.861 12.5133 128.521 11.8467 129.361 11.38C130.214 10.9133 131.188 10.68 132.281 10.68C133.681 10.68 134.848 11.0467 135.781 11.78C136.728 12.5133 137.348 13.5467 137.641 14.88H134.001C133.694 14.0267 133.101 13.6 132.221 13.6C131.594 13.6 131.094 13.8467 130.721 14.34C130.348 14.82 130.161 15.5133 130.161 16.42C130.161 17.3267 130.348 18.0267 130.721 18.52C131.094 19 131.594 19.24 132.221 19.24C133.101 19.24 133.694 18.8133 134.001 17.96H137.641C137.348 19.2667 136.728 20.2933 135.781 21.04C134.834 21.7867 133.668 22.16 132.281 22.16C131.188 22.16 130.214 21.9267 129.361 21.46C128.521 20.9933 127.861 20.3267 127.381 19.46C126.914 18.5933 126.681 17.58 126.681 16.42ZM144.55 22.16C143.457 22.16 142.47 21.9267 141.59 21.46C140.724 20.9933 140.037 20.3267 139.53 19.46C139.037 18.5933 138.79 17.58 138.79 16.42C138.79 15.2733 139.044 14.2667 139.55 13.4C140.057 12.52 140.75 11.8467 141.63 11.38C142.51 10.9133 143.497 10.68 144.59 10.68C145.684 10.68 146.67 10.9133 147.55 11.38C148.43 11.8467 149.124 12.52 149.63 13.4C150.137 14.2667 150.39 15.2733 150.39 16.42C150.39 17.5667 150.13 18.58 149.61 19.46C149.104 20.3267 148.404 20.9933 147.51 21.46C146.63 21.9267 145.644 22.16 144.55 22.16ZM144.55 19.2C145.204 19.2 145.757 18.96 146.21 18.48C146.677 18 146.91 17.3133 146.91 16.42C146.91 15.5267 146.684 14.84 146.23 14.36C145.79 13.88 145.244 13.64 144.59 13.64C143.924 13.64 143.37 13.88 142.93 14.36C142.49 14.8267 142.27 15.5133 142.27 16.42C142.27 17.3133 142.484 18 142.91 18.48C143.35 18.96 143.897 19.2 144.55 19.2ZM159.005 10.72C160.312 10.72 161.352 11.1467 162.125 12C162.912 12.84 163.305 14 163.305 15.48V22H159.905V15.94C159.905 15.1933 159.712 14.6133 159.325 14.2C158.938 13.7867 158.418 13.58 157.765 13.58C157.112 13.58 156.592 13.7867 156.205 14.2C155.818 14.6133 155.625 15.1933 155.625 15.94V22H152.205V10.84H155.625V12.32C155.972 11.8267 156.438 11.44 157.025 11.16C157.612 10.8667 158.272 10.72 159.005 10.72ZM171.901 19.1V22H170.161C168.921 22 167.955 21.7 167.261 21.1C166.568 20.4867 166.221 19.4933 166.221 18.12V13.68H164.861V10.84H166.221V8.12H169.641V10.84H171.881V13.68H169.641V18.16C169.641 18.4933 169.721 18.7333 169.881 18.88C170.041 19.0267 170.308 19.1 170.681 19.1H171.901ZM177.226 12.7C177.626 12.0867 178.126 11.6067 178.726 11.26C179.326 10.9 179.993 10.72 180.726 10.72V14.34H179.786C178.933 14.34 178.293 14.5267 177.866 14.9C177.44 15.26 177.226 15.9 177.226 16.82V22H173.806V10.84H177.226V12.7ZM187.441 22.16C186.348 22.16 185.361 21.9267 184.481 21.46C183.614 20.9933 182.928 20.3267 182.421 19.46C181.928 18.5933 181.681 17.58 181.681 16.42C181.681 15.2733 181.934 14.2667 182.441 13.4C182.948 12.52 183.641 11.8467 184.521 11.38C185.401 10.9133 186.388 10.68 187.481 10.68C188.574 10.68 189.561 10.9133 190.441 11.38C191.321 11.8467 192.014 12.52 192.521 13.4C193.028 14.2667 193.281 15.2733 193.281 16.42C193.281 17.5667 193.021 18.58 192.501 19.46C191.994 20.3267 191.294 20.9933 190.401 21.46C189.521 21.9267 188.534 22.16 187.441 22.16ZM187.441 19.2C188.094 19.2 188.648 18.96 189.101 18.48C189.568 18 189.801 17.3133 189.801 16.42C189.801 15.5267 189.574 14.84 189.121 14.36C188.681 13.88 188.134 13.64 187.481 13.64C186.814 13.64 186.261 13.88 185.821 14.36C185.381 14.8267 185.161 15.5133 185.161 16.42C185.161 17.3133 185.374 18 185.801 18.48C186.241 18.96 186.788 19.2 187.441 19.2ZM198.515 7.2V22H195.095V7.2H198.515ZM211.514 16.24C211.514 16.56 211.494 16.8933 211.454 17.24H203.714C203.767 17.9333 203.987 18.4667 204.374 18.84C204.774 19.2 205.261 19.38 205.834 19.38C206.687 19.38 207.281 19.02 207.614 18.3H211.254C211.067 19.0333 210.727 19.6933 210.234 20.28C209.754 20.8667 209.147 21.3267 208.414 21.66C207.681 21.9933 206.861 22.16 205.954 22.16C204.861 22.16 203.887 21.9267 203.034 21.46C202.181 20.9933 201.514 20.3267 201.034 19.46C200.554 18.5933 200.314 17.58 200.314 16.42C200.314 15.26 200.547 14.2467 201.014 13.38C201.494 12.5133 202.161 11.8467 203.014 11.38C203.867 10.9133 204.847 10.68 205.954 10.68C207.034 10.68 207.994 10.9067 208.834 11.36C209.674 11.8133 210.327 12.46 210.794 13.3C211.274 14.14 211.514 15.12 211.514 16.24ZM208.014 15.34C208.014 14.7533 207.814 14.2867 207.414 13.94C207.014 13.5933 206.514 13.42 205.914 13.42C205.341 13.42 204.854 13.5867 204.454 13.92C204.067 14.2533 203.827 14.7267 203.734 15.34H208.014Z" fill="white" />
+                            <path d="M6.4576 9.84375C6.55768 9.35404 6.99465 9 7.50168 9H9.49644C10.0035 9 10.4404 9.35404 10.5405 9.84375L11.0242 12.1599C11.4945 12.3585 11.9348 12.6132 12.3351 12.9143L14.5967 12.1699C15.0771 12.011 15.6041 12.2096 15.8576 12.6463L16.855 14.3603C17.1085 14.7971 17.0185 15.3463 16.6382 15.6805L14.8603 17.2489C14.8903 17.4938 14.9036 17.7452 14.9036 18C14.9036 18.2548 14.887 18.5063 14.8603 18.7511L16.6415 20.3228C17.0218 20.657 17.1085 21.2096 16.8584 21.643L15.861 23.357C15.6075 23.7904 15.0804 23.9923 14.6001 23.8335L12.3385 23.089C11.9348 23.3901 11.4945 23.6415 11.0275 23.8434L10.5472 26.1563C10.4438 26.6493 10.0068 27 9.50311 27H7.50836C7.00133 27 6.56435 26.646 6.46428 26.1563L5.98393 23.8434C5.5136 23.6449 5.07662 23.3901 4.673 23.089L2.40138 23.8335C1.92103 23.9923 1.39399 23.7938 1.14048 23.357L0.143097 21.643C-0.110418 21.2063 -0.0203533 20.657 0.359918 20.3228L2.14119 18.7511C2.11117 18.5063 2.09783 18.2548 2.09783 18C2.09783 17.7452 2.1145 17.4938 2.14119 17.2489L0.359918 15.6772C-0.0203533 15.343 -0.107082 14.7904 0.143097 14.357L1.14048 12.643C1.39399 12.2063 1.92103 12.0077 2.40138 12.1665L4.66299 12.911C5.06661 12.6099 5.50693 12.3585 5.97393 12.1566L6.4576 9.84375ZM8.49906 20.6471C9.97345 20.6404 11.1643 19.4526 11.1576 17.9901C11.151 16.5276 9.95343 15.3463 8.47905 15.3529C7.00466 15.3596 5.81381 16.5474 5.82048 18.0099C5.82715 19.4724 7.02468 20.6537 8.49906 20.6471Z" fill="white" />
+                        </svg>
+                    </Link>
+
+                    <button onClick={logout} className="mt-2.5 py-2.5 w-80 font-bold text-[18px] bg-orange-combat border border-neutral-dark-grayish hover:bg-white hover:text-orange-combat ease-in-out transition-all cursor-pointer">Sair</button>
+                </div>
+            ) : (
+                <form onSubmit={handleLogin} id="submit" action="post" className="flex flex-col ">
+                    <input onChange={e => setNick(e.target.value)} id="nick" type="text" value={nick} className="w-75 p-2 mb-2.5 bg-neutral-very-light-grayish border border-neutral-dark-grayish" placeholder="Digite seu usuário" />
+
+                    <input onChange={e => setSenha(e.target.value)} id="senha" type="password" value={senha} className="w-75 p-2 bg-neutral-very-light-grayish border border-neutral-dark-grayish" placeholder="Digite sua senha" />
+
+                    <div className="flex items-center justify-center">
+                        <button type="submit" className="w-35 mt-3 py-2 px-10 bg-orange-combat border border-neutral-dark-grayish hover:bg-white hover:text-orange-combat duration-300 ease-in-out transition-all cursor-pointer flex items-center justify-center">Enviar</button>
                     </div>
-                ) : (
-                    <form onSubmit={handleLogin} id="submit" action="post" className="flex flex-col items-center">
-                        <input onChange={e => setNick(e.target.value)} id="nick" type="text" value={nick} className="w-75 p-2.5 mb-2.5 bg-neutral-very-light-grayish border border-neutral-dark-grayish" placeholder="Digite seu usuário" />
-
-                        <input onChange={e => setSenha(e.target.value)} id="senha" type="password" value={senha} className="w-75 p-2.5 bg-neutral-very-light-grayish border border-neutral-dark-grayish" placeholder="Digite sua senha" />
-
-                        <button type="submit" className="mt-5 py-2.5 px-10 bg-orange-combat border border-neutral-dark-grayish hover:bg-white hover:text-orange-combat duration-300 ease-in-out transition-all cursor-pointer">Enviar</button>
-                    </form>
-                )}
-
-            </div>
-
-        </>
-
+                </form>
+            )}
+        </div>
     )
 }
+

@@ -2,17 +2,26 @@ import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 export const verificarToken = (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1];
+    let token = req.headers.authorization?.split(' ')[1] || req.query.token as string;
 
-    if(!token) return res.status(401).json({ error: "Acesso negado. Você precisa estar logado."});
+    if (!token) {
+        return res.status(401).json({ error: "Acesso negado. Sessão não encontrada." });
+    }
 
     try {
         const decodificado = jwt.verify(token, process.env.JWT_SECRET as string) as any;
         req.user = decodificado;
         next();
-    } catch (err) {
-        res.status(403).json({ error: "Token invalido ou expirado." });
+    } catch (err: any) {
+        console.error("Erro na validação do JWT:", err.message);
+
+        if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                error: "Sessão expirada.",
+                code: "TOKEN_EXPIRED"
+            });
+        }
+        return res.status(401).json({ error: "Token inválido." });
     }
 };
 

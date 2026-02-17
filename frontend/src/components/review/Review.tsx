@@ -185,7 +185,7 @@ export const Reviews = () => {
         <div className="flex flex-col items-center justify-center">
             {isAdmin ?
                 <div className="my-2.5 py-5 flex flex-col items-center justify-center bg-neutral-dark-grayish min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71">
-                    <button className="ml-4 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-bold" onClick={() => setShowAddForm(!showAddForm)}>{showAddForm ? "Fechar" : "+ Nova Avaliação"}</button>
+                    <button className="cursor-pointer ml-4 bg-orange-combat text-white hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-bold" onClick={() => setShowAddForm(!showAddForm)}>{showAddForm ? "Fechar" : "+ Nova Avaliação"}</button>
                 </div>
 
                 : ''
