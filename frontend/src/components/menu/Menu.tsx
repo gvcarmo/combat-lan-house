@@ -150,11 +150,12 @@ export function Login() {
             navigate(`/${nick}`);
 
         } catch (error: any) {
-            console.error(error);
+            console.error("Erro no login:", error);
             if (error.response) {
-                alert(error.response.data.message || 'Usuário ou senha incorretos.');
+                const mensagem = error.response.data.message || 'Usuário ou senha incorretos.';
+                alert(mensagem);
             } else {
-                alert('Erro ao conectar com o servidor.');
+                alert('Erro ao conectar com o servidor. Verifique sua internet.');
             }
         } finally {
             setGlobalLoading(false);
