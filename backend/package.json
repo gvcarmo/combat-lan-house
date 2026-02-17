@@ -14,8 +14,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx prisma generate && npx tsc",
-    "start": "node dist/server.js",
+    "start": "npx prisma migrate deploy && node dist/server.js",
     "dev": "npx tsx watch src/server.ts"
+    
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
