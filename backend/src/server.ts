@@ -1,5 +1,5 @@
-import express from 'express';
 import 'dotenv/config'
+import express from 'express';
 import pg from 'pg'
 import { PrismaClient } from '@prisma/client/index.js'
 import { PrismaPg } from '@prisma/adapter-pg'
