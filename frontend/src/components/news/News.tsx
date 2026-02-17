@@ -351,6 +351,7 @@ export const News = () => {
                                             <img
                                                 src={post.video_url.startsWith('http') ? post.video_url : `${post.video_url}`}
                                                 alt="Post content"
+                                                crossOrigin="anonymous"
                                                 className="w-full h-full object-cover"
                                                 onError={(e) => {
                                                     e.currentTarget.onerror = null;

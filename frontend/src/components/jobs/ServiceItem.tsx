@@ -131,6 +131,7 @@ export const ServiceItem = ({ job, onUpdate }: JobProps) => {
                         <img
                             src={job.icone ? job.icone : "./icons/default-icon.svg"}
                             alt={job.nome}
+                            crossOrigin="anonymous"
                             className="w-12 h-12 object-contain"
                         />
                     )}

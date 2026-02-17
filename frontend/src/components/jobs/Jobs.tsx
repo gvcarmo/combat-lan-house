@@ -187,7 +187,7 @@ export const Jobs = () => {
 
                             <form onSubmit={handleCreateJob} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="flex flex-col gap-1">
-                                    <label className="text-xs text-gray-400 ml-1">Nome do Serviço</label>
+                                    <label className="text-xs text-gray-400 ml-1">Nome do Serviço: *</label>
                                     <input
                                         required
                                         className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
@@ -198,21 +198,21 @@ export const Jobs = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-1">
-                                    <label className="text-xs text-gray-400 ml-1">Gênero do Serviço</label>
+                                    <label className="text-xs text-gray-400 ml-1">Gênero do Serviço: *</label>
                                     <select
                                         required
                                         className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors resize-none"
                                         value={newJob.genero}
                                         onChange={e => setNewJob({ ...newJob, genero: e.target.value })}
                                     >
-                                        <option value="null">Selecione o gênero</option>
+                                        <option value="">Selecione o gênero</option>
                                         <option value="presencial">Presencial</option>
                                         <option value="online">On-line</option>
                                     </select>
                                 </div>
 
                                 <div className="flex flex-col gap-1 md:col-span-1">
-                                    <label className="text-xs text-gray-400 ml-1">Ícone do Serviço</label>
+                                    <label className="text-xs text-gray-400 ml-1">Ícone:</label>
                                     <div className="flex items-center gap-4 p-3 bg-neutral-grayish border border-gray-700">
                                         <input
                                             type="file"
@@ -234,9 +234,8 @@ export const Jobs = () => {
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <label className="text-xs text-gray-400 ml-1">Preço</label>
-                                    <input
-                                        required
+                                    <label className="text-xs text-gray-400 ml-1">Preço: </label>
+                                    <input                                        
                                         className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
                                         placeholder="Ex.: 2,00"
                                         value={`${newJob.preco}`}
@@ -246,7 +245,7 @@ export const Jobs = () => {
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-gray-400 ml-1">Desconto:</label>
                                     <input
-                                        required
+                                        
                                         className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
                                         placeholder="Ex.: 0,50"
                                         value={`${newJob.desc}`}
@@ -255,8 +254,7 @@ export const Jobs = () => {
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-gray-400 ml-1">Total:</label>
-                                    <input
-                                        required
+                                    <input                                        
                                         className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
                                         placeholder="Ex.: 1,50"
                                         value={`${newJob.total}`}
@@ -264,7 +262,7 @@ export const Jobs = () => {
                                     />
                                 </div>
                                 <div className="flex flex-col gap-1 md:col-span-2">
-                                    <label className="text-xs text-gray-400 ml-1">Descrição</label>
+                                    <label className="text-xs text-gray-400 ml-1">Descrição: *</label>
                                     <textarea
                                         required
                                         rows={3}
@@ -276,7 +274,7 @@ export const Jobs = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-1 md:col-span-2">
-                                    <label className="text-xs text-gray-400 ml-1">Informações Úteis (Opcional)</label>
+                                    <label className="text-xs text-gray-400 ml-1">Informações Úteis:</label>
                                     <input
                                         className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
                                         placeholder="Ex: Prazo de 24h, trazer pendrive, etc."
