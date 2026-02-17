@@ -4,13 +4,9 @@ export const Footer = () => {
             <div className="w-full bottom-0 flex justify-center h-75 min-[320px]:h-auto bg-linear-to-b from-[#2A2A2A] to-[#121111] border-t border-neutral-very-light-grayish">
                 <div className="min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71 h-full flex min-[1139px]:flex-row min-[320px]:flex-col justify-center items-center gap-8 my-2.5">
                     <div className="text-white flex items-center">
-<<<<<<< HEAD
                         <a href="/">
                             <img className="w-16 h-21.25 hover:scale-105 transition-all uration-300 ease-in-out" src="./logo-c.svg" alt="Logo Combat Lan House - C" />
                         </a>
-=======
-                        <img className="hover:scale-105 transition-all uration-300 ease-in-out" src="./logo-c.svg" alt="Logo-C" />
->>>>>>> 4e63a98d061b7496a3534814a77467250e9e852e
                         <p className="pt-4.5 pl-5">Copyright © <span className="text-orange-combat">Combat Lan House</span><br /> Todos os direitos e conteúdos reservado<br /> à marca Combat e a seus respectivos donos.</p>
                     </div>
                     <div className="text-white">
