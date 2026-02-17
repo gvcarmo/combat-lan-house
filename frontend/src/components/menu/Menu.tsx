@@ -149,9 +149,13 @@ export function Login() {
 
             navigate(`/${nick}`);
 
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert('Usuário ou senha incorretos.');
+            if (error.response) {
+                alert(error.response.data.message || 'Usuário ou senha incorretos.');
+            } else {
+                alert('Erro ao conectar com o servidor.');
+            }
         } finally {
             setGlobalLoading(false);
         }
