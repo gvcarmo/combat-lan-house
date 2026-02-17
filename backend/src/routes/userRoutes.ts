@@ -48,6 +48,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
+routes.post('/webhook-pix', askController.handleWebhook);
 
 routes.post('/resetpassword/:token', userController.resetPassword);
 routes.post('/forgotpassword', userController.forgotPassword);
@@ -101,6 +102,5 @@ routes.delete('/message/:id', verificarToken, messageController.deleteMessage);
 
 routes.patch('/messages/:id/close', verificarToken, messageController.closeMessage);
 routes.patch('/messages/:id/reopen', verificarToken, messageController.reabrirTicket);
-
 
 export default routes;

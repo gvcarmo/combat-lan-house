@@ -39,8 +39,8 @@ export const MeusPedidos = () => {
                 try {
                     const response = await api.get(`/pedido/status/${pedidoAtivoId}`)
 
-                    if (response.data.status === 'pendente' || response.data.status === 'pago') {
-                        alert("Pagamento confirmado com sucesso!");
+                    if (response.data.status === 'pendente') {
+                        alert("Pagamento confirmado com sucesso! Seu pedido está sendo processado.");
                         setModalAberto(false);
                         setPedidoAtivoId(null);
                         window.location.reload();

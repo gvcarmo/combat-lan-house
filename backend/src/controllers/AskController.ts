@@ -239,6 +239,7 @@ export class AskController {
                     description: `Serviço: ${pedido.job.nome}`,
                     payment_method_id: 'pix',
                     external_reference: String(pedido.id),
+                    notification_url: "https://www.combatlanhouse.com.br/webhook-pix",
                     payer: {
                         email: pedido.usuario.email,
                         first_name: pedido.usuario.nome_completo.split(' ')[0] || "Cliente",
@@ -264,11 +265,13 @@ export class AskController {
     }
 
     async handleWebhook(req: Request, res: Response) {
-        const { action, data } = req.body;
+        const { action, data, type } = req.body;
 
-        if (action === "payment.created" || action === "payment.updated") {
+        if (action?.includes("payment") || type === "payment") {
             try {
-                const paymentId = data.id;
+                const paymentId = data?.id || req.body.resource?.split('/').pop();
+
+                if(!paymentId) return res.status(200).send()
 
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
