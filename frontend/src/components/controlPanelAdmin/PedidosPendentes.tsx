@@ -9,7 +9,7 @@ export interface Pedido {
     jobId: number;
     arquivosEnviados: string[];
     arquivosFinal: string[];
-    status: "aguardando pagamento" | "pendente" | "recebido" | "finalizado";
+    status: 'aguardando pagamento' | 'pendente' | 'recebido' | 'finalizado';
     criadoEm: string;
     usuario: Usuario;
     job: Job;
@@ -36,36 +36,46 @@ export const PedidosPendentes = () => {
     const titleClass = `text-xs text-orange-combat uppercase font-bold mb-1`
     const campoClass = `p-1 mr-2 text-sm transition-colors resize-none`
 
-    const socket = io(process.env.CORS_ORIGIN);
+
+    const fetchPedidos = async () => {
+        try {
+            const res = await api.get('/admin/pedidos');
+            setPedidos(res.data);
+        } catch (err: any) {
+            if (err.response?.status === 403) console.log("Sem permissão de admin.");
+        }
+    };
 
     useEffect(() => {
+        const socket = io(import.meta.env.CORS_ORIGIN || 'http://localhost:3000');
+
         socket.on('novo_pedido', (pedidoRecemCriado: Pedido) => {
-            console.log("Novo pedido recebido via Socket!", pedidoRecemCriado);
-
-            setPedidos((prevPedidos) => [pedidoRecemCriado, ...prevPedidos]);
-
-            // DICA: Tocar um som de alerta (opcional)
-            audio.play().catch(_e => {
-                console.warn("O áudio foi bloqueado pelo navegador. Clique em qualquer lugar da página para habilitar o som.");
-            });
+            setPedidos((prev) => [pedidoRecemCriado, ...prev]);
+            audio.play().catch(() => { });
         });
 
-        return () => {
-            socket.off('novo_pedido');
-        };
-    }, []);
+        if (isLogged && isAdmin) fetchPedidos();
 
-    useEffect(() => {
-        if (isLogged && isAdmin) {
-            api.get('/admin/pedidos')
-                .then(res => setPedidos(res.data))
-                .catch(err => {
-                    if (err.response?.status === 403) {
-                        console.log("Ainda sem permissão de admin no servidor.");
-                    }
-                });
-        }
+        return () => {
+            socket.disconnect();
+        };
     }, [isLogged, isAdmin]);
+
+    const handleStatusChange = async (pedidoId: number, novoStatus: string) => {
+        if (!confirm(`Deseja alterar o status para ${novoStatus}?`)) return;
+
+        setGlobalLoading(true);
+        try {
+            await api.patch(`/admin/pedido/${pedidoId}/status`, { status: novoStatus });
+            alert("Status atualizado!");
+            fetchPedidos();
+        } catch (error) {
+            console.error(error);
+            alert("Erro ao alterar status.");
+        } finally {
+            setGlobalLoading(false);
+        }
+    };
 
     const handleUploadFile = async (pedidoId: number, file: File) => {
         const formData = new FormData();
@@ -90,12 +100,16 @@ export const PedidosPendentes = () => {
         }
     }
 
+    const pedidosFiltrados = pedidos.filter(p => p.status === 'pendente');
+
     return (
         <div>
             <div className="my-5 flex flex-col items-center justify-center">
-                <h3 className="mb-2.5 text-orange-combat font-semibold text-[18px] ">Pedidos pendentes</h3>
+                <h3 className="mb-2.5 text-orange-combat font-semibold text-[18px] ">
+                    Pedidos pendentes ({pedidosFiltrados.length})
+                </h3>
             </div>
-            {pedidos.length === 0 ? (
+            {pedidosFiltrados.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-gray-700">
                     <p className="text-gray-500 italic">Não há nenhum pedido pendente.</p>
                 </div>
@@ -103,7 +117,7 @@ export const PedidosPendentes = () => {
                 <div>
                     <h3 className="mb-2.5 text-orange-combat font-semibold text-[18px]">Pedidos em andamento:</h3>
 
-                    {pedidos.map((pedido) =>
+                    {pedidosFiltrados.map((pedido) =>
                         <div key={pedido.id} className="mb-4 flex justify-between pr-4 gap-3 border-l-2 border-orange-combat bg-neutral-grayish-dark max-[610px]:flex-col">
                             <div className={`${backCampoClass}`}>
                                 <label className={`${titleClass}`}>Criado em:</label>
@@ -144,9 +158,15 @@ export const PedidosPendentes = () => {
                                 </div>
 
 
-                                <button className="cursor-pointer text-xs bg-orange-combat text-white px-3 py-1 w-fit hover:bg-gray-700 transition-colors">
-                                    Alterar Status
-                                </button>
+                                <select
+                                    className="cursor-pointer text-xs bg-gray-800 text-white px-2 py-1 border border-orange-combat outline-none"
+                                    value={pedido.status}
+                                    onChange={(e) => handleStatusChange(pedido.id, e.target.value)}
+                                >
+                                    <option value="pendente">Pendente</option>
+                                    <option value="aguardando pagamento">Aguardando Pagamento</option>
+                                    <option value="finalizado">Finalizado</option>
+                                </select>
                             </div>
 
                         </div>
