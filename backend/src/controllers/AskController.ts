@@ -239,7 +239,7 @@ export class AskController {
                     description: `Serviço: ${pedido.job.nome}`,
                     payment_method_id: 'pix',
                     external_reference: String(pedido.id),
-                    notification_url: "https://www.combatlanhouse.com.br/webhook-pix",
+                    notification_url: "https://combat-lan-house.onrender.com/webhook-pix",
                     payer: {
                         email: pedido.usuario.email,
                         first_name: pedido.usuario.nome_completo.split(' ')[0] || "Cliente",
@@ -265,6 +265,9 @@ export class AskController {
     }
 
     async handleWebhook(req: Request, res: Response) {
+        const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACESS_TOKEN! });
+        const payment = new Payment(client);
+
         const { action, data, type } = req.body;
 
         if (action?.includes("payment") || type === "payment") {
