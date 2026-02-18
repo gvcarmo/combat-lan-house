@@ -36,7 +36,7 @@ export const PedidosPendentes = () => {
     const titleClass = `text-xs text-orange-combat uppercase font-bold mb-1`
     const campoClass = `p-1 mr-2 text-sm transition-colors resize-none`
 
-    const socket = io('http://localhost:3000');
+    const socket = io(process.env.APP_URL);
 
     useEffect(() => {
         socket.on('novo_pedido', (pedidoRecemCriado: Pedido) => {
