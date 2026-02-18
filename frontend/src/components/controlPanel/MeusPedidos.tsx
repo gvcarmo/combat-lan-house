@@ -27,7 +27,7 @@ export const MeusPedidos = () => {
     const [mostrarLegenda, setMostrarLegenda] = useState(false);
     const [_pedidoSelecionado, setPedidoSelecionado] = useState<Pedido | null>(null);
 
-    const { setGlobalLoading } = useContext(AuthContext);
+    const { setGlobalLoading, isLogged, user } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -76,8 +76,21 @@ export const MeusPedidos = () => {
     };
 
     useEffect(() => {
-        api.get('/meus-pedidos').then((res: any) => setPedidos(res.data));
-    }, []);
+        if (isLogged && user) {
+            api.get('/meus-pedidos')
+                .then(res => setPedidos(res.data))
+                .catch(err => console.error("Erro ao carregar pedidos", err));
+        }
+    }, [user, isLogged]);
+
+    if (!isLogged) {
+        return (
+            <div className="flex flex-col items-center">
+                <p>Você precisa estar logado para ver seus pedidos.</p>
+                <button onClick={() => navigate('/login')}>Fazer Login</button>
+            </div>
+        );
+    }
 
     const getStatusColor = (status: string) => {
         switch (status) {

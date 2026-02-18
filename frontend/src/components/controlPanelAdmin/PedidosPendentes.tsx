@@ -26,7 +26,7 @@ export const PedidosPendentes = () => {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
     const [uploadingId, setUploadingId] = useState<number | null>(null);
 
-    const { setGlobalLoading } = useContext(AuthContext);
+    const { setGlobalLoading, isLogged, isAdmin } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const backCampoClass = `py-2 pl-4 flex flex-col md:col-span-2`
@@ -34,8 +34,12 @@ export const PedidosPendentes = () => {
     const campoClass = `p-1 mr-2 text-sm transition-colors resize-none`
 
     useEffect(() => {
-        api.get('/pedidos').then(res => setPedidos(res.data));
-    }, [])
+        if (isLogged && isAdmin) {
+            api.get('/pedidos')
+                .then(res => setPedidos(res.data))
+                .catch(err => console.error("Erro ao carregar painel admin", err));
+        }
+    }, [isLogged, isAdmin]);
 
     const handleUploadFile = async (pedidoId: number, file: File) => {
         const formData = new FormData();
