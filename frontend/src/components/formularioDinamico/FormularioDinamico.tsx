@@ -44,7 +44,9 @@ export const FormularioDinamico = () => {
         switch (serviceName) {
             case 'criacao-de-curriculo':
                 return <FormCurriculo />;
-            case 'via-iptu':
+            case 'via-iptu-valor-total':
+                return <FormIPTU />
+            case 'via-iptu-parcela':
                 return <FormIPTU />
             default:
                 return <p>Serviço não encontrado.</p>

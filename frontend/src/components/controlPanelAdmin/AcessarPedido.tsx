@@ -22,7 +22,9 @@ export const AcessarPedido = () => {
         switch (dadosPedido?.jobId) {
             case 17:
                 return <VisualizarPedidoCurriculo />;
-            case 14: 
+            case 18: 
+                return <VisualizarPedidoIPTU />
+            case 19: 
                 return <VisualizarPedidoIPTU />
             default:
                 return <p>Serviço não encontrado.</p>
