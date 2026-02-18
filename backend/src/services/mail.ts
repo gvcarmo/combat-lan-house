@@ -14,7 +14,7 @@ export const sendResetEmail = async (email: string, token: string) => {
                 <div style="font-family: sans-serif;">
                     <h1>Troca de Senha - Combat Lan House</h1>
                     <p>Você solicitou a alteração de senha. Clique no link abaixo:</p>
-                    <a href="${link}" style="background: #ff6600; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+                    <a href="${link}" style="background: #FF5100; color: #fff; padding: 10px 20px; text-decoration: none;">
                         Resetar Senha
                     </a>
                     <p>Se você não solicitou isso, ignore este e-mail.</p>

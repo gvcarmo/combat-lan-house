@@ -45,7 +45,8 @@ export const UserInfos = () => {
         try {
             setCarregando(true);
             setGlobalLoading(true);
-            await api.post('/forgotpassword', { email: userData.email });
+            console.log("DEBUG EMAIL:", userData.email);
+            await api.post(`/forgotpassword`, { email: userData.email });
 
             alert("Sucesso! Verifique sua caixa de entrada (e o spam) para redefinir a senha.");
         } catch (error: any) {
