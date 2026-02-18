@@ -11,7 +11,9 @@ export const transport = nodemailer.createTransport({
     tls: {
         rejectUnauthorized: false
     },
-    connectionTimeout: 10000
+    connectionTimeout: 10000,
+    greetingTimeout: 5000,
+    socketTimeout: 15000,
 });
 
 export const sendResetEmail = async (email: string, token: string) => {
