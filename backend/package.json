@@ -16,7 +16,6 @@
     "build": "npx prisma generate && npx tsc",
     "start": "npx prisma migrate deploy && node src/server.ts",
     "dev": "npx tsx watch src/server.ts"
-    
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
@@ -33,6 +32,7 @@
     "node": "^20.20.0",
     "nodemailer": "^8.0.1",
     "pg": "^8.17.2",
+    "resend": "^6.9.2",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

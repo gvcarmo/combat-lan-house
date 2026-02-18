@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import prisma from '../server.js'
 import crypto from 'crypto';
-import { transport } from '../services/mail.js';
+import { sendResetEmail } from '../services/mail.js';
 
 export class UserController {
     async registrarUsuario(req: Request, res: Response) {
@@ -89,33 +89,21 @@ export class UserController {
             });
 
             try {
+                console.log("Iniciando tentativa de envio via Resend para:", email);
 
-                console.log("Tentando enviar e-mail para:", email); // LOG DE CONTROLE
+                await sendResetEmail(email, token);
 
-                await transport.sendMail({
-                    from: '"Combat Lan House" <combatlanhouseinformatica@gmail.com>',
-                    to: email,
-                    subject: 'Recuperação de Senha',
-                    html: `
-                    <div style="font-family: sans-serif;">
-                        <h1>Recuperação de Senha</h1>
-                        <p>Clique no link abaixo para resetar sua senha:</p>
-                        <a href="https://www.combatlanhouse.com.br/resetpassword/${token}">Resetar Senha</a>
-                        <p>Este link expira em 1 hora.</p>
-                    </div>
-                    `
-                });
-            } catch (error: any) {
-                console.error("--- ERRO DETALHADO DO NODEMAILER ---");
-                console.error("Mensagem:", error.message);
-                console.error("Código:", error.code);
-                console.error("Comando:", error.command);
-                return res.status(500).json({ error: "Falha ao enviar e-mail." });
+                console.log("Fluxo de e-mail finalizado com sucesso.");
+                return res.json({ message: "E-mail enviado com sucesso!" });
+
+            } catch (emailError) {
+                // Se o Resend falhar, o erro cai aqui
+                console.error("Erro específico no envio do e-mail:", emailError);
+                return res.status(500).json({ error: "Ocorreu um erro ao tentar enviar o e-mail de recuperação." });
             }
 
-            return res.json({ message: "E-mail enviado com sucesso!" });
         } catch (error) {
-            console.error(error);
+            console.error("Erro global no forgotPassword:", error);
             return res.status(500).json({ error: "Erro interno ao processar solicitação." });
         }
     }
