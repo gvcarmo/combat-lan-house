@@ -31,10 +31,14 @@ export class AskController {
                     .normalize("NFD")
                     .replace(/[\u0300-\u036f]/g, "")
                     .toLowerCase()
-                    .replace(/\s+/g, '-');
+                    .replace(/[()]/g, "")
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
 
                 return nomeNormalizado === jobSlug.toLowerCase();
             });
+
+
 
             if (!job) {
                 return res.status(404).json({ error: "Serviço não encontrado." });
@@ -274,7 +278,7 @@ export class AskController {
             try {
                 const paymentId = data?.id || req.body.resource?.split('/').pop();
 
-                if(!paymentId) return res.status(200).send()
+                if (!paymentId) return res.status(200).send()
 
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -379,7 +383,7 @@ export class AskController {
 
             console.log("Link gerado com sucesso!");
 
-            return res.status(200).json({ url: signedUrl});
+            return res.status(200).json({ url: signedUrl });
 
         } catch (error) {
             console.error(error);

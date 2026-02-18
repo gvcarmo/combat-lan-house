@@ -27,15 +27,15 @@ export const FormIPTU = () => {
             await api.post('/pedidos', {
                 jobSlug: serviceName,
                 dadosForm: {
-                    ...formData,
-                },
+                    ...formData
+                }
             });
             alert(`Pedido realizado com sucesso!`)
 
             navigate(`/${user?.nick}`)
 
         } catch (error) {
-            return ("Erro ao enviar, verifique os dados.")
+            alert("Erro ao enviar, verifique os dados.")
 
         } finally {
             setGlobalLoading(false);
