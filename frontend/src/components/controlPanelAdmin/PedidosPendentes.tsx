@@ -36,7 +36,6 @@ export const PedidosPendentes = () => {
     const titleClass = `text-xs text-orange-combat uppercase font-bold mb-1`
     const campoClass = `p-1 mr-2 text-sm transition-colors resize-none`
 
-
     const fetchPedidos = async () => {
         try {
             const res = await api.get('/admin/pedidos');
@@ -50,32 +49,32 @@ export const PedidosPendentes = () => {
         const socket = io(import.meta.env.CORS_ORIGIN || 'http://localhost:3000');
 
         socket.on('novo_pedido', (pedidoRecemCriado: Pedido) => {
-            setPedidos((prev) => [pedidoRecemCriado, ...prev]);
-            audio.play().catch(() => { });
+            console.log("Novo pedido recebido via Socket!", pedidoRecemCriado);
+
+            setPedidos((prevPedidos) => [pedidoRecemCriado, ...prevPedidos]);
+
+            // DICA: Tocar um som de alerta (opcional)
+            audio.play().catch(_e => {
+                console.warn("O áudio foi bloqueado pelo navegador. Clique em qualquer lugar da página para habilitar o som.");
+            });
         });
 
-        if (isLogged && isAdmin) fetchPedidos();
-
         return () => {
-            socket.disconnect();
+            socket.off('novo_pedido');
         };
-    }, [isLogged, isAdmin]);
+    }, []);
 
-    const handleStatusChange = async (pedidoId: number, novoStatus: string) => {
-        if (!confirm(`Deseja alterar o status para ${novoStatus}?`)) return;
-
-        setGlobalLoading(true);
-        try {
-            await api.patch(`/admin/pedido/${pedidoId}/status`, { status: novoStatus });
-            alert("Status atualizado!");
-            fetchPedidos();
-        } catch (error) {
-            console.error(error);
-            alert("Erro ao alterar status.");
-        } finally {
-            setGlobalLoading(false);
+    useEffect(() => {
+        if (isLogged && isAdmin) {
+            api.get('/admin/pedidos')
+                .then(res => setPedidos(res.data))
+                .catch(err => {
+                    if (err.response?.status === 403) {
+                        console.log("Ainda sem permissão de admin no servidor.");
+                    }
+                });
         }
-    };
+    }, [isLogged, isAdmin]);
 
     const handleUploadFile = async (pedidoId: number, file: File) => {
         const formData = new FormData();
@@ -100,14 +99,28 @@ export const PedidosPendentes = () => {
         }
     }
 
+    const handleStatusChange = async (pedidoId: number, novoStatus: string) => {
+        if (!confirm(`Deseja alterar o status para ${novoStatus}?`)) return;
+
+        setGlobalLoading(true);
+        try {
+            await api.patch(`/admin/pedido/${pedidoId}/status`, { status: novoStatus });
+            alert("Status atualizado!");
+            fetchPedidos();
+        } catch (error) {
+            console.error(error);
+            alert("Erro ao alterar status.");
+        } finally {
+            setGlobalLoading(false);
+        }
+    };
+
     const pedidosFiltrados = pedidos.filter(p => p.status === 'pendente');
 
     return (
         <div>
             <div className="my-5 flex flex-col items-center justify-center">
-                <h3 className="mb-2.5 text-orange-combat font-semibold text-[18px] ">
-                    Pedidos pendentes ({pedidosFiltrados.length})
-                </h3>
+                <h3 className="mb-2.5 text-orange-combat font-semibold text-[18px] ">Pedidos pendentes</h3>
             </div>
             {pedidosFiltrados.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-gray-700">

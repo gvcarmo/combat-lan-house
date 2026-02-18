@@ -423,4 +423,11 @@ export class AskController {
         }
     }
 
+    async updateStatus(req: Request, res: Response) {
+        const { id } = req.params;
+        const { status } = req.body;
+        await prisma.pedido.update({ where: { id: Number(id) }, data: { status } });
+        return res.json({ message: "Atualizado." });
+    }
+
 }
