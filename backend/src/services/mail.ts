@@ -7,7 +7,7 @@ export const sendResetEmail = async (email: string, token: string) => {
 
     try {
         const { data, error } = await resend.emails.send({
-            from: 'Combat Lan House <onboarding@resend.dev>',
+            from: 'Combat Lan House <contato@combatlanhouse.com.br>',
             to: email,
             subject: 'Recuperação de Senha',
             html: `
