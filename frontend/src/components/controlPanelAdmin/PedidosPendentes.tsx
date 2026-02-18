@@ -46,14 +46,13 @@ export const PedidosPendentes = () => {
     };
 
     useEffect(() => {
-        const socket = io(import.meta.env.CORS_ORIGIN || 'http://localhost:3000');
+        const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000');
 
         socket.on('novo_pedido', (pedidoRecemCriado: Pedido) => {
             console.log("Novo pedido recebido via Socket!", pedidoRecemCriado);
 
             setPedidos((prevPedidos) => [pedidoRecemCriado, ...prevPedidos]);
 
-            // DICA: Tocar um som de alerta (opcional)
             audio.play().catch(_e => {
                 console.warn("O áudio foi bloqueado pelo navegador. Clique em qualquer lugar da página para habilitar o som.");
             });
