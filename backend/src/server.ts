@@ -23,7 +23,8 @@ app.use(cors({
 const io = new Server(httpServer, {
     cors: {
         origin: process.env.CORS_ORIGIN,
-        methods: ["GET", "POST"]
+        methods: ["GET", "POST", "PATCH", "DELETE"],
+        credentials: true
     }
 });
 

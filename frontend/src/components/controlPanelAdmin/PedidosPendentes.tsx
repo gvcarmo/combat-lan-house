@@ -46,8 +46,11 @@ export const PedidosPendentes = () => {
     };
 
     useEffect(() => {
-        const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000');
-
+        const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
+            transports: ['websocket', 'polling'],
+            withCredentials: true
+        });
+        
         socket.on('novo_pedido', (pedidoRecemCriado: Pedido) => {
             console.log("Novo pedido recebido via Socket!", pedidoRecemCriado);
 
