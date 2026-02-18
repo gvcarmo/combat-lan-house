@@ -3,7 +3,7 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendResetEmail = async (email: string, token: string) => {
-    const link = `https://www.combatlanhouse.com.br/reset-password/${token}`;
+    const link = `https://www.combatlanhouse.com.br/resetpassword/${token}`;
 
     try {
         const { data, error } = await resend.emails.send({

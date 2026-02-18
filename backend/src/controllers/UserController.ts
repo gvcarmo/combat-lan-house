@@ -112,34 +112,45 @@ export class UserController {
         const { token } = req.params as any;
         const { novaSenha } = req.body;
 
-        console.log("BODY:", req.body);
-        console.log("PARAMS:", req.params);
-
-        console.log("Token recebido:", token);
-
-        const salt = await bcrypt.genSalt(10);
-        const senhaHash = await bcrypt.hash(novaSenha, salt);
-
-        const user = await prisma.usuario.findFirst({
-            where: {
-                passwordResetToken: token,
-                passwordResetExpires: { gt: new Date() }
+        try {
+            if (!novaSenha || novaSenha.length < 6) {
+                return res.status(400).json({ error: "A nova senha deve ter pelo menos 6 caracteres." });
             }
-        });
 
-        if (!user) {
-            return res.status(400).json({ error: "Token inválido ou expirado" });
+            if (!token) {
+                return res.status(400).json({ error: "Token não fornecido." });
+            }
+
+            const user = await prisma.usuario.findFirst({
+                where: {
+                    passwordResetToken: token,
+                    passwordResetExpires: { gt: new Date() }
+                }
+            });
+
+            if (!user) {
+                console.log(`Tentativa de reset com token inválido ou expirado: ${token}`);
+                return res.status(400).json({ error: "O link de recuperação é inválido ou já expirou." });
+            }
+
+            const salt = await bcrypt.genSalt(10);
+            const senhaHash = await bcrypt.hash(novaSenha, salt);
+
+            await prisma.usuario.update({
+                where: { id: user.id },
+                data: {
+                    senha: senhaHash,
+                    passwordResetToken: null,
+                    passwordResetExpires: null
+                }
+            });
+            console.log(`Senha atualizada com sucesso para o usuário: ${user.email}`);
+
+            return res.json({ message: "Sua senha foi atualizada com sucesso! Agora você já pode fazer login." });
+
+        } catch (error) {
+            console.error("Erro ao resetar senha:", error);
+            return res.status(500).json({ error: "Erro interno ao atualizar a senha. Tente novamente mais tarde." });
         }
-
-        await prisma.usuario.update({
-            where: { id: user.id },
-            data: {
-                senha: senhaHash,
-                passwordResetToken: null,
-                passwordResetExpires: null
-            }
-        });
-
-        return res.json({ message: "Senha atualizada com sucesso!" })
     }
 }
