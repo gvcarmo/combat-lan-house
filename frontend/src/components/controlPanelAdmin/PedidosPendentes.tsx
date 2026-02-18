@@ -122,7 +122,7 @@ export const PedidosPendentes = () => {
     return (
         <div>
             <div className="my-5 flex flex-col items-center justify-center">
-                <h3 className="mb-2.5 text-orange-combat font-semibold text-[18px] ">Pedidos pendentes</h3>
+                <h3 className="mb-2.5 text-orange-combat font-semibold text-[18px] ">Pedidos pendentes ({pedidosFiltrados.length})</h3>
             </div>
             {pedidosFiltrados.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-gray-700">

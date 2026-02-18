@@ -22,18 +22,19 @@ app.use(cors({
 
 const io = new Server(httpServer, {
     cors: {
-        origin: process.env.CORS_ORIGIN,
+        origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
         methods: ["GET", "POST", "PATCH", "DELETE"],
         credentials: true
     }
 });
+
+app.use(express.json());
 
 app.use((req: any, res, next) => {
     req.io = io;
     return next();
 });
 
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(routes)
 app.use('/uploads', express.static('uploads'));

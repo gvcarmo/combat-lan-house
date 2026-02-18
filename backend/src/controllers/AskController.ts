@@ -1,10 +1,17 @@
 import { Request, Response } from 'express';
 import prisma from "../server.js";
-
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { v4 as uuidv4 } from 'uuid';
-
 import { v2 as cloudinary } from 'cloudinary';
+import { Server } from 'socket.io';
+
+declare global {
+    namespace Express {
+        interface Request {
+            io: Server;
+        }
+    }
+}
 
 const client = new MercadoPagoConfig({
     accessToken: process.env.MP_ACESS_TOKEN || ''
@@ -404,10 +411,10 @@ export class AskController {
 
             let pedidos;
 
-            if(nivelAcesso === 'admin') {
+            if (nivelAcesso === 'admin') {
                 pedidos = await prisma.pedido.findMany({
                     include: { job: true, usuario: true },
-                    orderBy: { criadoEm: 'desc'}
+                    orderBy: { criadoEm: 'desc' }
                 });
             } else {
                 pedidos = await prisma.pedido.findMany({
@@ -419,15 +426,43 @@ export class AskController {
 
             return res.json(pedidos);
         } catch (error) {
-            return res.status(500).json({ error: "Erro ao buscar pedidos."});
+            return res.status(500).json({ error: "Erro ao buscar pedidos." });
         }
     }
 
-    async updateStatus(req: Request, res: Response) {
-        const { id } = req.params;
-        const { status } = req.body;
-        await prisma.pedido.update({ where: { id: Number(id) }, data: { status } });
-        return res.json({ message: "Atualizado." });
+async updateStatus(req: any, res: Response) {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    try {
+        const pedidoAtualizado = await prisma.pedido.update({ 
+            where: { id: Number(id) }, 
+            data: { status },
+            include: {
+                job: true,
+                usuario: {
+                    select: { nome_completo: true, nick: true }
+                }
+            }
+        });
+
+        console.log(">>> Status atualizado para:", status);
+
+        if (status === 'pendente') {
+            if (req.io) {
+                req.io.emit('novo_pedido', pedidoAtualizado);
+                console.log("✅ Socket: Evento 'novo_pedido' enviado com sucesso!");
+            } else {
+                console.log("❌ Erro: req.io não encontrado no updateStatus.");
+            }
+        }
+
+        return res.json(pedidoAtualizado);
+
+    } catch (error) {
+        console.error("Erro ao atualizar status:", error);
+        return res.status(500).json({ error: "Erro ao atualizar pedido." });
     }
+}
 
 }

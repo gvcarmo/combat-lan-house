@@ -2,9 +2,11 @@ import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import prisma from '../server.js'
+import { verificarToken } from '../middlewares/auth.js';
 
 export const loginUsuario = async (req: Request, res: Response) => {
     const { nick, senha } = req.body;
+
 
     try {
         const usuario = await prisma.usuario.findUnique({ where: { nick } });
@@ -24,6 +26,8 @@ export const loginUsuario = async (req: Request, res: Response) => {
             process.env.JWT_SECRET as string,
             { expiresIn: '4h' }
         );
+
+        console.log(token)
 
         const refreshToken = jwt.sign(
             { id: usuario.id },
