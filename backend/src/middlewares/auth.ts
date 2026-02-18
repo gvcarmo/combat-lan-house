@@ -26,7 +26,7 @@ export const verificarToken = (req: Request, res: Response, next: NextFunction) 
 };
 
 export const somenteAdmin = (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user || req.user.nivel_acesso !== 'admin') {
+        if (!req.user || req.user.nivel !== 'admin') {
         return res.status(403).json({
             error: "Acesso restrito apenas para administradores."
         });

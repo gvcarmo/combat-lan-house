@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
+import { io } from 'socket.io-client';
 
 export interface Pedido {
     id: number;
@@ -22,22 +23,47 @@ interface Job {
     nome: string;
 }
 
+const audio = new Audio('./alerta.mp3');
+
 export const PedidosPendentes = () => {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
     const [uploadingId, setUploadingId] = useState<number | null>(null);
 
-    const { setGlobalLoading, isLogged, isAdmin } = useContext(AuthContext);
+    const { setGlobalLoading, isLogged, isAdmin, checkingAuth } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const backCampoClass = `py-2 pl-4 flex flex-col md:col-span-2`
     const titleClass = `text-xs text-orange-combat uppercase font-bold mb-1`
     const campoClass = `p-1 mr-2 text-sm transition-colors resize-none`
 
+    const socket = io('http://localhost:3000');
+
+    useEffect(() => {
+        socket.on('novo_pedido', (pedidoRecemCriado: Pedido) => {
+            console.log("Novo pedido recebido via Socket!", pedidoRecemCriado);
+
+            setPedidos((prevPedidos) => [pedidoRecemCriado, ...prevPedidos]);
+
+            // DICA: Tocar um som de alerta (opcional)
+            audio.play().catch(e => {
+                console.warn("O áudio foi bloqueado pelo navegador. Clique em qualquer lugar da página para habilitar o som.");
+            });
+        });
+
+        return () => {
+            socket.off('novo_pedido');
+        };
+    }, []);
+
     useEffect(() => {
         if (isLogged && isAdmin) {
-            api.get('/pedidos')
+            api.get('/admin/pedidos')
                 .then(res => setPedidos(res.data))
-                .catch(err => console.error("Erro ao carregar painel admin", err));
+                .catch(err => {
+                    if (err.response?.status === 403) {
+                        console.log("Ainda sem permissão de admin no servidor.");
+                    }
+                });
         }
     }, [isLogged, isAdmin]);
 

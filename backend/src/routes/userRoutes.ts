@@ -91,6 +91,8 @@ routes.put('/pedido/:id', verificarToken, askController.updateOrder)
 routes.post('/pedido/:id', verificarToken, upload.array('arquivosFinal'), askController.updateOrder);
 routes.get('/pedidos', verificarToken, askController.pedidosPendentes)
 
+routes.get('/admin/pedidos', verificarToken, somenteAdmin, askController.index)
+
 routes.post('/gerar-pix', verificarToken, (req, res) => askController.generatePix(req, res));
 routes.post('/webhooks/mercadopago', askController.handleWebhook);
 

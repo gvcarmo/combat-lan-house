@@ -38,8 +38,6 @@ export class AskController {
                 return nomeNormalizado === jobSlug.toLowerCase();
             });
 
-
-
             if (!job) {
                 return res.status(404).json({ error: "Serviço não encontrado." });
             }
@@ -54,6 +52,14 @@ export class AskController {
                     status: 'aguardando pagamento'
                 }
             });
+
+            const pedidoCompleto = await prisma.pedido.findUnique({
+                where: { id: novoPedido.id },
+                include: { job: true, usuario: true }
+            });
+
+            req.io.emit('novo_pedido', pedidoCompleto);
+
             return res.status(201).json(novoPedido);
         } catch (error) {
             console.error(error);
@@ -388,6 +394,32 @@ export class AskController {
         } catch (error) {
             console.error(error);
             return res.status(500).json({ error: "Erro ao processar download." });
+        }
+    }
+
+    async index(req: any, res: Response) {
+        try {
+            const usuarioId = req.user.id;
+            const nivelAcesso = String(req.user.nivel).trim().toLowerCase();
+
+            let pedidos;
+
+            if(nivelAcesso === 'admin') {
+                pedidos = await prisma.pedido.findMany({
+                    include: { job: true, usuario: true },
+                    orderBy: { criadoEm: 'desc'}
+                });
+            } else {
+                pedidos = await prisma.pedido.findMany({
+                    where: { usuarioId: usuarioId },
+                    include: { job: true },
+                    orderBy: { criadoEm: 'desc' }
+                });
+            }
+
+            return res.json(pedidos);
+        } catch (error) {
+            return res.status(500).json({ error: "Erro ao buscar pedidos."});
         }
     }
 

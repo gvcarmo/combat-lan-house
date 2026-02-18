@@ -5,7 +5,7 @@ declare global {
         interface Request {
             user?: {
                 id: number;
-                nivel_acesso: string;
+                nivel: string;
             }
         }
     }

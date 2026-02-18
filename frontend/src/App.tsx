@@ -10,6 +10,7 @@ import { MeusPedidos } from './components/controlPanel/MeusPedidos'
 import { VisualizarPedidoCurriculo } from './components/servicosForm/curriculo'
 import { AcessarPedido } from './components/controlPanelAdmin/AcessarPedido'
 import { EnviarMensagem } from './components/controlPanel/EnviarMensagem'
+import { PedidosPendentes } from './components/controlPanelAdmin/PedidosPendentes'
 
 function App() {
 
