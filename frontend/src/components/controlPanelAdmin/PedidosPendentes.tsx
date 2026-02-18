@@ -29,7 +29,7 @@ export const PedidosPendentes = () => {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
     const [uploadingId, setUploadingId] = useState<number | null>(null);
 
-    const { setGlobalLoading, isLogged, isAdmin, checkingAuth } = useContext(AuthContext);
+    const { setGlobalLoading, isLogged, isAdmin } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const backCampoClass = `py-2 pl-4 flex flex-col md:col-span-2`
@@ -45,7 +45,7 @@ export const PedidosPendentes = () => {
             setPedidos((prevPedidos) => [pedidoRecemCriado, ...prevPedidos]);
 
             // DICA: Tocar um som de alerta (opcional)
-            audio.play().catch(e => {
+            audio.play().catch(_e => {
                 console.warn("O áudio foi bloqueado pelo navegador. Clique em qualquer lugar da página para habilitar o som.");
             });
         });
