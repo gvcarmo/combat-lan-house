@@ -202,7 +202,10 @@ export const MeusPedidos = () => {
                             {pedido.status}
                         </span>
                     </div>
+
                 </div>
+
+
 
                 <div className="flex flex-col items-end max-[610px]:items-center gap-2 p-2">
                     {/* Botões de Ação (Mesma lógica que você já tinha) */}
@@ -294,8 +297,8 @@ export const MeusPedidos = () => {
                             </p>
                             <div className="text-xs">
                                 <p>* Você pode visualizar o pedido e edita-lo;</p>
-                                <p>* E pode deletar o pedido.</p>
-                                <p>Realize o pagamento para prosseguir.</p>
+                                <p>* Pode deletar o pedido.</p>
+                                <p>* Realize o pagamento para prosseguir com o atendimento.</p>
                             </div>
                         </div>
 
@@ -305,7 +308,7 @@ export const MeusPedidos = () => {
                             </p>
                             <div className="text-xs">
                                 <p>* São pedidos que estão pagos;</p>
-                                <p>* Você não pode mais edita-lo, o serviço está em produção.</p>
+                                <p>* Você não pode mais edita-lo, o serviço está em produção, por favor aguarde.</p>
                             </div>
                         </div>
 
@@ -315,7 +318,7 @@ export const MeusPedidos = () => {
                             </p>
                             <div className="text-xs">
                                 <p>* Pedidos que já foram enviados para o cliente;</p>
-                                <p>* Você pode baixar o pedido por 3 meses.</p>
+                                <p>* O arquivo fica disponível para download por 90 dias.</p>
                             </div>
                         </div>
                     </div>
