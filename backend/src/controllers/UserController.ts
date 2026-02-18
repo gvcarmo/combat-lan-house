@@ -88,18 +88,20 @@ export class UserController {
                 }
             });
 
+            console.log("Tentando enviar e-mail para:", email); // LOG DE CONTROLE
+
             await transport.sendMail({
-                from: 'Combat Lan House <noreply@combatlanhouse.com.br>',
+                from: '"Combat Lan House" <seu-email@gmail.com>',
                 to: email,
                 subject: 'Recuperação de Senha',
                 html: `
                     <div style="font-family: sans-serif;">
-                        <h1>Recuperação de Senha - Combat Lan House</h1>
-                        <p>Você solicitou a alteração de senha. Clique no link abaixo para prosseguir: </p>
-                        <a href="http://localhost:5173/resetpassword/${token}">Resetar Senha</a>
+                        <h1>Recuperação de Senha</h1>
+                        <p>Clique no link abaixo para resetar sua senha:</p>
+                        <a href="https://www.combatlanhouse.com.br/resetpassword/${token}">Resetar Senha</a>
                         <p>Este link expira em 1 hora.</p>
                     </div>
-                `
+                    `
             });
 
             return res.json({ message: "E-mail enviado com sucesso!" });

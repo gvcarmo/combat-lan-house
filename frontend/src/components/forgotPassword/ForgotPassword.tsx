@@ -49,7 +49,7 @@ export const ForgotPassword = () => {
                             <p>Você já está logado <strong>{user.nick}</strong>.</p>
                         </div>
                     ) : (
-                        <form onSubmit={handleSubmit} id="submit" action="post" className="flex flex-col p-5">
+                        <form onSubmit={handleSubmit} id="submit" className="flex flex-col p-5">
                             <div className="flex flex-col items-center">
                                 <div className="flex flex-col gap-1 pb-5">
                                     <label className="text-xs text-gray-400 ml-1">Insira o E-mail para recuperação de senha:</label>
