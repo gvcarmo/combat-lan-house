@@ -10,11 +10,12 @@ export const transport = nodemailer.createTransport({
     },
     tls: {
         rejectUnauthorized: false
-    }
+    },
+    connectionTimeout: 10000
 });
 
 export const sendResetEmail = async (email: string, token: string) => {
-    const link = `http://localhost:5173/reset-password/${token}`;
+    const link = `https://combat-lan-house.onrender.com/reset-password/${token}`;
 
     await transport.sendMail({
         from: '"Combat Lan House" <combatlanhouseinformatica@gmail.com>',

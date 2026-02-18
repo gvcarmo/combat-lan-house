@@ -88,13 +88,15 @@ export class UserController {
                 }
             });
 
-            console.log("Tentando enviar e-mail para:", email); // LOG DE CONTROLE
+            try {
 
-            await transport.sendMail({
-                from: '"Combat Lan House" <seu-email@gmail.com>',
-                to: email,
-                subject: 'Recuperação de Senha',
-                html: `
+                console.log("Tentando enviar e-mail para:", email); // LOG DE CONTROLE
+
+                await transport.sendMail({
+                    from: '"Combat Lan House" <combatlanhouseinformatica@gmail.com>',
+                    to: email,
+                    subject: 'Recuperação de Senha',
+                    html: `
                     <div style="font-family: sans-serif;">
                         <h1>Recuperação de Senha</h1>
                         <p>Clique no link abaixo para resetar sua senha:</p>
@@ -102,7 +104,14 @@ export class UserController {
                         <p>Este link expira em 1 hora.</p>
                     </div>
                     `
-            });
+                });
+            } catch (error: any) {
+                console.error("--- ERRO DETALHADO DO NODEMAILER ---");
+                console.error("Mensagem:", error.message);
+                console.error("Código:", error.code);
+                console.error("Comando:", error.command);
+                return res.status(500).json({ error: "Falha ao enviar e-mail." });
+            }
 
             return res.json({ message: "E-mail enviado com sucesso!" });
         } catch (error) {
