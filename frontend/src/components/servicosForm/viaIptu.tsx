@@ -4,7 +4,7 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
 
 export const FormIPTU = () => {
-    const [isSending, setIsSending] = useState(false);
+    const [isSending, _setIsSending] = useState(false);
 
     const { serviceName } = useParams();
 
