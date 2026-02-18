@@ -142,7 +142,7 @@ export const FormCurriculo = () => {
                 arquivosEnviados: []
             });
 
-            alert(`Pedido realizado com sucesso!`);
+            alert(`Pedido realizado com sucesso! Aguarde o processamento.`);
 
             navigate(`/${user?.nick}`);
 
@@ -646,7 +646,7 @@ export const VisualizarPedidoCurriculo = () => {
                 </div>
 
                 <div className="container mx-auto p-6 max-[610px]:p-0 text-white">
-                    <h2 className="text-xl font-bold mb-6 text-orange-combat">Resumo do Currículo</h2>
+                    <h2 className="text-xl font-bold mb-6 text-orange-combat">{dadosPedido.job.nome}o</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {formData && Object.keys(formData).map((chave) => (

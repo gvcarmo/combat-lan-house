@@ -2,6 +2,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import { FormCurriculo } from '../servicosForm/curriculo';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
+import { FormIPTU } from '../servicosForm/viaIptu';
 
 export const FormularioDinamico = () => {
     const { serviceName } = useParams();
@@ -19,10 +20,10 @@ export const FormularioDinamico = () => {
             mensagem = "Atenção: Solicitações de serviços feitas no Domingo só serão processadas na Segunda-Feira à partir das 08h00.";
         }
         else if (hora >= 18 || hora < 8) {
-            mensagem = "Recebemos o seu pedido fora do horário comercial, aguarde até o próximo dia útil, processaremos seu pedido à partir das 08h00."
+            mensagem = "Atenção: O seu pedido está sendo feito fora do horário comercial da nossa loja online, o processamento só irá ser iniciado à partir das 08h00."
         }
         else {
-            mensagem = "O seu pedido foi recebido! O prazo de entrega é de 15 minutos à 2 horas! Por favor aguarde."
+            mensagem = "Atenção: Após o recebimento do seu pedido, o prazo de entrega é de 5 minutos à 2 horas! Por favor aguarde."
         }
         setAviso(mensagem);
     }
@@ -43,6 +44,8 @@ export const FormularioDinamico = () => {
         switch (serviceName) {
             case 'criacao-de-curriculo':
                 return <FormCurriculo />;
+            case 'via-iptu':
+                return <FormIPTU />
             default:
                 return <p>Serviço não encontrado.</p>
         }

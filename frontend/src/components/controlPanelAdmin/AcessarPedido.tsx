@@ -4,6 +4,7 @@ import api from "../../services/api";
 import type { Pedido } from "./PedidosPendentes";
 import { AuthContext } from "../../contexts/AuthContext";
 import { VisualizarPedidoCurriculo } from "../servicosForm/curriculo";
+import { VisualizarPedidoIPTU } from "../servicosForm/viaIptu";
 
 export const AcessarPedido = () => {
     const [dadosPedido, setDadosPedido] = useState<Pedido | null>(null);
@@ -19,8 +20,10 @@ export const AcessarPedido = () => {
 
     const renderForm = () => {
         switch (dadosPedido?.jobId) {
-            case 1:
+            case 17:
                 return <VisualizarPedidoCurriculo />;
+            case 14: 
+                return <VisualizarPedidoIPTU />
             default:
                 return <p>Serviço não encontrado.</p>
         }
