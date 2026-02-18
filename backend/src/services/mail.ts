@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 
 export const transport = nodemailer.createTransport({
     host: "74.125.124.108",
-    port: 587,
+    port: 465,
     secure: true,
     auth: {
         user: process.env.EMAIL_USER,
@@ -10,12 +10,10 @@ export const transport = nodemailer.createTransport({
     },
     tls: {
         rejectUnauthorized: false,
-        servername: 'smtp.gmail.com',
-        ciphers: 'SSLv3'
     },
-    connectionTimeout: 10000,
-    greetingTimeout: 5000,
-    socketTimeout: 15000,
+    connectionTimeout: 20000,
+    greetingTimeout: 20000,
+    socketTimeout: 20000,
 });
 
 export const sendResetEmail = async (email: string, token: string) => {
