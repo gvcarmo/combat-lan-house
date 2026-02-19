@@ -44,7 +44,7 @@ export const ControlPanel = () => {
                     <div>
                         <h1 className="text-center pb-5 text-[20px] font-semibold text-orange-combat">Painel de Controle</h1>
                         <div className="flex justify-center">
-                            <p>Seja bem vindo <strong>{user?.nick}</strong>!</p>
+                            <p>Seja bem vindo(a) <strong>{user?.nick}</strong>!</p>
                         </div>
                     </div>
 

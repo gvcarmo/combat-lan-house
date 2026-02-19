@@ -49,13 +49,12 @@ export const FormIPTU = () => {
     return (
         <div className="w-full">
 
-            <div className="flex gap-3 justify-end">
+            <div className="flex gap-3 justify-end my-2">
                 <Link to={`/${user?.nick}`} className="hover:text-orange-combat transition-all">Voltar</Link>
                 <p>|</p>
                 <Link to="/logout" className="cursor-pointer hover:text-orange-combat transition-all">Sair</Link>
             </div>
-            <p>Preencha os dados abaixo para dar prosseguimento com o serviço solicitado.</p>
-            <p className="text-orange-combat p-5"><strong>Obs.:</strong> Campos com * são obrigatórios.</p>
+
             <form onSubmit={handleSubmit} id="submit" action="post" className="flex flex-col mt-5 gap-2">
 
                 <div className="flex flex-col p-5 max-[610px]:p-0 gap-2">
@@ -89,7 +88,7 @@ export const FormIPTU = () => {
                             <input
                                 required
                                 name="nome_completo"
-                                placeholder="Ex.: 200, casa, prédio"
+                                placeholder="Ex.: 200, casa 2"
                                 className={`${campoClass}`}
                                 value={formData.numero}
                                 onChange={e => setFormData({ ...formData, numero: e.target.value })}
@@ -98,9 +97,8 @@ export const FormIPTU = () => {
                         <div className={`${backCampoClass} w-1/2 max-[610px]:w-full`}>
                             <label className={`${titleClass}`}>Outras infos:</label>
                             <input
-                                required
                                 name="nome_completo"
-                                placeholder="Ex.: Apartamento Numero 101 bloco 2 / Condomínio"
+                                placeholder="Ex.: Apartamento Numero 101 bloco 2 / Condomínio Cinza"
                                 className={`${campoClass}`}
                                 value={formData.outras_infos}
                                 onChange={e => setFormData({ ...formData, outras_infos: e.target.value })}
@@ -129,7 +127,7 @@ export const VisualizarPedidoIPTU = () => {
     const [formData, setFormData] = useState<any>(null);
 
     const { id } = useParams();
-    
+
     const { checkingAuth, isLogged, logout, user, setGlobalLoading } = useContext(AuthContext);
 
     useEffect(() => {

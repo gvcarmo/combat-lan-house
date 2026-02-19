@@ -160,13 +160,11 @@ export const FormCurriculo = () => {
     return (
         <div className="w-full">
 
-            <div className="flex gap-3 justify-end">
+            <div className="flex gap-3 justify-end my-2">
                 <Link to={`/${user?.nick}`} className="hover:text-orange-combat transition-all">Voltar</Link>
                 <p>|</p>
                 <Link to="/logout" className="cursor-pointer hover:text-orange-combat transition-all">Sair</Link>
             </div>
-            <p>Preencha os dados abaixo para dar prosseguimento com o serviço solicitado.</p>
-            <p className="text-orange-combat p-5"><strong>Obs.:</strong> Campos com * são obrigatórios.</p>
             <form onSubmit={handleSubmit} id="submit" action="post" className="flex flex-col mt-5 gap-2">
                 <div className="flex flex-col p-5 max-[610px]:p-0 mb-5 gap-2">
                     <h5 className="text-[18px] font-semibold text-orange-combat mb-2.5">Dados pessoais:</h5>

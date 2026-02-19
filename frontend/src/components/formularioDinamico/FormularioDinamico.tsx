@@ -61,11 +61,17 @@ export const FormularioDinamico = () => {
                 </h1>
 
                 {aviso && (
-                    <div className="mb-6 p-4 bg-orange-combat/10 border-l-4 border-orange-combat text-orange-combat w-full">
+                    <div className="mb-6 p-4 bg-orange-combat/10 hover:bg-orange-combat/30 border-l-4 border-orange-combat text-orange-combat w-full transition-all">
                         <p className="text-xs font-bold uppercase tracking-wider mb-1">📅 Informação de Prazo:</p>
                         <p className="text-[11px] leading-relaxed text-white/90">{aviso}</p>
                     </div>
                 )}
+
+                <div className="mb-6 p-4 bg-red-500/10 hover:bg-red-500/30 border-l-4 border-red-500 text-red-500 w-full transition-all">
+                    <p className="text-xs font-bold uppercase tracking-wider mb-1 transition-all">⚠️ Atenção!</p>
+                    <p className="text-[11px] leading-relaxed text-white/90">* Forneça todos os dados aqui requeridos, ou seu serviço não será processado.</p>
+                    <p className="text-[11px] leading-relaxed text-white/90">* Campos com * (asterisco) são obrigatórios!</p>
+                </div>
 
                 {renderForm()}
             </div>

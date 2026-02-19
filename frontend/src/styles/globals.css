@@ -182,7 +182,10 @@ svg:hover rect {
     margin: 0;
 }
 
-.legenda, .formulario, .mensagem {
+.legenda,
+.formulario,
+.mensagem,
+.finalizouPedido {
     transition: all 0.3s cubic-bezier(0.77, 0, 0.175, 1);
     opacity: 0;
     height: 0;
@@ -190,7 +193,10 @@ svg:hover rect {
     padding: 0;
 }
 
-.legenda.active, .formulario.active, .mensagem.active {
+.legenda.active,
+.formulario.active,
+.mensagem.active,
+.finalizouPedido.active {
     display: flex;
     opacity: 1;
     height: auto;
