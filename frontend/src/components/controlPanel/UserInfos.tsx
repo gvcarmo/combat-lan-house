@@ -59,7 +59,7 @@ export const UserInfos = () => {
     }
 
     return (
-        <div>
+        <div className="max-[610px]:text-[12px]">
 
             <div className="my-5 flex flex-col items-center justify-center">
                 <h3 className="mb-2.5 text-orange-combat font-semibold text-[18px] ">Minha Conta</h3>
