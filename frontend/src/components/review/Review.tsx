@@ -276,7 +276,7 @@ export const Reviews = () => {
                 </div>
             )}
 
-            <div className="min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71 flex items-center justify-center relative">
+            <div className="flex items-center justify-center relative">
 
                 <button
                     onClick={prevSlide}
