@@ -50,7 +50,7 @@ export const PedidosPendentes = () => {
             transports: ['websocket', 'polling'],
             withCredentials: true
         });
-        
+
         socket.on('novo_pedido', (pedidoRecemCriado: Pedido) => {
             console.log("Novo pedido recebido via Socket!", pedidoRecemCriado);
 

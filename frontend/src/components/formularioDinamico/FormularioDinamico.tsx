@@ -1,39 +1,15 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { FormCurriculo } from '../servicosForm/curriculo';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { FormIPTU } from '../servicosForm/viaIptu';
 import { FormIPVA } from '../servicosForm/ipva';
+import { CriarVideo } from '../servicosForm/CriarVideo';
+import { Prazos } from '../../hooks/Prazos';
 
 export const FormularioDinamico = () => {
     const { serviceName } = useParams();
     const { checkingAuth, isLogged, user } = useContext(AuthContext);
-    const [aviso, setAviso] = useState("");
-
-    const exibirAvisoPrazo = () => {
-        const agora = new Date();
-        const diaSemana = agora.getDay();
-        const hora = agora.getHours();
-
-        let mensagem = "";
-
-        if (diaSemana === 0) {
-            mensagem = "Atenção: Solicitações de serviços feitas no Domingo só serão processadas na Segunda-Feira à partir das 08h00.";
-        }
-        else if (hora >= 18 || hora < 8) {
-            mensagem = "Atenção: O seu pedido está sendo feito fora do horário comercial da nossa loja online, o processamento só irá ser iniciado à partir das 08h00."
-        }
-        else {
-            mensagem = "Atenção: Após o processamento do seu pedido, o prazo de entrega é de 5 minutos à 2 horas! Por favor aguarde."
-        }
-        setAviso(mensagem);
-    }
-
-    useEffect(() => {
-        if (isLogged && !checkingAuth) {
-            exibirAvisoPrazo();
-        }
-    }, [isLogged, checkingAuth]);
 
     if (checkingAuth) return <div className="text-white">Verificando autenticação...</div>;
 
@@ -55,6 +31,8 @@ export const FormularioDinamico = () => {
                 return <FormIPVA />
             case 'via-licenciamento-anual-do-veiculo':
                 return <FormIPVA />
+            case 'criacao-de-video':
+                return <CriarVideo />
             default:
                 return <p>Serviço não encontrado.</p>
         }
@@ -74,16 +52,11 @@ export const FormularioDinamico = () => {
                     Solicitando:<br /> {serviceName?.replace(/-/g, ' ').toUpperCase()}
                 </h1>
 
-                {aviso && (
-                    <div className="mb-6 p-4 bg-orange-combat/10 hover:bg-orange-combat/30 border-l-4 border-orange-combat text-orange-combat w-full transition-all">
-                        <p className="text-xs font-bold uppercase tracking-wider mb-1">📅 Informação de Prazo:</p>
-                        <p className="text-[11px] leading-relaxed text-white/90">{aviso}</p>
-                    </div>
-                )}
+                <Prazos />
 
                 <div className="p-4 bg-red-500/10 hover:bg-red-500/30 border-l-4 border-red-500 text-red-500 w-full transition-all">
                     <p className="text-xs font-bold uppercase tracking-wider mb-1 transition-all">⚠️ Atenção!</p>
-                    <p className="text-[11px] leading-relaxed text-white/90">* Forneça todos os dados aqui requeridos, ou seu serviço não será processado.</p>
+                    <p className="text-[11px] leading-relaxed text-white/90">* Forneça todos os dados obrigatórios aqui requeridos (campos com *), ou seu serviço não será processado.</p>
                     <p className="text-[11px] leading-relaxed text-white/90">* Campos com * (asterisco) são obrigatórios!</p>
                 </div>
 

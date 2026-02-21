@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import api from '../../services/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
+import { Prazos } from '../../hooks/Prazos';
 
 interface Pedido {
     id: any;
@@ -27,9 +28,28 @@ export const MeusPedidos = () => {
     const [mostrarLegenda, setMostrarLegenda] = useState(false);
     const [_pedidoSelecionado, setPedidoSelecionado] = useState<Pedido | null>(null);
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const { setGlobalLoading, isLogged, user } = useContext(AuthContext);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const pedidoIdParaPagar = searchParams.get('pagar');
+
+        if (pedidoIdParaPagar && pedidos.length > 0) {
+            const idNum = Number(pedidoIdParaPagar);
+
+            const pedidoExistente = pedidos.find(p => p.id === idNum && p.status === 'aguardando pagamento');
+
+            if (pedidoExistente) {
+                handleGerarPix(idNum);
+
+                searchParams.delete('pagar');
+                setSearchParams(searchParams);
+            }
+        }
+    }, [pedidos, searchParams])
 
     useEffect(() => {
         let intervalo: any;
@@ -211,7 +231,7 @@ export const MeusPedidos = () => {
                     </div>
 
                 </div>
-                
+
                 {pedido.status === 'pendente' && (
                     <div className={`${backCampoClass}`}>
                         <h3 className={`${titleClass}`}>Do pagamento:</h3>
@@ -294,7 +314,10 @@ export const MeusPedidos = () => {
             <div className="my-5 flex flex-col items-center justify-center">
                 <h3 className="mb-2.5 text-orange-combat font-semibold text-[18px] ">Meus pedidos</h3>
             </div>
-            <div className="grid gap-4">
+
+            <Prazos />
+
+            <div className="grid">
                 <div className="flex flex-col gap-2">
                     <div className="flex justify-end">
                         <button onClick={() => setMostrarLegenda(!mostrarLegenda)} className="cursor-pointer px-4 py-1 w-fit bg-orange-combat hover:bg-gray-700 transition-all font-semibold">

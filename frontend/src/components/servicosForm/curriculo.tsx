@@ -131,7 +131,7 @@ export const FormCurriculo = () => {
 
         setGlobalLoading(true);
         try {
-            await api.post('/pedidos', {
+            const response = await api.post('/pedidos', {
                 jobSlug: serviceName,
                 dadosForm: {
                     ...formData,
@@ -141,9 +141,11 @@ export const FormCurriculo = () => {
                 arquivosEnviados: []
             });
 
-            alert(`Pedido realizado com sucesso! Aguarde o processamento.`);
+            const novoPedidoId = response.data.id;
 
-            navigate(`/${user?.nick}`);
+            alert(`Pedido realizado com sucesso! Realize o pagamento.`);
+
+            navigate(`/${user?.nick}?aba=meus_pedidos&pagar=${novoPedidoId}`);
 
         } catch (error) {
             return ("Erro ao enviar, verifique os dados.")

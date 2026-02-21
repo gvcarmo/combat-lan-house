@@ -1,4 +1,4 @@
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, useSearchParams, Navigate, Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { FazerPedido } from './FazerPedido';
@@ -9,9 +9,10 @@ import { EnviarMensagem } from './EnviarMensagem';
 
 export const ControlPanel = () => {
     const { nick } = useParams();
+    const [searchParams] = useSearchParams();
     const { user, isAdmin, isLogged, checkingAuth, logout } = useContext(AuthContext);
 
-    const [abaAtiva, setAbaAtiva] = useState('fazer_pedido');
+    const [abaAtiva, setAbaAtiva] = useState(searchParams.get('aba') || 'fazer_pedido');
 
     const [abaAtivaAdmin, setAbaAtivaAdmin] = useState('pedidos_pendentes');
 
