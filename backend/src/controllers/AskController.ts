@@ -45,6 +45,8 @@ export class AskController {
                 return nomeNormalizado === jobSlug.toLowerCase();
             });
 
+            console.log(job)
+
             if (!job) {
                 return res.status(404).json({ error: "Serviço não encontrado." });
             }

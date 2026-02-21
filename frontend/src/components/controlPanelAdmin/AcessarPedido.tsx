@@ -5,6 +5,7 @@ import type { Pedido } from "./PedidosPendentes";
 import { AuthContext } from "../../contexts/AuthContext";
 import { VisualizarPedidoCurriculo } from "../servicosForm/curriculo";
 import { VisualizarPedidoIPTU } from "../servicosForm/viaIptu";
+import { VisualizarPedidoIPVA } from "../servicosForm/ipva";
 
 export const AcessarPedido = () => {
     const [dadosPedido, setDadosPedido] = useState<Pedido | null>(null);
@@ -26,6 +27,8 @@ export const AcessarPedido = () => {
                 return <VisualizarPedidoIPTU />
             case 19: 
                 return <VisualizarPedidoIPTU />
+            case 16: 
+                return <VisualizarPedidoIPVA />
             default:
                 return <p>Serviço não encontrado.</p>
         }

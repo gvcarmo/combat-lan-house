@@ -1,12 +1,13 @@
-import { Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { FormCurriculo } from '../servicosForm/curriculo';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { FormIPTU } from '../servicosForm/viaIptu';
+import { FormIPVA } from '../servicosForm/ipva';
 
 export const FormularioDinamico = () => {
     const { serviceName } = useParams();
-    const { checkingAuth, isLogged } = useContext(AuthContext);
+    const { checkingAuth, isLogged, user } = useContext(AuthContext);
     const [aviso, setAviso] = useState("");
 
     const exibirAvisoPrazo = () => {
@@ -23,7 +24,7 @@ export const FormularioDinamico = () => {
             mensagem = "Atenção: O seu pedido está sendo feito fora do horário comercial da nossa loja online, o processamento só irá ser iniciado à partir das 08h00."
         }
         else {
-            mensagem = "Atenção: Após o recebimento do seu pedido, o prazo de entrega é de 5 minutos à 2 horas! Por favor aguarde."
+            mensagem = "Atenção: Após o processamento do seu pedido, o prazo de entrega é de 5 minutos à 2 horas! Por favor aguarde."
         }
         setAviso(mensagem);
     }
@@ -48,6 +49,8 @@ export const FormularioDinamico = () => {
                 return <FormIPTU />
             case 'via-iptu-parcela':
                 return <FormIPTU />
+            case 'via-ipva-e-licenciamento':
+                return <FormIPVA />
             default:
                 return <p>Serviço não encontrado.</p>
         }
@@ -56,7 +59,14 @@ export const FormularioDinamico = () => {
     return (
         <div className="min-h-screen flex justify-center items-center text-white bg-linear-to-r from-[#FF3300] via-[#FF5900] to-[#803100]">
             <div className="bg-neutral-grayish border border-neutral-border-light-color p-8 flex flex-col items-center my-2.5 min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71">
-                <h1 className="text-center text-orange-combat text-xl font-bold mb-4">
+
+                <div className="flex gap-3 w-full justify-end my-2">
+                    <Link to={`/${user?.nick}`} className="hover:text-orange-combat transition-all">Voltar</Link>
+                    <p>|</p>
+                    <Link to="/logout" className="cursor-pointer hover:text-orange-combat transition-all">Sair</Link>
+                </div>
+
+                <h1 className="text-center text-orange-combat text-xl font-bold mb-6">
                     Solicitando:<br /> {serviceName?.replace(/-/g, ' ').toUpperCase()}
                 </h1>
 
@@ -67,7 +77,7 @@ export const FormularioDinamico = () => {
                     </div>
                 )}
 
-                <div className="mb-6 p-4 bg-red-500/10 hover:bg-red-500/30 border-l-4 border-red-500 text-red-500 w-full transition-all">
+                <div className="p-4 bg-red-500/10 hover:bg-red-500/30 border-l-4 border-red-500 text-red-500 w-full transition-all">
                     <p className="text-xs font-bold uppercase tracking-wider mb-1 transition-all">⚠️ Atenção!</p>
                     <p className="text-[11px] leading-relaxed text-white/90">* Forneça todos os dados aqui requeridos, ou seu serviço não será processado.</p>
                     <p className="text-[11px] leading-relaxed text-white/90">* Campos com * (asterisco) são obrigatórios!</p>

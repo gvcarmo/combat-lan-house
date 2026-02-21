@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -8,7 +8,6 @@ export const FormCurriculo = () => {
     const [isSending, _setIsSending] = useState(false);
     const [nascimento, setNascimento] = useState({ dia: '', mes: '', ano: '' });
     const [endereco, setEndereco] = useState({ rua: '', numero: '', bairro: '', cidade: '' })
-
     const { serviceName } = useParams();
     const navigate = useNavigate();
 
@@ -159,12 +158,6 @@ export const FormCurriculo = () => {
 
     return (
         <div className="w-full">
-
-            <div className="flex gap-3 justify-end my-2">
-                <Link to={`/${user?.nick}`} className="hover:text-orange-combat transition-all">Voltar</Link>
-                <p>|</p>
-                <Link to="/logout" className="cursor-pointer hover:text-orange-combat transition-all">Sair</Link>
-            </div>
             <form onSubmit={handleSubmit} id="submit" action="post" className="flex flex-col mt-5 gap-2">
                 <div className="flex flex-col p-5 max-[610px]:p-0 mb-5 gap-2">
                     <h5 className="text-[18px] font-semibold text-orange-combat mb-2.5">Dados pessoais:</h5>
@@ -305,7 +298,7 @@ export const FormCurriculo = () => {
                         <button
                             type="button"
                             onClick={addTel}
-                            className="cursor-pointer text-xs bg-gray-700 text-white p-2 w-fit h-8 hover:bg-gray-600 transition-colors">
+                            className="cursor-pointer text-xs bg-gray-700 text-white py-1 px-2 w-fit hover:bg-gray-600 transition-colors">
                             + Add outro tel
                         </button>
                     </div>
@@ -324,16 +317,20 @@ export const FormCurriculo = () => {
                         />
                     </div>
 
-                    <div className={`${backCampoClass}`}>
-                        <label className={`${titleClass}`}>CNH:</label>
-                        <input
-                            placeholder="Ex.: A/B"
-                            name="cnh"
-                            className={`${campoClass}`}
-                            value={formData.cnh}
-                            onChange={handleChange}
-                        />
+                    <div className="flex gap-3">
+                        <div className={`${backCampoClass} w-1/2`}>
+                            <label className={`${titleClass}`}>CNH:</label>
+                            <input
+                                placeholder="Ex.: A/B"
+                                name="cnh"
+                                className={`${campoClass}`}
+                                value={formData.cnh}
+                                onChange={handleChange}
+                            />
+                        </div>
+
                     </div>
+
 
                 </div>
 
@@ -368,7 +365,7 @@ export const FormCurriculo = () => {
                         <button
                             type="button"
                             onClick={addEscolaridade}
-                            className="cursor-pointer text-xs bg-gray-700 text-white p-2 w-fit h-8 hover:bg-gray-600 transition-colors">
+                            className="cursor-pointer text-xs bg-gray-700 text-white py-1 px-2 w-fit hover:bg-gray-600 transition-colors">
                             + Add outra formação
                         </button>
                     </div>
@@ -400,7 +397,7 @@ export const FormCurriculo = () => {
                         <button
                             type="button"
                             onClick={addCursos}
-                            className="cursor-pointer text-xs bg-gray-700 text-white p-2 w-fit h-8 hover:bg-gray-600 transition-colors">
+                            className="cursor-pointer text-xs bg-gray-700 text-white py-1 px-2 w-fit hover:bg-gray-600 transition-colors">
                             + Add curso
                         </button>
                     </div>
@@ -459,7 +456,7 @@ export const FormCurriculo = () => {
                         <button
                             type="button"
                             onClick={addExperiencia}
-                            className="cursor-pointer text-xs bg-gray-700 text-white p-2 w-fit h-8 hover:bg-gray-600 transition-colors">
+                            className="cursor-pointer text-xs bg-gray-700 text-white py-1 px-2 w-fit hover:bg-gray-600 transition-colors">
                             + Add empresa
                         </button>
                     </div>

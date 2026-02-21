@@ -190,7 +190,7 @@ export const MeusPedidos = () => {
         return hoje > dataExpiração;
     }
 
-    const renderCardPedido = (pedido: Pedido, isConcluido: boolean = false) => {
+    const renderCardPedido = (pedido: Pedido, _isConcluido: boolean = false) => {
         // Cálculo de 3 meses a frente (Data de Entrega + 90 dias)
         const dataEntrega = new Date(pedido.atualizadoEm); // No seu caso, ideal seria ter p.dataFinalizacao
         const dataExpiracao = new Date(dataEntrega);
@@ -204,12 +204,6 @@ export const MeusPedidos = () => {
                         <span className="text-orange-combat">Pedido em:</span> {new Date(pedido.criadoEm).toLocaleDateString()}
                     </p>
 
-                    {isConcluido && (
-                        <p className="text-[10px] text-orange-pailed font-medium">
-                            Disponível para download até: {dataExpiracao.toLocaleDateString()}
-                        </p>
-                    )}
-
                     <div>
                         <span className={`px-2 py-0.5 text-[10px] font-bold uppercase ${getStatusColor(pedido.status)}`}>
                             {pedido.status}
@@ -217,8 +211,15 @@ export const MeusPedidos = () => {
                     </div>
 
                 </div>
-
-
+                
+                {pedido.status === 'pendente' && (
+                    <div className={`${backCampoClass}`}>
+                        <h3 className={`${titleClass}`}>Do pagamento:</h3>
+                        <p className={`${campoClass} flex gap-2 items-center`}>
+                            <span className=""><img className="w-4" src="./icons/check2.svg" alt="Pago!" /></span> Pago
+                        </p>
+                    </div>
+                )}
 
                 <div className="flex flex-col items-end max-[610px]:items-center gap-2 p-2">
                     {/* Botões de Ação (Mesma lógica que você já tinha) */}
@@ -239,7 +240,6 @@ export const MeusPedidos = () => {
                     {pedido.status === 'finalizado' && (
                         <div className="p-2 bg-neutral-dark/50 rounded-sm">
 
-                            {/* 2. Verificamos se os 90 dias já passaram (usando a função de expiração) */}
                             {verificarExpiracao(pedido.atualizadoEm) ? (
 
                                 // CASO: EXPIROU

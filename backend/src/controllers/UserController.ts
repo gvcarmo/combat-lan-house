@@ -91,7 +91,7 @@ export class UserController {
             try {
                 console.log("Iniciando tentativa de envio via Resend para:", email);
 
-                await sendResetEmail(email, token);
+                await sendResetEmail(email, user.nick, token);
 
                 console.log("Fluxo de e-mail finalizado com sucesso.");
                 return res.json({ message: "E-mail enviado com sucesso!" });

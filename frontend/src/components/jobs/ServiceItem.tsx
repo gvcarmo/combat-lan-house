@@ -232,17 +232,20 @@ export const ServiceItem = ({ job, onUpdate }: JobProps) => {
                         </>
                     )}
                 </div>
-                <div>
-                    {isLogged && user ? (
-                        <div className="flex flex-col items-end gap-1.5">
-                            <p className="text-center text-[12px] "><span className="bg-orange-combat text-white px-2 py-px w-23.5 font-semibold">R$ {job.preco}</span></p>
-                            <p className="text-center text-[12px] "><span className="bg-orange-combat text-white px-2 py-px w-23.5 font-semibold">- {job.desc}</span></p>
-                            <p className="text-center text-[12px] "><span className="bg-orange-combat text-white px-2 py-px w-23.5 font-semibold">= {job.total}</span></p>
-                        </div>
-                    ) : (
-                        ''
-                    )}
-                </div>
+                {job.genero === 'online' && (
+                    <div>
+                        {isLogged && user ? (
+                            <div className="flex flex-col items-end gap-1.5">
+                                <p className="text-center text-[12px] "><span>R$</span> <span className="bg-orange-combat text-white px-2 py-px w-23.5 font-semibold">{job.preco}</span></p>
+                                <p className="text-center text-[12px] ">DESC. <span className="bg-orange-combat text-white px-2 py-px w-23.5 font-semibold">{job.desc}</span></p>
+                                <p className="text-center text-[12px] ">TOT. <span className="bg-orange-combat text-white px-2 py-px w-23.5 font-semibold">{job.total}</span></p>
+                            </div>
+                        ) : (
+                            ''
+                        )}
+                    </div>
+
+                )}
 
             </div>
         </div>

@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const sendResetEmail = async (email: string, token: string) => {
+export const sendResetEmail = async (email: string, nick: string, token: string, ) => {
     const link = `https://www.combatlanhouse.com.br/resetpassword/${token}`;
 
     try {
@@ -13,7 +13,7 @@ export const sendResetEmail = async (email: string, token: string) => {
             html: `
                 <div style="font-family: sans-serif;">
                     <h1>Troca de Senha - Combat Lan House</h1>
-                    <p>Você solicitou a alteração de senha. Clique no link abaixo:</p>
+                    <p>Olá <span style="font-weight: bold;">${nick}</span>! Você solicitou a alteração de senha. Clique no link abaixo:</p>
                     <a href="${link}" style="background: #FF5100; color: #fff; padding: 10px 20px; text-decoration: none;">
                         Resetar Senha
                     </a>

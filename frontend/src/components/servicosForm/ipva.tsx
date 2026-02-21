@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 import api from "../../services/api";
 
-export const FormIPTU = () => {
+export const FormIPVA = () => {
     const [isSending, setIsSending] = useState(false);
 
     const { serviceName } = useParams();
@@ -14,16 +14,16 @@ export const FormIPTU = () => {
 
     const [formData, setFormData] = useState({
         nome_completo: '',
-        endereco: '',
-        numero: '',
+        renavam: '',
+        exercicio: '',
         outras_infos: ''
     })
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        setIsSending(true);
         setGlobalLoading(true);
+        setIsSending(true);
         try {
             await api.post('/pedidos', {
                 jobSlug: serviceName,
@@ -40,7 +40,7 @@ export const FormIPTU = () => {
 
         } finally {
             setGlobalLoading(false);
-            setIsSending(true);
+            setIsSending(false);
         }
     }
 
@@ -51,12 +51,11 @@ export const FormIPTU = () => {
     return (
         <div className="w-full">
             <form onSubmit={handleSubmit} id="submit" className="flex flex-col mt-5 gap-2">
-
                 <div className="flex flex-col p-5 max-[610px]:p-0 gap-2">
                     <h5 className="text-[18px] font-semibold text-orange-combat mb-2.5">Dados Necessários:</h5>
 
                     <div className={`${backCampoClass}`}>
-                        <label className={`${titleClass}`}>Nome Completo do Proprietário do Imóvel: *</label>
+                        <label className={`${titleClass}`}>Nome Completo do Proprietário do Veículo: *</label>
                         <input
                             required
                             name="nome_completo"
@@ -66,41 +65,52 @@ export const FormIPTU = () => {
                             onChange={e => setFormData({ ...formData, nome_completo: e.target.value })}
                         />
                     </div>
+
                     <div className={`${backCampoClass}`}>
-                        <label className={`${titleClass}`}>Endereço do Imóvel: *</label>
+                        <label className={`${titleClass}`}>Número do Renavam: *</label>
                         <input
                             required
-                            name="endereco"
-                            placeholder="Ex.: Rua Dr. Adilson Resende Facure"
+                            name="renavam"
+                            type="text"
+                            maxLength={11}
+                            placeholder="Ex.: 99988899944"
                             className={`${campoClass}`}
-                            value={formData.endereco}
-                            onChange={e => setFormData({ ...formData, endereco: e.target.value })}
+                            value={formData.renavam}
+                            onChange={e => setFormData({ ...formData, renavam: e.target.value })}
                         />
                     </div>
-                    <div className="flex max-[610px]:flex-col gap-4">
-                        <div className={`${backCampoClass} w-1/2 max-[610px]:w-full`}>
-                            <label className={`${titleClass}`}>Número: *</label>
-                            <input
-                                required
-                                name="numero"
-                                placeholder="Ex.: 200, casa 2"
-                                className={`${campoClass}`}
-                                value={formData.numero}
-                                onChange={e => setFormData({ ...formData, numero: e.target.value })}
-                            />
-                        </div>
-                        <div className={`${backCampoClass} w-1/2 max-[610px]:w-full`}>
-                            <label className={`${titleClass}`}>Outras infos:</label>
-                            <input
+
+                    <div className={`${backCampoClass}`}>
+                        <label className={`${titleClass}`}>Ano do exercício: *</label>
+                        <input
+                            required
+                            name="exercicio"
+                            type="text"
+                            placeholder="Ex.: 2026"
+                            className={`${campoClass}`}
+                            value={formData.exercicio}
+                            onChange={e => setFormData({ ...formData, exercicio: e.target.value })}
+                        />
+                    </div>
+
+                    <div className="flex flex-col border border-orange-combat max-[610px]:border-none p-5 max-[610px]:p-0 mb-5 gap-2">
+                        <h5 className="text-[18px] font-semibold text-orange-combat mb-2.5">Outras informações relevantes:</h5>
+
+                        <div className="flex flex-col gap-3 mb-2 ">
+                            <label className="text-xs text-gray-400 ml-1">Informações adicionais:</label>
+                            <textarea
+                                rows={5}
                                 name="outras_infos"
-                                placeholder="Ex.: Apartamento Numero 101 bloco 2 / Condomínio Cinza"
-                                className={`${campoClass}`}
+                                className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors w-full"
                                 value={formData.outras_infos}
                                 onChange={e => setFormData({ ...formData, outras_infos: e.target.value })}
                             />
+                            <p className="text-[12px]"><strong>Obs.:</strong> <br />* Caso não tenha certeza sobre alguma informação, sugiro que abra um ticket no painel de controle, enviando assim a foto do documento.</p>
+
                         </div>
                     </div>
                 </div>
+
                 <div className="flex flex-col items-center">
                     <button
                         disabled={isSending}
@@ -115,7 +125,7 @@ export const FormIPTU = () => {
     )
 }
 
-export const VisualizarPedidoIPTU = () => {
+export const VisualizarPedidoIPVA = () => {
     const [dadosPedido, setDadosPedido] = useState<any>(null);
     const [carregando, setCarregando] = useState(true);
     const [isEditing, setIsEditing] = useState(false);

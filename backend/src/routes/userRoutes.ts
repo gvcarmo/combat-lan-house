@@ -89,6 +89,7 @@ routes.get('/pedido/:id/download', verificarToken, askController.downloadFile);
 routes.get('/pedido/:id', verificarToken, askController.showOrder)
 routes.put('/pedido/:id', verificarToken, askController.updateOrder)
 routes.post('/pedido/:id', verificarToken, upload.array('arquivosFinal'), askController.updateOrder);
+routes.post('/pedidos', verificarToken, upload.array('arquivosEnviados'), askController.StorageEvent);
 routes.get('/pedidos', verificarToken, askController.pedidosPendentes)
 
 routes.get('/admin/pedidos', verificarToken, somenteAdmin, askController.index)

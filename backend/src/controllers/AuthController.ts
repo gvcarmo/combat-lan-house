@@ -27,8 +27,6 @@ export const loginUsuario = async (req: Request, res: Response) => {
             { expiresIn: '4h' }
         );
 
-        console.log(token)
-
         const refreshToken = jwt.sign(
             { id: usuario.id },
             process.env.JWT_REFRESH_SECRET as string,
