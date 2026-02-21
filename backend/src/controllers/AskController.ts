@@ -235,7 +235,7 @@ export class AskController {
                 });
             }
 
-            const precoRaw = pedido.job.preco || "0";
+            const precoRaw = pedido.job.total || "0";
 
             // Remove R$, espaços e troca vírgula por ponto
             const valorLimpo = precoRaw
