@@ -133,7 +133,7 @@ export const Jobs = () => {
 
                 <div className="w-full max-w-275 bg-neutral-dark-grayish border border-gray-800 p-6 max-[610px]:p-2">
 
-                    {isLogged && user ? ( 
+                    {isLogged && user ? (
 
                         <div className={`mb-6 p-4 bg-orange-combat/10 hover:bg-orange-combat/30 border-l-4 text-orange-combat w-full flex-col`}>
                             <p className="text-xs font-bold uppercase tracking-wider mb-1">📦 Antes de fazer um pedido:</p>
@@ -147,10 +147,13 @@ export const Jobs = () => {
                     <div className="flex justify-between items-center w-full">
                         <div className="border-l-4 border-orange-combat bg-orange-combat/10 py-2 pl-4 flex flex-col gap-1 md:col-span-2 mb-4 w-full">
                             <div className="text-xs uppercase mb-1">
-                                <input className="p-1 mr-2 text-sm bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors resize-none w-[98%]" placeholder="Pesquisar serviço..." type="text"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)} />
-                                <img className="absolute w-5 top-3 left-4 opacity-50" src="./icons/search.svg" alt="Procurar" />
+
+                                <div className="relative">
+                                    <input className="px-8 py-1 mr-2 text-sm bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors resize-none w-[98%]" placeholder="Pesquisar serviço..." type="text"
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)} />
+                                    <img className="absolute w-4 top-2 left-2 opacity-50" src="./icons/search.svg" alt="Procurar" />
+                                </div>
 
                                 {searchTerm && (
                                     <button
@@ -316,7 +319,7 @@ export const Jobs = () => {
 
                     <div className="grid grid-cols-1 gap-4">
                         <div>
-                            <div className="flex flex-col gap-4 justify-center">
+                            <div className="flex flex-col gap-4 justify-center mb-4">
                                 <div className="flex flex-col gap-4">
                                     <div className="flex gap-4">
                                         <button
