@@ -33,8 +33,6 @@ export const Jobs = () => {
 
     const [filtroAtivo, setFiltroAtivo] = useState<'presencial' | 'online'>('presencial');
 
-    const [mostrarLegenda, setMostrarLegenda] = useState(false);
-
     const jobsFiltrados = jobs.filter((job: any) => {
 
         if (!job.genero) return false;
@@ -235,7 +233,7 @@ export const Jobs = () => {
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-gray-400 ml-1">Preço: </label>
-                                    <input                                        
+                                    <input
                                         className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
                                         placeholder="Ex.: 2,00"
                                         value={`${newJob.preco}`}
@@ -245,7 +243,7 @@ export const Jobs = () => {
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-gray-400 ml-1">Desconto:</label>
                                     <input
-                                        
+
                                         className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
                                         placeholder="Ex.: 0,50"
                                         value={`${newJob.desc}`}
@@ -254,7 +252,7 @@ export const Jobs = () => {
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-gray-400 ml-1">Total:</label>
-                                    <input                                        
+                                    <input
                                         className="p-3 bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors"
                                         placeholder="Ex.: 1,50"
                                         value={`${newJob.total}`}
@@ -305,7 +303,7 @@ export const Jobs = () => {
 
                     <div className="grid grid-cols-1 gap-4">
                         <div>
-                            <div className="flex flex-col gap-4 mb-6 justify-center">
+                            <div className="flex flex-col gap-4 justify-center">
                                 <div className="flex flex-col gap-4">
                                     <div className="flex gap-4">
                                         <button
@@ -322,53 +320,13 @@ export const Jobs = () => {
                                         </button>
                                     </div>
 
-                                    <div className="flex justify-end">
-                                        <button onClick={() => setMostrarLegenda(!mostrarLegenda)} className="cursor-pointer px-4 py-1 w-fit bg-orange-combat hover:bg-gray-700 transition-all font-semibold">
-                                            {mostrarLegenda ? "Legenda ▲" : "Legenda ▼"}
-                                        </button>
+                                    <div className={`mb-6 p-4 bg-orange-combat/10 hover:bg-orange-combat/30 border-l-4 text-orange-combat w-full flex-col`}>
+                                        <p className="text-xs font-bold uppercase tracking-wider mb-1">📦 Antes de fazer um pedido:</p>
+                                        <p className="text-[11px] leading-relaxed text-white/90">* A categoria <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Presencial'</span> são os serviços exclusivos da loja presencial, você pode ir até a loja ou pedi-los via whatsapp <a className="text-blue-400 hover:text-blue-700" href="http://wa.me/+55349996368855" target="_blank">(Clique Aqui)</a>.</p>
+                                        <p className="text-[11px] leading-relaxed text-white/90">* O canal do <span className="font-semibold">'WhatsApp'</span> é EXCLUSIVO da loja <span className="font-semibold">'Presencial'</span> <a className="text-blue-400 hover:text-blue-700" href="http://wa.me/+55349996368855" target="_blank">(Clique Aqui)</a>.</p>
+                                        <p className="text-[11px] leading-relaxed text-white/90">* A categoria <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Online'</span> são serviços exclusivos da loja Online, você clica em pedir e aguarda o pedido no painel Meus Pedidos.</p>
+                                        <p className="text-[11px] leading-relaxed text-white/90">* Para qualquer comunicação com a loja online, abra um <b>Ticket</b>.</p>
                                     </div>
-
-                                    <div className={`legenda ${mostrarLegenda ? 'active' : ''} border border-orange-combat shadow-sm flex flex-col gap-2  max-[610px]:gap-3`}>
-                                        <p>Os serviços:</p>
-                                        <div className="flex gap-3 items-center max-[610px]:flex-col">
-                                            <p className={`h-fit px-2 py-1 text-xs max-[610px]:text-[11.5px] font-bold uppercase bg-orange-combat`}>
-                                                PRESENCIAIS
-                                            </p>
-                                            <div className="text-xs">
-                                                <p>* São realizados apenas presencialmente e pelo Whatsapp;</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex gap-3 items-center max-[610px]:flex-col">
-                                            <p className={`h-fit px-2 py-1 text-xs font-bold uppercase bg-orange-combat`}>
-                                                ONLINE
-                                            </p>
-                                            <div className="text-xs">
-                                                <p>* Basta pedir pelo site, clique no botão PEDIR;</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex gap-3 items-center max-[610px]:flex-col">
-                                            <p className={`h-fit px-2 py-1 text-xs font-bold uppercase bg-green-100 text-green-800`}>
-                                                WHATSAPP
-                                            </p>
-                                            <div className="text-xs">
-                                                <p>* O Whatsapp é EXCLUSIVO da loja presencial.</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex gap-3 items-center max-[610px]:flex-col">
-                                            <p className={`h-fit px-2 py-1 text-xs font-bold uppercase bg-white text-gray-700`}>
-                                                Chat
-                                            </p>
-                                            <div className="text-xs">
-                                                <p>* O CHAT é EXCLUSIVO para serviços online.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
                                 </div>
 
                             </div>

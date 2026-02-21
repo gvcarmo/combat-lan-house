@@ -205,7 +205,7 @@ export const EnviarMensagem = () => {
                 key={message.id}
                 className={`border-l-2 ${isFechado ? 'border-gray-600 bg-neutral-grayish' : 'border-orange-combat bg-neutral-grayish-dark'} shadow-sm flex flex-col p-4 justify-between transition-all`}
             >
-                <div className="w-full flex gap-4 justify-between max-[610px]:flex-col">
+                <div className="w-full flex gap-4 justify-between max-[1139px]:flex-col">
 
                     <div className="flex flex-col gap-2 items-center">
                         <h4 className={`text-xs uppercase font-bold ${isFechado ? 'text-gray-400' : 'text-orange-combat'}`}>
@@ -272,12 +272,18 @@ export const EnviarMensagem = () => {
                         )}
 
                         {message.status === 'em espera' && (
-                            <div className="w-full flex flex-col items-end gap-2 max-[610px]:items-center">
+                            <div className="w-full flex flex-col items-end gap-2 max-[1139px]:items-center">
                                 <button onClick={() => handleToggleMessage(message.id!)} className="cursor-pointer bg-orange-combat hover:bg-gray-700 py-1 px-3 text-xs " >{isVisivel ? 'Fechar' : 'Responder'}</button>
 
                                 <button onClick={() => handleDeleteMessage(message.id!)} className="cursor-pointer bg-orange-combat hover:bg-gray-700 py-1 px-3 text-xs ">Excluir</button>
                             </div>
 
+                        )}
+
+                        {message.status === 'fechado' && (
+                            <div className="flex flex-col gap-2">
+                                <button onClick={() => handleToggleMessage(message.id!)} className="cursor-pointer bg-gray-900 hover:bg-gray-700 py-1 px-3 text-xs " >{isVisivel ? 'Fechar' : 'Abrir'}</button>
+                            </div>
                         )}
                     </div>
 
@@ -550,7 +556,7 @@ export const EnviarMensagem = () => {
 
                         {/* SEÇÃO: TICKETS EM ANDAMENTO */}
                         <section>
-                            <div className="flex items-center gap-2 mb-4 border-b border-orange-combat/30 pb-2">
+                            <div className="flex items-center gap-2 mb-4 border-b border-orange-combat/30 pb-2 mt-4">
                                 <h3 className="text-orange-combat font-semibold text-[16px] uppercase tracking-wider">Atendimentos Ativos</h3>
                                 <span className="bg-orange-combat text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
                                     {ticketsAbertos.length}
@@ -568,12 +574,12 @@ export const EnviarMensagem = () => {
 
                         {/* SEÇÃO: HISTÓRICO DE RESOLVIDOS */}
                         {ticketsEncerrados.length > 0 && (
-                            <section className="opacity-60 hover:opacity-100 transition-opacity">
+                            <section className="">
                                 <div className="flex items-center gap-2 mb-4 border-b border-gray-700 pb-2">
                                     <h3 className="text-gray-400 font-semibold text-[16px] uppercase tracking-wider">Histórico (Encerrados)</h3>
                                 </div>
 
-                                <div className="flex flex-col gap-4">
+                                <div className="flex flex-col gap-4 hover:opacity-100 transition-opacity opacity-60">
                                     {ticketsEncerrados.map((message) => renderTicketCard(message, true))}
                                 </div>
                             </section>
