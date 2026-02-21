@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { FormIPTU } from '../servicosForm/viaIptu';
 import { FormIPVA } from '../servicosForm/ipva';
-import { CriarVideo } from '../servicosForm/CriarVideo';
+// import { CriarVideo } from '../servicosForm/CriarVideo';
 import { Prazos } from '../../hooks/Prazos';
 
 export const FormularioDinamico = () => {
@@ -31,8 +31,8 @@ export const FormularioDinamico = () => {
                 return <FormIPVA />
             case 'via-licenciamento-anual-do-veiculo':
                 return <FormIPVA />
-            case 'criacao-de-video':
-                return <CriarVideo />
+            // case 'criacao-de-video':
+            //     return <CriarVideo />
             default:
                 return <p>Serviço não encontrado.</p>
         }
