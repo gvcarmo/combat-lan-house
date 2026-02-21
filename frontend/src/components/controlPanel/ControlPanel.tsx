@@ -92,7 +92,7 @@ export const ControlPanel = () => {
                 </div>
 
                 <div className="flex items-center justify-center">
-                    <div className="text-white flex items-center mb-2">
+                    <div className="text-white flex items-center mb-2 p-2">
                         <Link to="/">
                             <img className="w-13 hover:scale-105 transition-all uration-300 ease-in-out" src="./logo-c.svg" alt="Logo Combat Lan House - C" />
                         </Link>

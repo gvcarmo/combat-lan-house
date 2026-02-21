@@ -282,7 +282,7 @@ export const EnviarMensagem = () => {
 
                         {message.status === 'fechado' && (
                             <div className="flex flex-col gap-2">
-                                <button onClick={() => handleToggleMessage(message.id!)} className="cursor-pointer bg-gray-900 hover:bg-gray-700 py-1 px-3 text-xs " >{isVisivel ? 'Fechar' : 'Abrir'}</button>
+                                <button onClick={() => handleToggleMessage(message.id!)} className="cursor-pointer bg-gray-900 hover:bg-gray-700 py-1 px-3 text-xs " >{isVisivel ? 'Fechar' : 'Visualizar'}</button>
                             </div>
                         )}
                     </div>

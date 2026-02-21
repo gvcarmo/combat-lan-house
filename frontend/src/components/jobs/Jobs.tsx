@@ -18,7 +18,7 @@ interface Job {
 
 export const Jobs = () => {
 
-    const { isAdmin, setGlobalLoading } = useContext(AuthContext);
+    const { isAdmin, setGlobalLoading, isLogged, user } = useContext(AuthContext);
     const [jobs, setJobs] = useState<Job[]>([]);
     const [showAddForm, setShowAddForm] = useState(false);
 
@@ -130,12 +130,24 @@ export const Jobs = () => {
     return (
         <div className="flex justify-center mb-2.5 ">
             <div id="jobs" className="min-[1139px]:w-280 min-[610px]:w-139 min-[320px]:w-71 flex flex-col items-center py-2.5 bg-neutral-grayish border border-neutral-border-light-color text-white">
+
                 <div className="w-full max-w-275 bg-neutral-dark-grayish border border-gray-800 p-6 max-[610px]:p-2">
 
-                    <div className="flex justify-between items-center mb-6">
-                        <div>
-                            <div className="relative flex-1 max-w-md">
-                                <input className="py-2.5 pl-12 w-full bg-[#1a1a1a] border border-gray-700" placeholder="Pesquisar serviço..." type="text"
+                    {isLogged && user ? ( 
+
+                        <div className={`mb-6 p-4 bg-orange-combat/10 hover:bg-orange-combat/30 border-l-4 text-orange-combat w-full flex-col`}>
+                            <p className="text-xs font-bold uppercase tracking-wider mb-1">📦 Antes de fazer um pedido:</p>
+                            <p className="text-[11px] leading-relaxed text-white/90">* A categoria <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Presencial'</span> são os serviços exclusivos da loja presencial, você pode ir até a loja ou pedi-los via whatsapp <a className="text-blue-400 hover:text-blue-700" href="http://wa.me/+55349996368855" target="_blank">(Clique Aqui)</a>.</p>
+                            <p className="text-[11px] leading-relaxed text-white/90">* O canal do <span className="font-semibold">'WhatsApp'</span> é EXCLUSIVO da loja <span className="font-semibold">'Presencial'</span> <a className="text-blue-400 hover:text-blue-700" href="http://wa.me/+55349996368855" target="_blank">(Clique Aqui)</a>.</p>
+                            <p className="text-[11px] leading-relaxed text-white/90">* A categoria <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Online'</span> são serviços exclusivos da loja Online, você clica em pedir e aguarda o pedido no painel Meus Pedidos.</p>
+                            <p className="text-[11px] leading-relaxed text-white/90">* Para qualquer comunicação com a loja online, abra um <b>Ticket</b>.</p>
+                        </div>
+                    ) : ('')}
+
+                    <div className="flex justify-between items-center w-full">
+                        <div className="border-l-4 border-orange-combat bg-orange-combat/10 py-2 pl-4 flex flex-col gap-1 md:col-span-2 mb-4 w-full">
+                            <div className="text-xs uppercase mb-1">
+                                <input className="p-1 mr-2 text-sm bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors resize-none w-[98%]" placeholder="Pesquisar serviço..." type="text"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)} />
                                 <img className="absolute w-5 top-3 left-4 opacity-50" src="./icons/search.svg" alt="Procurar" />
@@ -150,22 +162,23 @@ export const Jobs = () => {
                                 )}
                             </div>
 
-                            <div className="">
+                            <div className="flex flex-col">
                                 {searchTerm === "" ? (
-                                    <p className="text-gray-500 text-center py-5">
-                                        Digite algo para procurar um serviço...
+                                    <p className="p-1 mr-2 text-xs  focus:border-orange-combat outline-none transition-colors resize-none">
+                                        Antes de digitar algo, selecione um filtro abaixo...
                                     </p>
                                 ) : filteredJobs.length > 0 ? (
-                                    filteredJobs.map(job => (
+                                    filteredJobs.map((job: any) => (
                                         <ServiceItem key={job.id} job={job} />
                                     ))
                                 ) : (
-                                    <p className="text-gray-500 text-center py-10">
+                                    <p className="p-1 mr-2 text-xs  focus:border-orange-combat outline-none transition-colors resize-none">
                                         Nenhum serviço encontrado para "{searchTerm}"
                                     </p>
                                 )}
                             </div>
                         </div>
+
 
                         {isAdmin && (
                             <button
@@ -320,13 +333,6 @@ export const Jobs = () => {
                                         </button>
                                     </div>
 
-                                    <div className={`mb-6 p-4 bg-orange-combat/10 hover:bg-orange-combat/30 border-l-4 text-orange-combat w-full flex-col`}>
-                                        <p className="text-xs font-bold uppercase tracking-wider mb-1">📦 Antes de fazer um pedido:</p>
-                                        <p className="text-[11px] leading-relaxed text-white/90">* A categoria <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Presencial'</span> são os serviços exclusivos da loja presencial, você pode ir até a loja ou pedi-los via whatsapp <a className="text-blue-400 hover:text-blue-700" href="http://wa.me/+55349996368855" target="_blank">(Clique Aqui)</a>.</p>
-                                        <p className="text-[11px] leading-relaxed text-white/90">* O canal do <span className="font-semibold">'WhatsApp'</span> é EXCLUSIVO da loja <span className="font-semibold">'Presencial'</span> <a className="text-blue-400 hover:text-blue-700" href="http://wa.me/+55349996368855" target="_blank">(Clique Aqui)</a>.</p>
-                                        <p className="text-[11px] leading-relaxed text-white/90">* A categoria <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Online'</span> são serviços exclusivos da loja Online, você clica em pedir e aguarda o pedido no painel Meus Pedidos.</p>
-                                        <p className="text-[11px] leading-relaxed text-white/90">* Para qualquer comunicação com a loja online, abra um <b>Ticket</b>.</p>
-                                    </div>
                                 </div>
 
                             </div>
