@@ -27,7 +27,11 @@ export const AcessarPedido = () => {
                 return <VisualizarPedidoIPTU />
             case 19: 
                 return <VisualizarPedidoIPTU />
-            case 16: 
+            case 20: 
+                return <VisualizarPedidoIPVA />
+            case 21: 
+                return <VisualizarPedidoIPVA />
+            case 22: 
                 return <VisualizarPedidoIPVA />
             default:
                 return <p>Serviço não encontrado.</p>

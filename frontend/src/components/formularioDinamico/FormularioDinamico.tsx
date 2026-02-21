@@ -51,6 +51,10 @@ export const FormularioDinamico = () => {
                 return <FormIPTU />
             case 'via-ipva-e-licenciamento':
                 return <FormIPVA />
+            case 'via-ipva':
+                return <FormIPVA />
+            case 'via-licenciamento-anual-do-veiculo':
+                return <FormIPVA />
             default:
                 return <p>Serviço não encontrado.</p>
         }
