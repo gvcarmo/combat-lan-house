@@ -25,15 +25,18 @@ export const FormIPVA = () => {
         setGlobalLoading(true);
         setIsSending(true);
         try {
-            await api.post('/pedidos', {
+            const response = await api.post('/pedidos', {
                 jobSlug: serviceName,
                 dadosForm: {
                     ...formData
                 }
             });
-            alert(`Pedido realizado com sucesso!`)
 
-            navigate(`/${user?.nick}`)
+            const novoPedidoId = response.data.id;
+
+            alert(`Pedido realizado com sucesso! Realize o pagamento.`);
+
+            navigate(`/${user?.nick}?aba=meus_pedidos&pagar=${novoPedidoId}`);
 
         } catch (error) {
             alert("Erro ao enviar, verifique os dados.")

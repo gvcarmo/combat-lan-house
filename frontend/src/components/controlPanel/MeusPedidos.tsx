@@ -21,7 +21,7 @@ export const MeusPedidos = () => {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
 
     const [pixDados, setPixDados] = useState<PixData | null>(null);
-    const [carregando, setCarregando] = useState(false);
+    const [carregando, setCarregando] = useState<number | null>(null);
     const [copiado, setCopiado] = useState(false);
     const [modalAberto, setModalAberto] = useState(false);
     const [pedidoAtivoId, setPedidoAtivoId] = useState<number | null>(null);
@@ -40,7 +40,7 @@ export const MeusPedidos = () => {
         if (pedidoIdParaPagar && pedidos.length > 0) {
             const idNum = Number(pedidoIdParaPagar);
 
-            const pedidoExistente = pedidos.find(p => p.id === idNum && p.status === 'aguardando pagamento');
+            const pedidoExistente = pedidos.find(p => String(p.id) === String(pedidoIdParaPagar) && p.status === 'aguardando pagamento');
 
             if (pedidoExistente) {
                 handleGerarPix(idNum);
@@ -74,16 +74,16 @@ export const MeusPedidos = () => {
     }, [modalAberto, pedidoAtivoId]);
 
     const handleGerarPix = async (pedidoId: number) => {
-        setCarregando(true);
+        setCarregando(pedidoId);
         try {
             const response = await api.post('/gerar-pix', { pedidoId });
             setPixDados(response.data);
             setPedidoAtivoId(pedidoId);
             setModalAberto(true);
         } catch (error) {
-            alert("Erro ao gerar PIX. Verifique seu backend.");
+            alert("Erro ao gerar PIX.");
         } finally {
-            setCarregando(false);
+            setCarregando(null);
         }
     };
 
@@ -252,7 +252,7 @@ export const MeusPedidos = () => {
                                 Excluir
                             </button>
                             <button onClick={() => handleGerarPix(pedido.id)} className="cursor-pointer text-xs bg-orange-combat text-white px-3 py-1 w-fit hover:bg-gray-700 transition-colors">
-                                {carregando ? 'Gerando...' : 'Pagar com PIX'}
+                                {carregando === pedido.id ? 'Gerando...' : 'Pagar com PIX'}
                             </button>
                         </>
                     )}
@@ -318,7 +318,7 @@ export const MeusPedidos = () => {
             <Prazos />
 
             <div className="grid">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 mb-2">
                     <div className="flex justify-end">
                         <button onClick={() => setMostrarLegenda(!mostrarLegenda)} className="cursor-pointer px-4 py-1 w-fit bg-orange-combat hover:bg-gray-700 transition-all font-semibold">
                             {mostrarLegenda ? "Legenda ▲" : "Legenda ▼"}
