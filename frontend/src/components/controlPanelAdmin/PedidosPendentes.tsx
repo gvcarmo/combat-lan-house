@@ -29,7 +29,7 @@ export const PedidosPendentes = () => {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
     const [uploadingId, setUploadingId] = useState<number | null>(null);
 
-    const { setGlobalLoading, isLogged, isAdmin } = useContext(AuthContext);
+    const { setGlobalLoading } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const backCampoClass = `py-2 pl-4 flex flex-col md:col-span-2`
