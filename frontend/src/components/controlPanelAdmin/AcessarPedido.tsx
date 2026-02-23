@@ -14,6 +14,7 @@ import { VisualizarPedidoAntTRF1 } from "../servicosForm/AntTRF";
 import { VisualizarPedidoAntSTM } from "../servicosForm/AntSTM";
 import { VisualizarPedidoAntTJM } from "../servicosForm/AntTJM";
 import { VisualizarPedidoAntPF } from "../servicosForm/AntPF";
+import { VisualizarPedidoContratoRes } from "../servicosForm/ContratoRes";
 
 export const AcessarPedido = () => {
     const [dadosPedido, setDadosPedido] = useState<Pedido | null>(null);
@@ -31,34 +32,36 @@ export const AcessarPedido = () => {
         switch (dadosPedido?.jobId) {
             case 17:
                 return <VisualizarPedidoCurriculo />;
-            case 18: 
+            case 18:
                 return <VisualizarPedidoIPTU />
-            case 19: 
+            case 19:
                 return <VisualizarPedidoIPTU />
-            case 20: 
+            case 20:
                 return <VisualizarPedidoIPVA />
-            case 21: 
+            case 21:
                 return <VisualizarPedidoIPVA />
-            case 22: 
+            case 22:
                 return <VisualizarPedidoIPVA />
-            case 23: 
+            case 23:
                 return <VisualizarPedidoMEI />
-            case 24: 
+            case 24:
                 return <VisualizarPedidoAntCivil />
-            case 25: 
+            case 25:
                 return <VisualizarPedidoAntTJ />
-            case 26: 
+            case 26:
                 return <VisualizarPedidoAntEleitoral />
-            case 27: 
+            case 27:
                 return <VisualizarPedidoAntEleitoral />
-            case 28: 
+            case 28:
                 return <VisualizarPedidoAntTRF1 />
-            case 29: 
+            case 29:
                 return <VisualizarPedidoAntSTM />
-            case 30: 
+            case 30:
                 return <VisualizarPedidoAntTJM />
-            case 31: 
+            case 31:
                 return <VisualizarPedidoAntPF />
+            case 32:
+                return <VisualizarPedidoContratoRes />
             default:
                 return <p>Serviço não encontrado.</p>
         }

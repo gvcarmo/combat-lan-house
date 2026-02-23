@@ -13,6 +13,7 @@ import { FormAntTRF1 } from '../servicosForm/AntTRF';
 import { FormAntSTM } from '../servicosForm/AntSTM';
 import { FormAntTJM } from '../servicosForm/AntTJM';
 import { FormAntPF } from '../servicosForm/AntPF';
+import { FormContrato } from '../servicosForm/ContratoRes';
 
 export const FormularioDinamico = () => {
     const { serviceName } = useParams();
@@ -56,6 +57,8 @@ export const FormularioDinamico = () => {
                 return <FormAntTJM />
             case 'antecedentes-criminais-da-policia-federal':
                 return <FormAntPF />
+            case 'contrato-de-aluguel-residencial':
+                return <FormContrato />
             default:
                 return <p>Serviço não encontrado.</p>
         }
