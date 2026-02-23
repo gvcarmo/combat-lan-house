@@ -411,18 +411,10 @@ export class AskController {
 
             let pedidos;
 
-            if (nivelAcesso === 'admin') {
-                pedidos = await prisma.pedido.findMany({
-                    include: { job: true, usuario: true },
-                    orderBy: { criadoEm: 'desc' }
-                });
-            } else {
-                pedidos = await prisma.pedido.findMany({
-                    where: { usuarioId: usuarioId },
-                    include: { job: true },
-                    orderBy: { criadoEm: 'desc' }
-                });
-            }
+            pedidos = await prisma.pedido.findMany({
+                include: { job: true, usuario: true },
+                orderBy: { criadoEm: 'desc' }
+            });
 
             return res.json(pedidos);
         } catch (error) {
@@ -430,39 +422,39 @@ export class AskController {
         }
     }
 
-async updateStatus(req: any, res: Response) {
-    const { id } = req.params;
-    const { status } = req.body;
+    async updateStatus(req: any, res: Response) {
+        const { id } = req.params;
+        const { status } = req.body;
 
-    try {
-        const pedidoAtualizado = await prisma.pedido.update({ 
-            where: { id: Number(id) }, 
-            data: { status },
-            include: {
-                job: true,
-                usuario: {
-                    select: { nome_completo: true, nick: true }
+        try {
+            const pedidoAtualizado = await prisma.pedido.update({
+                where: { id: Number(id) },
+                data: { status },
+                include: {
+                    job: true,
+                    usuario: {
+                        select: { nome_completo: true, nick: true }
+                    }
+                }
+            });
+
+            console.log(">>> Status atualizado para:", status);
+
+            if (status === 'pendente') {
+                if (req.io) {
+                    req.io.emit('novo_pedido', pedidoAtualizado);
+                    console.log("✅ Socket: Evento 'novo_pedido' enviado com sucesso!");
+                } else {
+                    console.log("❌ Erro: req.io não encontrado no updateStatus.");
                 }
             }
-        });
 
-        console.log(">>> Status atualizado para:", status);
+            return res.json(pedidoAtualizado);
 
-        if (status === 'pendente') {
-            if (req.io) {
-                req.io.emit('novo_pedido', pedidoAtualizado);
-                console.log("✅ Socket: Evento 'novo_pedido' enviado com sucesso!");
-            } else {
-                console.log("❌ Erro: req.io não encontrado no updateStatus.");
-            }
+        } catch (error) {
+            console.error("Erro ao atualizar status:", error);
+            return res.status(500).json({ error: "Erro ao atualizar pedido." });
         }
-
-        return res.json(pedidoAtualizado);
-
-    } catch (error) {
-        console.error("Erro ao atualizar status:", error);
-        return res.status(500).json({ error: "Erro ao atualizar pedido." });
     }
-}
 
 }
