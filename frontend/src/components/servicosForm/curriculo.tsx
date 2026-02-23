@@ -468,7 +468,7 @@ export const FormCurriculo = () => {
                     <h5 className="text-[18px] font-semibold text-orange-combat mb-2.5">Outras informações relevantes:</h5>
 
                     <div className="flex flex-col gap-3 mb-2 ">
-                        <label className="text-xs text-gray-400 ml-1">Informações adicionais:</label>
+                        <label className="text-xs text-gray-400 ml-1">Informações adicionais (opcional):</label>
                         <textarea
                             rows={5}
                             name="outras_infos"
@@ -643,7 +643,7 @@ export const VisualizarPedidoCurriculo = () => {
                 </div>
 
                 <div className="container mx-auto p-6 max-[610px]:p-0 text-white">
-                    <h2 className="text-xl font-bold mb-6 text-orange-combat">{dadosPedido.job.nome}o</h2>
+                    <h2 className="text-xl font-bold mb-6 text-orange-combat">{dadosPedido.job.nome}</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {formData && Object.keys(formData).map((chave) => (

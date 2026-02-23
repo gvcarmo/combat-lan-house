@@ -5,6 +5,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { FormIPTU } from '../servicosForm/viaIptu';
 import { FormIPVA } from '../servicosForm/ipva';
 import { Prazos } from '../../hooks/Prazos';
+import { FormMEI } from '../servicosForm/viaMEI';
 
 export const FormularioDinamico = () => {
     const { serviceName } = useParams();
@@ -30,6 +31,8 @@ export const FormularioDinamico = () => {
                 return <FormIPVA />
             case 'via-licenciamento-anual-do-veiculo':
                 return <FormIPVA />
+            case 'via-mei':
+                return <FormMEI />
             default:
                 return <p>Serviço não encontrado.</p>
         }

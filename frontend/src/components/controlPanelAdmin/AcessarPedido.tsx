@@ -6,6 +6,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { VisualizarPedidoCurriculo } from "../servicosForm/curriculo";
 import { VisualizarPedidoIPTU } from "../servicosForm/viaIptu";
 import { VisualizarPedidoIPVA } from "../servicosForm/ipva";
+import { VisualizarPedidoMEI } from "../servicosForm/viaMEI";
 
 export const AcessarPedido = () => {
     const [dadosPedido, setDadosPedido] = useState<Pedido | null>(null);
@@ -33,6 +34,8 @@ export const AcessarPedido = () => {
                 return <VisualizarPedidoIPVA />
             case 22: 
                 return <VisualizarPedidoIPVA />
+            case 23: 
+                return <VisualizarPedidoMEI />
             default:
                 return <p>Serviço não encontrado.</p>
         }
@@ -46,8 +49,6 @@ export const AcessarPedido = () => {
     if (!dadosPedido) {
         return <div className="min-h-screen flex justify-center items-center bg-black text-white">Carregando dados do pedido...</div>;
     }
-
-    console.log(dadosPedido)
 
     return (
         <div>

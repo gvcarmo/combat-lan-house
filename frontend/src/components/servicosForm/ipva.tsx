@@ -100,7 +100,7 @@ export const FormIPVA = () => {
                         <h5 className="text-[18px] font-semibold text-orange-combat mb-2.5">Outras informações relevantes:</h5>
 
                         <div className="flex flex-col gap-3 mb-2 ">
-                            <label className="text-xs text-gray-400 ml-1">Informações adicionais:</label>
+                            <label className="text-xs text-gray-400 ml-1">Informações adicionais (opcional):</label>
                             <textarea
                                 rows={5}
                                 name="outras_infos"

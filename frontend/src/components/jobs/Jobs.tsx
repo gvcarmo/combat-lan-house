@@ -186,7 +186,7 @@ export const Jobs = () => {
                         {isAdmin && (
                             <button
                                 onClick={() => setShowAddForm(!showAddForm)}
-                                className="cursor-pointer ml-4 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-bold"
+                                className="cursor-pointer ml-4 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-2 w-50 py-2 font-bold"
                             >
                                 {showAddForm ? "Fechar" : "+ Novo Serviço"}
                             </button>

@@ -13,13 +13,14 @@ export const Prazos = () => {
         let mensagem = "";
 
         if (diaSemana === 0) {
-            mensagem = "Atenção: Solicitações de serviços feitas no Domingo só serão processadas na Segunda-Feira à partir das 08h00.";
+            // mensagem = "Atenção: Solicitações de serviços feitas no Domingo só serão processadas na Segunda-Feira à partir das 08h00.";
+            mensagem = "Atenção: Após o pagamento do seu pedido, o prazo de entrega é de 5 minutos à 2 horas! Por favor aguarde!";
         }
-        else if (hora >= 18 || hora < 8) {
-            mensagem = "Atenção: O seu pedido está sendo feito fora do horário comercial da nossa loja online, o processamento só irá ser iniciado à partir das 08h00."
-        }
+        // else if (hora >= 18 || hora < 8) {
+        //     mensagem = "Atenção: O seu pedido está sendo feito fora do horário comercial da nossa loja online, o processamento só irá ser iniciado à partir das 08h00."
+        // }
         else {
-            mensagem = "Atenção: Após o processamento do seu pedido, o prazo de entrega é de 5 minutos à 2 horas! Por favor aguarde."
+            mensagem = "Atenção: Após o pagamento do seu pedido, o prazo de entrega é de 5 minutos à 2 horas! Por favor aguarde."
         }
         setAviso(mensagem);
     }
