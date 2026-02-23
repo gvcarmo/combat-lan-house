@@ -46,19 +46,17 @@ export const PedidosPendentes = () => {
     };
 
     const carregarHistorico = async () => {
-        if (isLogged && isAdmin) {
-            try {
-                const res = await api.get('/admin/pedidos');
-                setPedidos(res.data);
-            } catch(err) {
-                console.error("Erro ao carregar histórico", err);
-            }
+        try {
+            const res = await api.get('/admin/pedidos');
+            setPedidos(res.data);
+        } catch (err) {
+            console.error("Erro ao carregar histórico", err);
         }
     }
 
     useEffect(() => {
         carregarHistorico();
-    }, [isLogged, isAdmin]);
+    }, []);
 
     useEffect(() => {
         const socket = io(import.meta.env.VITE_API_URL || 'http://localhost: 3000', {
@@ -69,11 +67,11 @@ export const PedidosPendentes = () => {
         socket.on('novo_pedido', (pedidoRecemCriado: Pedido) => {
             setPedidos((prev) => {
                 const existe = prev.find(p => p.id === pedidoRecemCriado.id);
-                if(existe) return prev;
+                if (existe) return prev;
                 return [pedidoRecemCriado, ...prev];
             });
 
-            audio.play().catch(() => {});
+            audio.play().catch(() => { });
         });
 
         return () => {
