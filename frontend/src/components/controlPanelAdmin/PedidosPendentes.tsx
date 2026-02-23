@@ -36,21 +36,14 @@ export const PedidosPendentes = () => {
     const titleClass = `text-xs text-orange-combat uppercase font-bold mb-1`
     const campoClass = `p-1 mr-2 text-sm transition-colors resize-none`
 
-    const fetchPedidos = async () => {
-        try {
-            const res = await api.get('/admin/pedidos');
-            setPedidos(res.data);
-        } catch (err: any) {
-            if (err.response?.status === 403) console.log("Sem permissão de admin.");
-        }
-    };
-
     const carregarHistorico = async () => {
         try {
             const res = await api.get('/admin/pedidos');
             setPedidos(res.data);
-        } catch (err) {
-            console.error("Erro ao carregar histórico", err);
+        } catch (err: any) {
+            console.error("Erro ao buscar pedidos:", err);
+            if (err.response?.status === 403) {
+                console.error("Acesso negado: O usuário não é admin no backend.");
         }
     }
 
@@ -59,7 +52,7 @@ export const PedidosPendentes = () => {
     }, []);
 
     useEffect(() => {
-        const socket = io(import.meta.env.VITE_API_URL || 'http://localhost: 3000', {
+        const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
             transports: ['websocket', 'polling'],
             withCredentials: true
         });
@@ -109,7 +102,7 @@ export const PedidosPendentes = () => {
         try {
             await api.patch(`/admin/pedido/${pedidoId}/status`, { status: novoStatus });
             alert("Status atualizado!");
-            fetchPedidos();
+            carregarHistorico();
         } catch (error) {
             console.error(error);
             alert("Erro ao alterar status.");

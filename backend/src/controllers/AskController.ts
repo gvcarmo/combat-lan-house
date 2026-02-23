@@ -406,9 +406,6 @@ export class AskController {
 
     async index(req: any, res: Response) {
         try {
-            const usuarioId = req.user.id;
-            const nivelAcesso = String(req.user.nivel).trim().toLowerCase();
-
             let pedidos;
 
             pedidos = await prisma.pedido.findMany({
