@@ -44,6 +44,7 @@ export const PedidosPendentes = () => {
             console.error("Erro ao buscar pedidos:", err);
             if (err.response?.status === 403) {
                 console.error("Acesso negado: O usuário não é admin no backend.");
+            }
         }
     }
 
