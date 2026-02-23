@@ -6,6 +6,13 @@ import { FormIPTU } from '../servicosForm/viaIptu';
 import { FormIPVA } from '../servicosForm/ipva';
 import { Prazos } from '../../hooks/Prazos';
 import { FormMEI } from '../servicosForm/viaMEI';
+import { FormAntCivil } from '../servicosForm/AntCivil';
+import { FormAntTJ } from '../servicosForm/AntTJ';
+import { FormAntEleitoral } from '../servicosForm/AntEleitoral';
+import { FormAntTRF1 } from '../servicosForm/AntTRF';
+import { FormAntSTM } from '../servicosForm/AntSTM';
+import { FormAntTJM } from '../servicosForm/AntTJM';
+import { FormAntPF } from '../servicosForm/AntPF';
 
 export const FormularioDinamico = () => {
     const { serviceName } = useParams();
@@ -33,6 +40,22 @@ export const FormularioDinamico = () => {
                 return <FormIPVA />
             case 'via-mei':
                 return <FormMEI />
+            case 'antecedentes-criminais-policia-civil':
+                return <FormAntCivil />
+            case 'certidao-judicial-tribunal-de-justica-mg':
+                return <FormAntTJ />
+            case 'certidao-de-quitacao-eleitoral':
+                return <FormAntEleitoral />
+            case 'certidao-de-crimes-eleitorais':
+                return <FormAntEleitoral />
+            case 'certidao-judicial-trf1':
+                return <FormAntTRF1 />
+            case 'certidao-negativa-militar-stm':
+                return <FormAntSTM />
+            case 'certidao-negativa-militar-tjmmg':
+                return <FormAntTJM />
+            case 'antecedentes-criminais-da-policia-federal':
+                return <FormAntPF />
             default:
                 return <p>Serviço não encontrado.</p>
         }

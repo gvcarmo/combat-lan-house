@@ -12,7 +12,7 @@ interface Job {
 
 export const FazerPedido = ({ categoria = 'online' }: Job) => {
     const [searchTerm, setSearchTerm] = useState("");
-
+    const [showList, setShowList] = useState<number>(5);
     const [jobs, setJobs] = useState<Job[]>([]);
 
     useEffect(() => {
@@ -31,6 +31,13 @@ export const FazerPedido = ({ categoria = 'online' }: Job) => {
         return matchesCategory && matchesSearch;
     });
 
+    const showMore = () => {
+        setShowList((prev) => Math.min(prev + 5, jobs.length))
+    }
+
+    const showLess = () => {
+        setShowList((prev) => Math.min(prev, prev = 5))
+    }
 
     const jobsFiltrados = jobs.filter((job: any) => job.genero === categoria);
 
@@ -84,10 +91,25 @@ export const FazerPedido = ({ categoria = 'online' }: Job) => {
             </div>
 
             <div>
-                {jobsFiltrados.map((job: any) => (
+                {jobsFiltrados.slice(0, showList).map((job: any) => (
                     <ServiceItem key={job.id} job={job} />
                 ))}
             </div>
+            <div className="mt-4 flex justify-center items-center gap-2 max-[610px]:gap-0">
+                <button
+                    onClick={showMore}
+                    className="cursor-pointer ml-4 max-[610px]:ml-0 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 max-[610px]:px-2 py-2 font-semibold w-40"
+                >
+                    Mostrar + 5
+                </button>
+                <button
+                    onClick={showLess}
+                    className="cursor-pointer ml-4 max-[610px]:ml-2 bg-orange-combat hover:bg-white hover:text-orange-combat transition-all px-6 py-2 font-semibold w-40"
+                >
+                    Recolher
+                </button>
+            </div>
+
         </div>
     )
 }
