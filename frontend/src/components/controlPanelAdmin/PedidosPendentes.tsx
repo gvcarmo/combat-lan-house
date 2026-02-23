@@ -45,38 +45,41 @@ export const PedidosPendentes = () => {
         }
     };
 
+    const carregarHistorico = async () => {
+        if (isLogged && isAdmin) {
+            try {
+                const res = await api.get('/admin/pedidos');
+                setPedidos(res.data);
+            } catch(err) {
+                console.error("Erro ao carregar histórico", err);
+            }
+        }
+    }
+
     useEffect(() => {
-        const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
+        carregarHistorico();
+    }, [isLogged, isAdmin]);
+
+    useEffect(() => {
+        const socket = io(import.meta.env.VITE_API_URL || 'http://localhost: 3000', {
             transports: ['websocket', 'polling'],
             withCredentials: true
         });
 
         socket.on('novo_pedido', (pedidoRecemCriado: Pedido) => {
-            console.log("Novo pedido recebido via Socket!", pedidoRecemCriado);
-
-            setPedidos((prevPedidos) => [pedidoRecemCriado, ...prevPedidos]);
-
-            audio.play().catch(_e => {
-                console.warn("O áudio foi bloqueado pelo navegador. Clique em qualquer lugar da página para habilitar o som.");
+            setPedidos((prev) => {
+                const existe = prev.find(p => p.id === pedidoRecemCriado.id);
+                if(existe) return prev;
+                return [pedidoRecemCriado, ...prev];
             });
+
+            audio.play().catch(() => {});
         });
 
         return () => {
-            socket.off('novo_pedido');
+            socket.disconnect();
         };
     }, []);
-
-    useEffect(() => {
-        if (isLogged && isAdmin) {
-            api.get('/admin/pedidos')
-                .then(res => setPedidos(res.data))
-                .catch(err => {
-                    if (err.response?.status === 403) {
-                        console.log("Ainda sem permissão de admin no servidor.");
-                    }
-                });
-        }
-    }, [isLogged, isAdmin]);
 
     const handleUploadFile = async (pedidoId: number, file: File) => {
         const formData = new FormData();
