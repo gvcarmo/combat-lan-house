@@ -6,6 +6,7 @@ import { MeusPedidos } from './MeusPedidos';
 import { UserInfos } from './UserInfos';
 import { PedidosPendentes } from '../controlPanelAdmin/PedidosPendentes';
 import { EnviarMensagem } from './EnviarMensagem';
+import { Prazos } from '../../hooks/Prazos';
 
 export const ControlPanel = () => {
     const { nick } = useParams();
@@ -55,11 +56,15 @@ export const ControlPanel = () => {
                                 <button className={`cursor-pointer transition-all hover:text-orange-combat transition-all" ${abaAtivaAdmin === 'pedidos_pendentes' ? 'text-orange-combat' : ''}`}
                                     onClick={() => setAbaAtivaAdmin('pedidos_pendentes')}>Pedidos pendentes</button>
                                 <p>|</p>
+                                <button className={`cursor-pointer transition-all hover:text-orange-combat transition-all" ${abaAtivaAdmin === 'mensagem_ativa' ? 'text-orange-combat' : ''}`}
+                                    onClick={() => setAbaAtivaAdmin('mensagem_ativa')}>Mensagem Ativa</button>
+                                <p>|</p>
                                 <button className={`cursor-pointer transition-all hover:text-orange-combat transition-all" ${abaAtivaAdmin === 'chat' ? 'text-orange-combat' : ''}`}
                                     onClick={() => setAbaAtivaAdmin('chat')}>Tickets</button>
                             </div>
                             <div>
                                 {abaAtivaAdmin === 'pedidos_pendentes' && <PedidosPendentes />}
+                                {abaAtivaAdmin === 'mensagem_ativa' && <Prazos />}
                                 {abaAtivaAdmin === 'chat' && <EnviarMensagem />}
 
                             </div>
