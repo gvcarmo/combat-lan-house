@@ -47,7 +47,7 @@ export const Menu = () => {
     }
 
     async function handlePedidos() {
-        navigate(`/${user?.nick}?aba=chat`)
+        navigate(`/${user?.nick}?aba=meus_pedidos`)
     }
 
     return (

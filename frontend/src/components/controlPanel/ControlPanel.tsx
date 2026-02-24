@@ -55,10 +55,10 @@ export const ControlPanel = () => {
                             <div className="flex gap-3 max-[610px]:gap-2 max-[610px]:text-[14px] justify-end">
                                 <button className={`cursor-pointer transition-all hover:text-orange-combat transition-all" ${abaAtivaAdmin === 'pedidos_pendentes' ? 'text-orange-combat' : ''}`}
                                     onClick={() => setAbaAtivaAdmin('pedidos_pendentes')}>Pedidos pendentes</button>
-                                <p>|</p>
+                                <p className="max-[610px]:text-[35px] max-[610px]:font-extralight">|</p>
                                 <button className={`cursor-pointer transition-all hover:text-orange-combat transition-all" ${abaAtivaAdmin === 'mensagem_ativa' ? 'text-orange-combat' : ''}`}
                                     onClick={() => setAbaAtivaAdmin('mensagem_ativa')}>Mensagem Ativa</button>
-                                <p>|</p>
+                                <p className="max-[610px]:text-[35px] max-[610px]:font-extralight">|</p>
                                 <button className={`cursor-pointer transition-all hover:text-orange-combat transition-all" ${abaAtivaAdmin === 'chat' ? 'text-orange-combat' : ''}`}
                                     onClick={() => setAbaAtivaAdmin('chat')}>Tickets</button>
                             </div>

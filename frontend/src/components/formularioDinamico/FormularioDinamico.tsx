@@ -14,6 +14,7 @@ import { FormAntSTM } from '../servicosForm/AntSTM';
 import { FormAntTJM } from '../servicosForm/AntTJM';
 import { FormAntPF } from '../servicosForm/AntPF';
 import { FormContrato } from '../servicosForm/ContratoRes';
+import { FormDeclararIR } from '../servicosForm/DeclararIR';
 
 export const FormularioDinamico = () => {
     const { serviceName } = useParams();
@@ -59,6 +60,8 @@ export const FormularioDinamico = () => {
                 return <FormAntPF />
             case 'contrato-de-aluguel-residencial':
                 return <FormContrato />
+            case 'declaracao-de-imposto-de-renda':
+                return <FormDeclararIR />
             default:
                 return <p>Serviço não encontrado.</p>
         }
