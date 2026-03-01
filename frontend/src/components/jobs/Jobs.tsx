@@ -29,9 +29,12 @@ export const Jobs = () => {
 
     const [searchTerm, setSearchTerm] = useState("");
 
-    const [showList, setShowList] = useState<number>(5);
+    const [showList, setShowList] = useState<number>(() => {
+        const saved = localStorage.getItem("@Combat:showList");
+        return saved ? Number(saved) : 5;
+    });
 
-    const [filtroAtivo, setFiltroAtivo] = useState<'presencial' | 'online'>('presencial');
+    const [filtroAtivo, setFiltroAtivo] = useState<'presencial' | 'online'>('online');
 
     const jobsFiltrados = jobs.filter((job: any) => {
 
@@ -40,12 +43,16 @@ export const Jobs = () => {
         return job.genero.toLowerCase() === filtroAtivo.toLowerCase();
     })
 
+    useEffect(() => {
+        localStorage.setItem("@Combat:showList", String(showList));
+    }, [showList]);
+
     const showMore = () => {
-        setShowList((prev) => Math.min(prev + 5, jobs.length))
+        setShowList((prev) => prev + 5);
     }
 
     const showLess = () => {
-        setShowList((prev) => Math.min(prev, prev = 5))
+        setShowList(5);
     }
 
     const filteredJobs = jobs.filter((job) => {
@@ -54,8 +61,7 @@ export const Jobs = () => {
         const matchesCategory = job.genero?.toLowerCase() === filtroAtivo.toLowerCase();
 
         const matchesSearch =
-            job.nome?.toLowerCase().includes(search) ||
-            job.descricao?.toLowerCase().includes(search);
+            job.nome?.toLowerCase().includes(search);
 
         return matchesCategory && matchesSearch;
     });
@@ -136,11 +142,14 @@ export const Jobs = () => {
                     {isLogged && user ? (
 
                         <div className={`mb-6 p-4 bg-orange-combat/10 hover:bg-orange-combat/30 border-l-4 text-orange-combat w-full flex-col`}>
-                            <p className="text-xs font-bold uppercase tracking-wider mb-1">📦 Antes de fazer um pedido:</p>
-                            <p className="text-[11px] leading-relaxed text-white/90">* A categoria <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Presencial'</span> são os serviços exclusivos da loja presencial, você pode ir até a loja ou pedi-los via whatsapp <a className="text-blue-400 hover:text-blue-700" href="http://wa.me/+55349996368855" target="_blank">(Clique Aqui)</a>.</p>
-                            <p className="text-[11px] leading-relaxed text-white/90">* O canal do <span className="font-semibold">'WhatsApp'</span> é EXCLUSIVO da loja <span className="font-semibold">'Presencial'</span> <a className="text-blue-400 hover:text-blue-700" href="http://wa.me/+55349996368855" target="_blank">(Clique Aqui)</a>.</p>
-                            <p className="text-[11px] leading-relaxed text-white/90">* A categoria <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Online'</span> são serviços exclusivos da loja Online, você clica em pedir e aguarda o pedido no painel Meus Pedidos.</p>
-                            <p className="text-[11px] leading-relaxed text-white/90">* Para qualquer comunicação com a loja online, abra um <b>Ticket</b>.</p>
+                            <p className="text-xs font-bold uppercase tracking-wider mb-1">📦 Antes de fazer um pedido:</p>                           
+                            
+                            <p className="text-[11px] leading-relaxed text-white/90">* Para ser atendido na Combat <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Online'</span>, você deve se cadastrar, clicar em 'Pedir' no serviço escolhido e preencher o formulário do pedido e aguardar, qualquer dúvida entre em contato clicando no balão no canto inferior direito.</p>
+                            <p className="text-[11px] leading-relaxed text-white/90">* Caso esteja fora do horário de atendimento, abra um  <b>Ticket</b>, lá você tem permissão para enviar arquivos.</p>
+
+                            <p className="text-[11px] leading-relaxed text-white/90">* Os serviços da categoria <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Presencial'</span>  também podem ser feitos pelo WhatsApp <a className="text-blue-400 hover:text-blue-700" href="http://wa.me/+55349996368855" target="_blank">(Clique Aqui)</a>.</p>
+
+                            <p className="text-[11px] leading-relaxed text-white/90">* Os preços da Combat Online e da Combat Presencial podem divergir.</p>
                         </div>
                     ) : ('')}
 
@@ -149,7 +158,7 @@ export const Jobs = () => {
                             <div className="text-xs uppercase mb-1">
 
                                 <div className="relative">
-                                    <input className="px-8 py-1 mr-2 text-sm bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors resize-none w-[98%]" placeholder="Pesquisar serviço..." type="text"
+                                    <input className="px-8 py-1 mr-2 text-sm bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors resize-none w-[98%]" placeholder="Pesquisar serviço pelo nome..." type="text"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)} />
                                     <img className="absolute w-4 top-2 left-2 opacity-50" src="./icons/search.svg" alt="Procurar" />
@@ -220,8 +229,8 @@ export const Jobs = () => {
                                         onChange={e => setNewJob({ ...newJob, genero: e.target.value })}
                                     >
                                         <option value="">Selecione o gênero</option>
-                                        <option value="presencial">Presencial</option>
                                         <option value="online">On-line</option>
+                                        <option value="presencial">Presencial</option>
                                     </select>
                                 </div>
 
@@ -323,16 +332,16 @@ export const Jobs = () => {
                                 <div className="flex flex-col gap-4">
                                     <div className="flex gap-4">
                                         <button
-                                            onClick={() => setFiltroAtivo('presencial')}
-                                            className={`cursor-pointer hover:bg-white hover:text-orange-combat px-6 py-1 font-bold transition-all ${filtroAtivo === 'presencial' ? 'bg-orange-combat text-white' : 'bg-gray-700 text-gray-300'}`}
-                                        >
-                                            PRESENCIAL
-                                        </button>
-                                        <button
                                             onClick={() => setFiltroAtivo('online')}
                                             className={`cursor-pointer px-6 py-1 font-bold transition-all hover:bg-white hover:text-orange-combat ${filtroAtivo === 'online' ? 'bg-orange-combat text-white' : 'bg-gray-700 text-gray-300'}`}
                                         >
                                             ONLINE
+                                        </button>
+                                        <button
+                                            onClick={() => setFiltroAtivo('presencial')}
+                                            className={`cursor-pointer hover:bg-white hover:text-orange-combat px-6 py-1 font-bold transition-all ${filtroAtivo === 'presencial' ? 'bg-orange-combat text-white' : 'bg-gray-700 text-gray-300'}`}
+                                        >
+                                            PRESENCIAL
                                         </button>
                                     </div>
 

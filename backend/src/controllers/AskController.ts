@@ -28,8 +28,11 @@ const payment = new Payment(client);
 export class AskController {
     async StorageEvent(req: any, res: Response) {
         try {
-            const { jobSlug, dadosForm, arquivosEnviados } = req.body;
+            const { jobSlug, dadosForm } = req.body;
             const usuarioId = req.user.id;
+
+            const arquivosMulter = req.files as any[];
+            const linksImagens = arquivosMulter ? arquivosMulter.map(f => f.path) : [];
 
             const jobs = await prisma.job.findMany();
 
@@ -53,8 +56,8 @@ export class AskController {
                 data: {
                     usuarioId: usuarioId,
                     jobId: job.id,
-                    dadosForm: JSON.stringify(dadosForm),
-                    arquivosEnviados: arquivosEnviados || [],
+                    dadosForm: typeof dadosForm === 'string' ? dadosForm : JSON.stringify(dadosForm),
+                    arquivosEnviados: linksImagens,
                     arquivosFinal: [],
                     status: 'aguardando pagamento'
                 }
@@ -76,7 +79,7 @@ export class AskController {
 
     async updateOrder(req: any, res: Response) {
         const { id } = req.params;
-        const { dadosForm } = req.body;
+        const { dadosForm, removerImagens } = req.body;
         const usuarioId = Number(req.user.id);
         const nivelAcesso = String(req.user.nivel).toLowerCase().trim();
 
@@ -110,11 +113,26 @@ export class AskController {
                 dadosParaAtualizar.dadosForm = typeof dadosForm === 'string' ? dadosForm : JSON.stringify(dadosForm);
             }
 
-            if (novosArquivos.length > 0) {
-                dadosParaAtualizar.arquivosFinal = novosArquivos;
-                if (ehAdmin) {
+            if (ehAdmin) {
+                if (novosArquivos.length > 0) {
+                    dadosParaAtualizar.arquivosFinal = novosArquivos;
                     dadosParaAtualizar.status = "finalizado";
                 }
+            } else {
+                // Se for o cliente editando:
+                let imagensAtuais = Array.isArray(pedido.arquivosEnviados) ? (pedido.arquivosEnviados as string[]) : [];
+
+                // 1. Filtrar as imagens que o usuário quer remover
+                if (removerImagens) {
+                    const urlsParaRemover = typeof removerImagens === 'string' ? JSON.parse(removerImagens) : removerImagens;
+                    imagensAtuais = imagensAtuais.filter(url => !urlsParaRemover.includes(url));
+
+                    // Opcional: Aqui você poderia chamar cloudinary.uploader.destroy() usando o public_id 
+                    // para limpar o storage do Cloudinary, mas o filtro já resolve o banco.
+                }
+
+                // 2. Adicionar as novas imagens carregadas no Multer
+                dadosParaAtualizar.arquivosEnviados = [...imagensAtuais, ...novosArquivos];
             }
 
             const pedidoAtualizado = await prisma.pedido.update({

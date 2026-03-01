@@ -61,11 +61,30 @@ export class UserController {
     }
 
     async showMe(req: any, res: Response) {
-        const userId = req.user.id;
-        const user = await prisma.usuario.findUnique({ where: { id: userId } });
-        return res.json(user);
-    }
+        try {
+            const userId = req.user.id;
+            const user = await prisma.usuario.findUnique({
+                where: { id: userId },
+                select: {
+                    id: true,
+                    nick: true,
+                    nome_completo: true, // 👈 Garanta que isso está aqui
+                    email: true,
+                    nivel_acesso: true, // Note que no seu registrar está 'nivel_acesso'
+                    // não envie a senha!
+                }
+            });
 
+            if (!user) {
+                return res.status(404).json({ error: "Usuário não encontrado" });
+            }
+
+            return res.json(user);
+        } catch (error) {
+            return res.status(500).json({ error: "Erro ao buscar perfil" });
+        }
+    }
+    
     async forgotPassword(req: Request, res: Response) {
         const { email } = req.body;
 

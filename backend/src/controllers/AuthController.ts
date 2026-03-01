@@ -2,11 +2,9 @@ import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import prisma from '../server.js'
-import { verificarToken } from '../middlewares/auth.js';
 
 export const loginUsuario = async (req: Request, res: Response) => {
     const { nick, senha } = req.body;
-
 
     try {
         const usuario = await prisma.usuario.findUnique({ where: { nick } });

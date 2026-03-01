@@ -26,8 +26,15 @@ export class MessageController {
                     mensagem: mensagemJSON,
                     status: 'em espera',
                     enviarArquivo: arquivosUpload
-                }
+                },
+                include: { usuario: true }
             });
+
+            if (req.io) {
+                req.io.emit('nova_mensagem_chat', novaMensagem);
+                console.log("Evento emitido para todos:", novaMensagem.id);
+            }
+
             return res.status(201).json(novaMensagem);
         } catch (error) {
             console.error('Erro ao enviar mensagem:', error);
@@ -105,8 +112,18 @@ export class MessageController {
                     mensagem: historico,
                     status: nivelUsuario === 'admin' ? 'respondida' : 'em espera',
                     atualizadoEm: new Date()
-                }
+                },
+                include: { usuario: true }
             });
+
+            const io = (req as any).io; // Garante que pega do middleware
+            if (io) {
+                io.emit('nova_mensagem_chat', atualizada);
+                console.log("📢 DISPARO OK PARA O TICKET:", atualizada.id);
+            } else {
+                console.log("❌ ERRO: req.io não encontrado no Controller");
+            }
+
             return res.json(atualizada);
         } catch (error) {
             console.error('Erro ao responder mensagem:', error);
@@ -194,6 +211,50 @@ export class MessageController {
             return res.json({ message: "Ticket reaberto com sucesso!" });
         } catch (error) {
             return res.status(500).json({ error: "Erro ao reabrir ticket." });
+        }
+    }
+
+    async listMyChat(req: any, res: Response) {
+        const userId = req.user.id;
+        try {
+            const chat = await prisma.message.findFirst({
+                where: {
+                    usuarioId: Number(userId),
+                    assunto: 'CHAT_SUPORTE',
+                    status: { not: 'fechado' }
+                },
+                include: { usuario: { select: { nome_completo: true } } }
+            });
+            return res.json(chat);
+        } catch (error) {
+            return res.status(500).json({ error: 'Erro ao carregar chat' });
+        }
+    }
+
+    async listAllActiveChats(req: any, res: Response) {
+        const nivelUsuario = req.user?.nivel;
+        if (nivelUsuario !== 'admin') return res.status(403).json({ error: "Acesso Negado." });
+
+        try {
+            const chats = await prisma.message.findMany({
+                where: {
+                    assunto: 'CHAT_SUPORTE',
+                    status: { not: 'fechado' }
+                },
+                include: {
+                    usuario: {
+                        select: {
+                            id: true,
+                            nome_completo: true,
+                            email: true
+                        }
+                    }
+                },
+                orderBy: { atualizadoEm: 'desc' }
+            });
+            return res.json(chats);
+        } catch (error) {
+            return res.status(500).json({ error: 'Erro ao listar chats ativos' });
         }
     }
 }

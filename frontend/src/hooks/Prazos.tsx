@@ -1,37 +1,45 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
 export const Prazos = () => {
     const [aviso, setAviso] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [tempAviso, setTempAviso] = useState("");
+    const [isAdminOnline, setIsAdminOnline] = useState(false);
+    const [isManual, setIsManual] = useState(false);
 
-    const { checkingAuth, isLogged, isAdmin } = useContext(AuthContext);
+    const { checkingAuth, isLogged, isAdmin, socket } = useContext(AuthContext);
 
-    const exibirAvisoPrazo = () => {
-        const agora = new Date();
-        const diaSemana = agora.getDay();
-        const hora = agora.getHours();
+    const definirMensagemPorStatus = useCallback((online: boolean, forcar: boolean = false) => {
+        setIsAdminOnline(online);
 
-        let mensagem = "";
-
-        if (diaSemana === 0) {
-            mensagem = "Atenção: Após o pagamento do seu pedido, o prazo de entrega é de 5 minutos à 2 horas! Por favor aguarde!";
+        // Só altera se NÃO for manual OU se estivermos 'forcando' (no caso do reset)
+        if (!isManual || forcar) {
+            if (online) {
+                setAviso("🚀 Suporte Online: Nosso time está ativo! Seu pedido será processado em poucos minutos.");
+            } else {
+                setAviso("⌛ Atenção: No momento nossos atendentes estão offline. O processamento do seu pedido pode levar de 5 minutos à 2 horas ou iniciar às 08h00.");
+            }
         }
-        else if (hora >= 18 || hora < 8) {
-            mensagem = "Atenção: O seu pedido está sendo feito fora do horário comercial da nossa loja online, o processamento só irá ser iniciado à partir das 08h00."
-        }
-        else {
-            mensagem = "Atenção: Após o pagamento do seu pedido, o prazo de entrega é de 5 minutos à 2 horas! Por favor aguarde."
-        }
-        setAviso(mensagem);
-    }
+    }, [isManual]);
 
     useEffect(() => {
-        if (isLogged && !checkingAuth) {
-            exibirAvisoPrazo();
+        if (isLogged && !checkingAuth && socket) {
+
+            const handleStatus = (data: { online: boolean }) => {
+                definirMensagemPorStatus(data.online);
+            };
+
+            socket.on('status_admin', handleStatus);
+            socket.emit('verificar_admin_online');
+
+            return () => {
+                socket.off('status_admin', handleStatus);
+            };
+        } else {
+            console.log("⚠️ Prazos: Socket não disponível ou usuário não logado.");
         }
-    }, [isLogged, checkingAuth]);
+    }, [isLogged, checkingAuth, socket, definirMensagemPorStatus]);
 
     const handleEdit = () => {
         setTempAviso(aviso);
@@ -41,25 +49,46 @@ export const Prazos = () => {
     const handleSave = () => {
         setAviso(tempAviso);
         setIsEditing(false);
+        setIsManual(true);
+    };
+
+    const resetarParaAutomatico = () => {
+        setIsManual(false);
+        // Forçamos a atualização imediata ao resetar
+        socket?.emit('verificar_admin_online');
     };
 
     return (
         <div className="w-full">
-            {/* Área do Admin para habilitar edição */}
+            {/* Controles do Admin */}
             {isAdmin && (
-                <div className="my-4 flex justify-end">
+                <div className="my-4 flex justify-end gap-2">
+                    {isManual && (
+                        <button
+                            onClick={resetarParaAutomatico}
+                            className="cursor-pointer text-[10px] bg-gray-700 px-3 py-1 uppercase hover:bg-gray-600 text-white"
+                        >
+                            🔄 Voltar ao Automático
+                        </button>
+                    )}
                     <button
                         onClick={isEditing ? handleSave : handleEdit}
-                        className="cursor-pointer text-[10px] bg-orange-combat px-3 py-1 uppercase hover:bg-orange-500 transition-colors"
+                        className="cursor-pointer text-[10px] bg-orange-combat px-3 py-1 uppercase hover:bg-orange-500 text-white"
                     >
                         {isEditing ? "✅ Salvar Alteração" : "✏️ Editar Mensagem"}
                     </button>
                 </div>
             )}
 
+            {/* Renderização da Mensagem (O que faltava) */}
             {aviso && (
-                <div className="w-full mb-6 p-4 bg-orange-combat/10 hover:bg-orange-combat/30 border-l-4 border-orange-combat text-orange-combat transition-all">
-                    <p className="text-xs font-bold uppercase tracking-wider mb-1">📅 Informação de Prazo:</p>
+                <div className={`w-full mb-6 p-4 border-l-4 transition-all ${isAdminOnline
+                        ? "bg-green-500/10 border-green-500 text-green-500"
+                        : "bg-orange-combat/10 border-orange-combat text-orange-combat"
+                    }`}>
+                    <p className="text-xs font-bold uppercase tracking-wider mb-1">
+                        {isAdminOnline ? "🟢 Status do Atendimento:" : "📅 Informação de Prazo:"}
+                    </p>
 
                     {isEditing ? (
                         <textarea

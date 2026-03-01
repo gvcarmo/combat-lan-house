@@ -1,20 +1,22 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { FormCurriculo } from '../servicosForm/curriculo';
-import { useContext } from 'react';
+import { FormCurriculo, VisualizarPedidoCurriculo } from '../servicosForm/curriculo';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
-import { FormIPTU } from '../servicosForm/viaIptu';
-import { FormIPVA } from '../servicosForm/ipva';
+import { FormIPTU, VisualizarPedidoIPTU } from '../servicosForm/viaIptu';
+import { FormIPVA, VisualizarPedidoIPVA } from '../servicosForm/ipva';
 import { Prazos } from '../../hooks/Prazos';
-import { FormMEI } from '../servicosForm/viaMEI';
-import { FormAntCivil } from '../servicosForm/AntCivil';
-import { FormAntTJ } from '../servicosForm/AntTJ';
-import { FormAntEleitoral } from '../servicosForm/AntEleitoral';
-import { FormAntTRF1 } from '../servicosForm/AntTRF';
-import { FormAntSTM } from '../servicosForm/AntSTM';
-import { FormAntTJM } from '../servicosForm/AntTJM';
-import { FormAntPF } from '../servicosForm/AntPF';
-import { FormContrato } from '../servicosForm/ContratoRes';
-import { FormDeclararIR } from '../servicosForm/DeclararIR';
+import { FormMEI, VisualizarPedidoMEI } from '../servicosForm/viaMEI';
+import { FormAntCivil, VisualizarPedidoAntCivil } from '../servicosForm/AntCivil';
+import { FormAntTJ, VisualizarPedidoAntTJ } from '../servicosForm/AntTJ';
+import { FormAntEleitoral, VisualizarPedidoAntEleitoral } from '../servicosForm/AntEleitoral';
+import { FormAntTRF1, VisualizarPedidoAntTRF1 } from '../servicosForm/AntTRF';
+import { FormAntSTM, VisualizarPedidoAntSTM } from '../servicosForm/AntSTM';
+import { FormAntTJM, VisualizarPedidoAntTJM } from '../servicosForm/AntTJM';
+import { FormAntPF, VisualizarPedidoAntPF } from '../servicosForm/AntPF';
+import { FormContrato, VisualizarPedidoContratoRes } from '../servicosForm/ContratoRes';
+import { FormCriarArte, VisualizarPedidoCriarArteSimples } from '../servicosForm/CriarArte';
+import api from '../../services/api';
+import { SitCadCPF } from '../servicosForm/SitCadCPF';
 
 export const FormularioDinamico = () => {
     const { serviceName } = useParams();
@@ -60,8 +62,14 @@ export const FormularioDinamico = () => {
                 return <FormAntPF />
             case 'contrato-de-aluguel-residencial':
                 return <FormContrato />
-            case 'declaracao-de-imposto-de-renda':
-                return <FormDeclararIR />
+            case 'criacao-de-arte-simples':
+                return <FormCriarArte />
+            case 'criacao-de-arte-intermediaria':
+                return <FormCriarArte />
+            case 'criacao-de-arte-avancada':
+                return <FormCriarArte />
+            case 'comprovante-de-situacao-cadastral-no-cpf':
+                return <SitCadCPF />
             default:
                 return <p>Serviço não encontrado.</p>
         }
@@ -94,3 +102,64 @@ export const FormularioDinamico = () => {
         </div >
     );
 }
+
+export const VisualizarPedidoDinamico = () => {
+    const [pedido, setPedido] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const { id } = useParams();
+
+    useEffect(() => {
+        api.get(`/pedido/${id}`).then((res: any) => {
+            const data = Array.isArray(res.data) ? res.data[0] : res.data;
+            setPedido(data);
+            setLoading(false);
+        });
+    }, [id]);
+
+    if (loading) return <p>Carregando...</p>;
+    if (!pedido) return <p>Pedido não encontrado.</p>;
+
+    // O segredo está aqui: decidimos o componente com base no SLUG do job que vem do banco
+    switch (pedido.job?.slug) {
+            case 'criacao-de-curriculo':
+                return <VisualizarPedidoCurriculo />;
+            case 'via-iptu-valor-total':
+                return <VisualizarPedidoIPTU />
+            case 'via-iptu-parcela':
+                return <VisualizarPedidoIPTU />
+            case 'via-ipva-e-licenciamento':
+                return <VisualizarPedidoIPVA />
+            case 'via-ipva':
+                return <VisualizarPedidoIPVA />
+            case 'via-licenciamento-anual-do-veiculo':
+                return <VisualizarPedidoIPVA />
+            case 'via-mei':
+                return <VisualizarPedidoMEI />
+            case 'antecedentes-criminais-policia-civil':
+                return <VisualizarPedidoAntCivil />
+            case 'certidao-judicial-tribunal-de-justica-mg':
+                return <VisualizarPedidoAntTJ />
+            case 'certidao-de-quitacao-eleitoral':
+                return <VisualizarPedidoAntEleitoral />
+            case 'certidao-de-crimes-eleitorais':
+                return <VisualizarPedidoAntEleitoral />
+            case 'certidao-judicial-trf1':
+                return <VisualizarPedidoAntTRF1 />
+            case 'certidao-negativa-militar-stm':
+                return <VisualizarPedidoAntSTM />
+            case 'certidao-negativa-militar-tjmmg':
+                return <VisualizarPedidoAntTJM />
+            case 'antecedentes-criminais-da-policia-federal':
+                return <VisualizarPedidoAntPF />
+            case 'contrato-de-aluguel-residencial':
+                return <VisualizarPedidoContratoRes />
+            case 'criacao-de-arte-simples':
+                return <VisualizarPedidoCriarArteSimples />
+            case 'criacao-de-arte-intermediaria':
+                return <VisualizarPedidoCriarArteSimples />
+            case 'criacao-de-arte-avancada':
+                return <VisualizarPedidoCriarArteSimples />
+        default:
+            return <VisualizarPedidoCriarArteSimples />; 
+    }
+};

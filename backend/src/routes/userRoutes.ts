@@ -48,6 +48,24 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
+routes.post('/chat/upload', upload.single('file'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: "Nenhum arquivo enviado." });
+        }
+
+        // O multer-storage-cloudinary coloca o link em req.file.path
+        const fileUrl = req.file.path;
+        
+        return res.json({ 
+            url: fileUrl, 
+            type: req.file.mimetype.includes('image') ? 'image' : 'document' 
+        });
+    } catch (error) {
+        return res.status(500).json({ error: "Erro ao subir para o Cloudinary" });
+    }
+});
+
 routes.post('/webhook-pix', askController.handleWebhook);
 
 routes.post('/resetpassword/:token', userController.resetPassword);
@@ -80,14 +98,14 @@ routes.put('/reviews/:id', upload.single('midia'), editReview);
 routes.put('/reviews/:id', editReview);
 routes.delete('/reviews/:id', deletarReview);
 
-routes.post('/pedidos', verificarToken, askController.StorageEvent);
+routes.post('/pedidos', verificarToken, upload.array('arquivosEnviados', 10), askController.StorageEvent);
 routes.delete('/pedidos/:id', verificarToken, askController.deleteOrder);
 routes.get('/pedido/status/:id', askController.checkStatus);
 routes.post('/meus-pedidos', verificarToken, askController.listMyOrders);
 routes.get('/meus-pedidos', verificarToken, askController.listMyOrders);
 routes.get('/pedido/:id/download', verificarToken, askController.downloadFile);
 routes.get('/pedido/:id', verificarToken, askController.showOrder)
-routes.put('/pedido/:id', verificarToken, askController.updateOrder)
+routes.put('/pedido/:id', verificarToken, upload.array('arquivosEnviados', 10), askController.updateOrder)
 routes.post('/pedido/:id', verificarToken, upload.array('arquivosFinal'), askController.updateOrder);
 routes.post('/pedidos', verificarToken, upload.array('arquivosEnviados'), askController.StorageEvent);
 routes.get('/pedidos', verificarToken, askController.pedidosPendentes)
@@ -106,5 +124,8 @@ routes.delete('/message/:id', verificarToken, messageController.deleteMessage);
 
 routes.patch('/messages/:id/close', verificarToken, messageController.closeMessage);
 routes.patch('/messages/:id/reopen', verificarToken, messageController.reabrirTicket);
+
+routes.get('/admin/chats/ativos', verificarToken, messageController.listAllActiveChats);
+routes.get('/admin/chats/clientes', verificarToken, messageController.listMyChat);
 
 export default routes;

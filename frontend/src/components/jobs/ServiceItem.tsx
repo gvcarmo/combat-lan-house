@@ -99,7 +99,12 @@ export const ServiceItem = ({ job, onUpdate }: JobProps) => {
 
     const handleSelectService = () => {
         const slug = createSlug(job.nome);
-        navigate(`/formulario/${slug}`);
+        if (slug === 'digitacao') {
+            alert("Converse com o Atendente no Chat para pedir este serviço.");
+            return;
+        } else {
+            navigate(`/formulario/${slug}`);
+        }
     }
 
     return (

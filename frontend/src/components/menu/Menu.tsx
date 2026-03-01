@@ -3,10 +3,13 @@ import { useState, useContext, useRef, useEffect } from "react";
 import api from '../../services/api'
 import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { ChatWidget } from "../chat/Chat";
 
 export const Menu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [loginIsOpen, setLoginIsOpen] = useState(false);
+
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
     const { isLogged, user } = useContext(AuthContext);
 
@@ -36,19 +39,19 @@ export const Menu = () => {
         setLoginIsOpen(!loginIsOpen);
     }
 
-    async function handleOpenWhatsApp() {
-
-        if (!isLogged) {
-            alert("Você será redirecionado para o atendimento da Loja Presencial. Para abrir um Ticket na loja online, você precisa estar logado.")
-            window.open("http://wa.me/+55349996368855")
-        } else {
-            navigate(`/${user?.nick}?aba=chat`)
-        }
-    }
-
     async function handlePedidos() {
         navigate(`/${user?.nick}?aba=meus_pedidos`)
     }
+
+    const handleChatClick = () => {
+        if (!isLogged) {
+            alert("Você precisa estar Logado para falar com um Atendente.")
+            navigate('/login');
+            return;
+        }
+        // Inverte o estado (se true vira false, se false vira true)
+        setIsChatOpen(prev => !prev);
+    };
 
     return (
         <header className="relative w-full flex justify-center h-22.5 bg-linear-[29deg,#101010_0%,#131313_23%,#131313_83%,#101010_100%] border-b  border-[#000000]">
@@ -133,20 +136,20 @@ export const Menu = () => {
 
                 </div>
             </div >
-            {isLogged && user ? (
 
-                <button onClick={handleOpenWhatsApp} className="fixed flex items-center justify-center z-50 bottom-8 right-8 w-20 h-20 rounded-full bg-neutral-dark-grayish border border-neutral-very-light-grayish cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out max-[510px]:bottom-3 max-[510px]:right-3 max-[510px]:w-15 max-[510px]:h-15" >
-                    <svg width="40" height="40" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18.6023 8.525C18.6023 13.2331 14.4367 17.05 9.30228 17.05C8.009 17.05 6.77869 16.8078 5.65978 16.3719L1.70728 18.4644C1.25681 18.7017 0.704626 18.6194 0.341345 18.2609C-0.0219366 17.9025 -0.10428 17.3455 0.137907 16.895L1.86228 13.64C0.694938 12.2159 0.00228215 10.4431 0.00228215 8.525C0.00228215 3.81688 4.16791 0 9.30228 0C14.4367 0 18.6023 3.81688 18.6023 8.525ZM18.6023 26.35C14.0443 26.35 10.2517 23.342 9.45728 19.375C15.2698 19.3023 20.3218 15.1658 20.8788 9.55672C24.9137 10.4867 27.9023 13.8338 27.9023 17.825C27.9023 19.7431 27.2096 21.5159 26.0423 22.94L27.7667 26.195C28.004 26.6455 27.9217 27.1977 27.5632 27.5609C27.2048 27.9242 26.6478 28.0066 26.1973 27.7644L22.2448 25.6719C21.1259 26.1078 19.8956 26.35 18.6023 26.35Z" fill="white" />
-                    </svg>
-                </button>
-            ) : (
-                <button onClick={handleOpenWhatsApp} className="fixed flex items-center justify-center z-50 bottom-8 right-8 w-20 h-20 rounded-full bg-neutral-dark-grayish border border-neutral-very-light-grayish cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out max-[510px]:bottom-3 max-[510px]:right-3 max-[510px]:w-15 max-[510px]:h-15">
+            <button
+                onClick={handleChatClick}
+                className="fixed bottom-5 right-5 bg-orange-combat w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white text-2xl z-60"
+            >
+                {isChatOpen ? 'X' : '💬'}
+            </button>
 
-                    <svg width="40" height="40" viewBox="0 0 448 448" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M380.9 65.1C339 23.1 283.2 0 223.9 0C101.5 0 1.9 99.6 1.9 222C1.9 261.1 12.1 299.3 31.5 333L0 448L117.7 417.1C150.1 434.8 186.6 444.1 223.8 444.1H223.9C346.2 444.1 448 344.5 448 222.1C448 162.8 422.8 107.1 380.9 65.1ZM223.9 406.7C190.7 406.7 158.2 397.8 129.9 381L123.2 377L53.4 395.3L72 327.2L67.6 320.2C49.1 290.8 39.4 256.9 39.4 222C39.4 120.3 122.2 37.5 224 37.5C273.3 37.5 319.6 56.7 354.4 91.6C389.2 126.5 410.6 172.8 410.5 222.1C410.5 323.9 325.6 406.7 223.9 406.7ZM325.1 268.5C319.6 265.7 292.3 252.3 287.2 250.5C282.1 248.6 278.4 247.7 274.7 253.3C271 258.9 260.4 271.3 257.1 275.1C253.9 278.8 250.6 279.3 245.1 276.5C212.5 260.2 191.1 247.4 169.6 210.5C163.9 200.7 175.3 201.4 185.9 180.2C187.7 176.5 186.8 173.3 185.4 170.5C184 167.7 172.9 140.4 168.3 129.3C163.8 118.5 159.2 120 155.8 119.8C152.6 119.6 148.9 119.6 145.2 119.6C141.5 119.6 135.5 121 130.4 126.5C125.3 132.1 111 145.5 111 172.8C111 200.1 130.9 226.5 133.6 230.2C136.4 233.9 172.7 289.9 228.4 314C263.6 329.2 277.4 330.5 295 327.9C305.7 326.3 327.8 314.5 332.4 301.5C337 288.5 337 277.4 335.6 275.1C334.3 272.6 330.6 271.2 325.1 268.5Z" fill="white" />
-                    </svg>
-                </button>
+            {/* O WIDGET REAL (Renderiza apenas se logado, mas fica oculto até o toggle) */}
+            {isLogged && (
+                <ChatWidget
+                    externalOpen={isChatOpen} 
+                    setExternalOpen={setIsChatOpen}
+                />
             )}
 
             <div ref={loginRef} className={`userLogin ${loginIsOpen ? 'active' : ''} w-92.5 h-78 max-[379px]:w-78 bg-neutral-grayish border border-neutral-light-grayish absolute top-23.5 right-1 z-30 shadow-2xs text-white p-5 flex flex-col items-center justify-center`}>

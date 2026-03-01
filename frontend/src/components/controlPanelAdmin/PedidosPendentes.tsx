@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import { io } from 'socket.io-client';
 
 export interface Pedido {
     id: number;
@@ -29,7 +28,7 @@ export const PedidosPendentes = () => {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
     const [uploadingId, setUploadingId] = useState<number | null>(null);
 
-    const { setGlobalLoading } = useContext(AuthContext);
+    const { setGlobalLoading, socket } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const backCampoClass = `py-2 pl-4 flex flex-col md:col-span-2`
@@ -53,25 +52,22 @@ export const PedidosPendentes = () => {
     }, []);
 
     useEffect(() => {
-        const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
-            transports: ['websocket', 'polling'],
-            withCredentials: true
-        });
-
-        socket.on('novo_pedido', (pedidoRecemCriado: Pedido) => {
+        const handleNovoPedido = (pedidoRecemCriado: Pedido) => {
             setPedidos((prev) => {
                 const existe = prev.find(p => p.id === pedidoRecemCriado.id);
                 if (existe) return prev;
                 return [pedidoRecemCriado, ...prev];
             });
-
             audio.play().catch(() => { });
-        });
+        };
+
+        socket.on('novo_pedido', handleNovoPedido);
 
         return () => {
-            socket.disconnect();
+            // EM VEZ DE DISCONNECT, use OFF para remover apenas este evento
+            socket.off('novo_pedido', handleNovoPedido);
         };
-    }, []);
+    }, [socket]);
 
     const handleUploadFile = async (pedidoId: number, file: File) => {
         const formData = new FormData();

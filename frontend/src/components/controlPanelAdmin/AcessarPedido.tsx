@@ -15,6 +15,7 @@ import { VisualizarPedidoAntSTM } from "../servicosForm/AntSTM";
 import { VisualizarPedidoAntTJM } from "../servicosForm/AntTJM";
 import { VisualizarPedidoAntPF } from "../servicosForm/AntPF";
 import { VisualizarPedidoContratoRes } from "../servicosForm/ContratoRes";
+import { VisualizarPedidoCriarArteSimples } from "../servicosForm/CriarArte";
 
 export const AcessarPedido = () => {
     const [dadosPedido, setDadosPedido] = useState<Pedido | null>(null);
@@ -62,6 +63,8 @@ export const AcessarPedido = () => {
                 return <VisualizarPedidoAntPF />
             case 32:
                 return <VisualizarPedidoContratoRes />
+            case 33:
+                return <VisualizarPedidoCriarArteSimples />
             default:
                 return <p>Serviço não encontrado.</p>
         }
