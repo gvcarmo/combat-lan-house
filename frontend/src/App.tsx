@@ -7,7 +7,6 @@ import { ForgotPassword, ResetPassword } from './components/forgotPassword/Forgo
 import { FormularioDinamico, VisualizarPedidoDinamico } from './components/formularioDinamico/FormularioDinamico'
 import { RegisterPage } from './components/register/RegisterPage'
 import { MeusPedidos } from './components/controlPanel/MeusPedidos'
-import { AcessarPedido } from './components/controlPanelAdmin/AcessarPedido'
 import { EnviarMensagem } from './components/controlPanel/EnviarMensagem'
 
 function App() {
@@ -23,9 +22,9 @@ function App() {
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
           <Route path="/:nick" element={<ControlPanel />} />
           <Route path="/meus-pedidos" element={<MeusPedidos />} />
-          <Route path="/pedido/:id" element={<AcessarPedido />} />
           <Route path="/formulario/:serviceName" element={<FormularioDinamico />} />
-          <Route path="/formulario/:id/view" element={<VisualizarPedidoDinamico />} />            <Route path="/messages" element={<EnviarMensagem />} />
+          <Route path="/formulario/:id/view" element={<VisualizarPedidoDinamico />} />
+          <Route path="/messages" element={<EnviarMensagem />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

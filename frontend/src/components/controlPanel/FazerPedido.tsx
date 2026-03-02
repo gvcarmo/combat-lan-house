@@ -3,6 +3,7 @@ import { ServiceItem } from '../jobs/ServiceItem';
 import api from '../../services/api';
 
 interface Job {
+    id: number;
     nome?: string;
     descricao?: string;
     categoria?: 'fisico' | 'online';
@@ -12,12 +13,21 @@ interface Job {
 
 export const FazerPedido = ({ categoria = 'online' }: Job) => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [showList, setShowList] = useState<number>(5);
+
+    const [showList, setShowList] = useState<number>(() => {
+        const saved = localStorage.getItem("@Combat:showList");
+        return saved ? Number(saved) : 5;
+    });
+
     const [jobs, setJobs] = useState<Job[]>([]);
 
     useEffect(() => {
         api.get('/jobs').then((res: any) => setJobs(res.data));
     }, []);
+    
+    useEffect(() => {
+        localStorage.setItem("@Combat:showList", String(showList));
+    }, [showList]);
 
     const filteredJobs = jobs.filter((job) => {
         const search = searchTerm.toLowerCase();
@@ -25,18 +35,17 @@ export const FazerPedido = ({ categoria = 'online' }: Job) => {
         const matchesCategory = job.genero === 'online';
 
         const matchesSearch =
-            job.nome?.toLowerCase().includes(search) ||
-            job.descricao?.toLowerCase().includes(search);
+            job.nome?.toLowerCase().includes(search);
 
         return matchesCategory && matchesSearch;
     });
 
     const showMore = () => {
-        setShowList((prev) => Math.min(prev + 5, jobs.length))
+        setShowList((prev) => prev + 5);
     }
 
     const showLess = () => {
-        setShowList((prev) => Math.min(prev, prev = 5))
+        setShowList(5);
     }
 
     const jobsFiltrados = jobs.filter((job: any) => job.genero === categoria);
@@ -57,7 +66,7 @@ export const FazerPedido = ({ categoria = 'online' }: Job) => {
             <div className="border-l-4 border-orange-combat bg-orange-combat/10 py-2 pl-4 flex flex-col gap-1 md:col-span-2 mb-6">
                 <div className="text-xs uppercase mb-1">
                     <div className="relative">
-                        <input className="px-8 py-1 mr-2 text-sm bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors resize-none w-[98%]" placeholder="Pesquisar serviço..." type="text"
+                        <input className="px-8 py-1 mr-2 text-sm bg-neutral-grayish border border-gray-700 focus:border-orange-combat outline-none transition-colors resize-none w-[98%]" placeholder="Pesquisar serviço pelo nome..." type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)} />
                         <img className="absolute w-4 top-2 left-2 opacity-50" src="./icons/search.svg" alt="Procurar" />

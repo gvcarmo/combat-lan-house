@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import api from "../../services/api";
 import { ServiceItem } from "./ServiceItem";
 
-interface Job {
+export interface Job {
     id: number;
     nome: string;
     descricao: string;
