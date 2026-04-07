@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useParams } from "react-router-dom";
 import api from "../../services/api";
+import { useConfirm } from 'react-use-confirming-dialog'
 
 export const UserInfos = () => {
     const { nick } = useParams();
@@ -37,24 +38,48 @@ export const UserInfos = () => {
 
     if (!userData) return <div className="p-10 text-center">Usuário não encontrado.</div>;
 
+    const confirm = useConfirm()
+
     const handleSolicitarReset = async () => {
-        const confirmar = window.confirm(`Deseja enviar um link de recuperação para ${userData.email}?`);
 
-        if (!confirmar) return;
+        const proceed = await confirm({
+            title: "RECUPERAR SENHA",
+            message: `Um link de recuperação será enviado para o e-mail: ${userData.email}, deseja continuar?`,
+            confirmText: "Enviar Link",
+            cancelText: "Cancelar",
+            confirmColor: "#f97316",
+            confirmTextFont: "Inter, sans-serif",
+            cancelTextFont: "Inter, sans-serif",
+            dialogTextFont: "Georgia, serif"
+        })
+        if (proceed) {
+            try {
+                setCarregando(true);
+                setGlobalLoading(true);
+                console.log("DEBUG EMAIL:", userData.email);
+                await api.post(`/forgotpassword`, { email: userData.email });
 
-        try {
-            setCarregando(true);
-            setGlobalLoading(true);
-            console.log("DEBUG EMAIL:", userData.email);
-            await api.post(`/forgotpassword`, { email: userData.email });
+                const proceed = await confirm({
+                    title: "E-MAIL ENVIADO",
+                    message: "Sucesso! Verifique sua caixa de entrada (e o spam) para redefinir a senha.",
+                    confirmText: "Ok!",
+                    cancelText: "Cancelar",
+                    confirmColor: "#f97316",
+                    confirmTextFont: "Inter, sans-serif",
+                    cancelTextFont: "Inter, sans-serif",
+                    dialogTextFont: "Georgia, serif"
+                })
+                if (proceed) {
+                    close(); // Fechar o diálogo após confirmação
+                }
+            } catch (error: any) {
+                console.error(error);
+                alert(error.response?.data?.error || "Erro ao solicitar troca de senha.");
+            } finally {
+                setGlobalLoading(false);
+                setCarregando(false);
+            }
 
-            alert("Sucesso! Verifique sua caixa de entrada (e o spam) para redefinir a senha.");
-        } catch (error: any) {
-            console.error(error);
-            alert(error.response?.data?.error || "Erro ao solicitar troca de senha.");
-        } finally {
-            setGlobalLoading(false);
-            setCarregando(false);
         }
     }
 

@@ -8,26 +8,29 @@ import { FormularioDinamico, VisualizarPedidoDinamico } from './components/formu
 import { RegisterPage } from './components/register/RegisterPage'
 import { MeusPedidos } from './components/controlPanel/MeusPedidos'
 import { EnviarMensagem } from './components/controlPanel/EnviarMensagem'
+import { ConfirmProvider } from 'react-use-confirming-dialog'
 
 function App() {
 
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<RegisterPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/resetpassword/:token" element={<ResetPassword />} />
-          <Route path="/:nick" element={<ControlPanel />} />
-          <Route path="/meus-pedidos" element={<MeusPedidos />} />
-          <Route path="/formulario/:serviceName" element={<FormularioDinamico />} />
-          <Route path="/formulario/:id/view" element={<VisualizarPedidoDinamico />} />
-          <Route path="/messages" element={<EnviarMensagem />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <ConfirmProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<RegisterPage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/resetpassword/:token" element={<ResetPassword />} />
+            <Route path="/:nick" element={<ControlPanel />} />
+            <Route path="/meus-pedidos" element={<MeusPedidos />} />
+            <Route path="/formulario/:serviceName" element={<FormularioDinamico />} />
+            <Route path="/formulario/:id/view" element={<VisualizarPedidoDinamico />} />
+            <Route path="/messages" element={<EnviarMensagem />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ConfirmProvider>
   )
 }
 

@@ -40,7 +40,7 @@ const storage = new CloudinaryStorage({
         return {
             folder: 'uploads',
             resource_type: 'auto',
-            allowed_formats: ['jpg', 'png', 'jpeg', 'svg', 'pdf', 'doc', 'docx', 'txt'],
+            allowed_formats: ['jpg', 'png', 'jpeg', 'svg', 'pdf', 'doc', 'docx', 'txt', 'mov', 'mp4', 'avi', 'mkv', 'mpeg', 'mp3', 'wav', 'ogg', 'flv', 'webm', '3gp', 'zip', 'rar', '7z'],
             public_id: `file-${Date.now()}`
         };
     },

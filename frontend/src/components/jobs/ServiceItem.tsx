@@ -3,6 +3,9 @@ import api from "../../services/api";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from 'react-router-dom';
 
+import React from 'react'
+import { useConfirm } from 'react-use-confirming-dialog'
+
 interface JobProps {
     job: any;
     onUpdate?: any;
@@ -97,13 +100,31 @@ export const ServiceItem = ({ job, onUpdate }: JobProps) => {
             .replace(/\s+/g, "-");
     };
 
-    const handleSelectService = () => {
-        const slug = createSlug(job.nome);
-        if (slug === 'digitacao') {
-            alert("Converse com o Atendente no Chat para pedir este serviço.");
+    const confirm = useConfirm()
+
+    const slug = createSlug(job.nome);
+
+    const handleSelectService = async () => {
+
+        if (slug === 'digitacao' || slug === 'criar-video') {
+            const proceed = await confirm({
+                title: "FAZER PEDIDO",
+                message: "Este serviço deve ser feito pelo Chat com o Atendente antes de continuar para o formulário.",
+                confirmText: "Tudo certo, fazer o pedido!",
+                cancelText: "Vou conversar com o Atendente",
+                confirmColor: "#f97316",
+                confirmTextFont: "Inter, sans-serif",
+                cancelTextFont: "Inter, sans-serif",
+                dialogTextFont: "Georgia, serif"
+            })
+            if (proceed) {
+                navigate(`/formulario/${slug}`);
+            }
             return;
+
         } else {
             navigate(`/formulario/${slug}`);
+            return;
         }
     }
 

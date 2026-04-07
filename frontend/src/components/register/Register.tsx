@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import api from "../../services/api";
 import { Link, useNavigate } from "react-router-dom";
+import { useConfirm } from "react-use-confirming-dialog";
 
 interface Register {
     nick: string;
@@ -34,6 +35,8 @@ export const Register = () => {
         setRegister(res.data);
     }
 
+    const confirm = useConfirm()
+
     const handleCreateUser = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -41,17 +44,29 @@ export const Register = () => {
 
         setGlobalLoading(true);
         try {
-            await api.post('/usuarios', {
-                nick: newRegister.nick,
-                nome_completo: newRegister.nome_completo,
-                email: newRegister.email,
-                senha: newRegister.senha,
-                nivel_acesso: newRegister.nivel_acesso
+            const proceed = await confirm({
+                title: "CADASTRO FINALIZADO",
+                message: "Cadastro realizado com sucesso! Você será redirecionado para a página de login.",
+                confirmText: "Confirmar",
+                cancelText: "Cancelar",
+                confirmColor: "#f97316",
+                confirmTextFont: "Inter, sans-serif",
+                cancelTextFont: "Inter, sans-serif",
+                dialogTextFont: "Georgia, serif"
             })
 
-            alert("Cadastro realizado com sucesso!");
-            fetchRegister();
-            navigate('/');
+            if (proceed) {
+                await api.post('/usuarios', {
+                    nick: newRegister.nick,
+                    nome_completo: newRegister.nome_completo,
+                    email: newRegister.email,
+                    senha: newRegister.senha,
+                    nivel_acesso: newRegister.nivel_acesso
+                })
+                fetchRegister();
+                navigate('/login');
+            }
+
         } catch (error) {
             alert("Erro ao se cadastrar, verifique as informações.")
         } finally {

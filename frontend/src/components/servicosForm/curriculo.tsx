@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import { useConfirm } from "react-use-confirming-dialog";
 
 export const FormCurriculo = () => {
     const { setGlobalLoading, user } = useContext(AuthContext);
@@ -123,6 +124,8 @@ export const FormCurriculo = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const confirm = useConfirm()
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -130,29 +133,40 @@ export const FormCurriculo = () => {
         const enderecoFinal = `${endereco.rua}, ${endereco.numero}, ${endereco.bairro}, ${endereco.cidade}`;
 
         setGlobalLoading(true);
-        try {
-            const response = await api.post('/pedidos', {
-                jobSlug: serviceName,
-                dadosForm: {
-                    ...formData,
-                    data_nascimento: dataFinal,
-                    endereco: enderecoFinal,
-                },
-                arquivosEnviados: []
-            });
+        const proceed = await confirm({
+            title: "FINALIZAR PEDIDO",
+            message: "Tem certeza que deseja finalizar o pedido?",
+            confirmText: "Finalizar Pedido",
+            cancelText: "Cancelar",
+            confirmColor: "#f97316",
+            confirmTextFont: "Inter, sans-serif",
+            cancelTextFont: "Inter, sans-serif",
+            dialogTextFont: "Georgia, serif"
+        })
+        if (proceed) {
+            setGlobalLoading(true);
+            try {
+                const response = await api.post('/pedidos', {
+                    jobSlug: serviceName,
+                    dadosForm: {
+                        ...formData,
+                        data_nascimento: dataFinal,
+                        endereco: enderecoFinal,
+                    },
+                    arquivosEnviados: []
+                });
 
-            const novoPedidoId = response.data.id;
+                const novoPedidoId = response.data.id;
 
-            alert(`Pedido realizado com sucesso! Realize o pagamento.`);
+                navigate(`/${user?.nick}?aba=meus_pedidos&pagar=${novoPedidoId}`);
 
-            navigate(`/${user?.nick}?aba=meus_pedidos&pagar=${novoPedidoId}`);
-
-        } catch (error) {
-            return ("Erro ao enviar, verifique os dados.")
-        } finally {
-            setGlobalLoading(false);
+            } catch (error) {
+                return ("Erro ao enviar, verifique os dados.")
+            } finally {
+                setGlobalLoading(false);
+            }
         }
-    };
+    }
 
     const backCampoClass = `border-l-2 border-orange-combat bg-neutral-dark-grayish py-2 pl-4 flex flex-col gap-1 md:col-span-2 mb-6`
     const titleClass = `text-xs text-orange-combat uppercase font-bold mb-1`

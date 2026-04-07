@@ -18,6 +18,8 @@ import { FormCriarArte } from '../servicosForm/CriarArte';
 import api from '../../services/api';
 import { SitCadCPF } from '../servicosForm/SitCadCPF';
 import { VisualizarPedido } from '../../hooks/VisualizarPedido';
+import { DigitacaoForm } from '../servicosForm/digitacao';
+import { CriarVideoForm } from '../servicosForm/criarVideo';
 
 export const FormularioDinamico = () => {
     const { serviceName } = useParams();
@@ -71,6 +73,10 @@ export const FormularioDinamico = () => {
                 return <FormCriarArte />
             case 'comprovante-de-situacao-cadastral-no-cpf':
                 return <SitCadCPF />
+            case 'digitacao':
+                return <DigitacaoForm />
+            case 'criacao-de-video':
+                return <CriarVideoForm />
             default:
                 return <p>Serviço não encontrado.</p>
         }

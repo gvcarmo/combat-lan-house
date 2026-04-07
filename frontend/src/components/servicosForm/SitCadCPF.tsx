@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
+import { useConfirm } from "react-use-confirming-dialog";
 
 export const SitCadCPF = () => {
     const [isSending, setIsSending] = useState(false);
@@ -19,6 +20,8 @@ export const SitCadCPF = () => {
         data_nascimento: [{ dia: '', mes: '', ano: '' }],
     })
 
+    const confirm = useConfirm()
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -26,27 +29,51 @@ export const SitCadCPF = () => {
 
         setIsSending(true);
         setGlobalLoading(true);
-        try {
-            const response = await api.post('/pedidos', {
-                jobSlug: serviceName,
-                dadosForm: {
-                    ...formData,
-                    data_nascimento: dataFinal
+        const proceed = await confirm({
+            title: "FINALIZAR PEDIDO",
+            message: "Tem certeza que deseja finalizar o pedido?",
+            confirmText: "Finalizar Pedido",
+            cancelText: "Cancelar",
+            confirmColor: "#f97316",
+            confirmTextFont: "Inter, sans-serif",
+            cancelTextFont: "Inter, sans-serif",
+            dialogTextFont: "Georgia, serif"
+        })
+        if (proceed) {
+            setGlobalLoading(true);
+            try {
+                const proceed = await confirm({
+                    title: "PEDIDO FINALIZADO",
+                    message: "Pedido realizado com sucesso! Você será redirecionado para o pagamento no seu painel, onde poderá acompanhar o andamento do seu pedido.",
+                    confirmText: "Confirmar",
+                    cancelText: "Cancelar",
+                    confirmColor: "#f97316",
+                    confirmTextFont: "Inter, sans-serif",
+                    cancelTextFont: "Inter, sans-serif",
+                    dialogTextFont: "Georgia, serif"
+                })
+                if (proceed) {
+
+                    const response = await api.post('/pedidos', {
+                        jobSlug: serviceName,
+                        dadosForm: {
+                            ...formData,
+                            data_nascimento: dataFinal
+                        }
+                    });
+
+                    const novoPedidoId = response.data.id;
+
+                    navigate(`/${user?.nick}?aba=meus_pedidos&pagar=${novoPedidoId}`);
+
                 }
-            });
+            } catch (error) {
+                alert("Erro ao enviar, verifique os dados.")
 
-            const novoPedidoId = response.data.id;
-
-            alert(`Pedido realizado com sucesso! Realize o pagamento.`);
-
-            navigate(`/${user?.nick}?aba=meus_pedidos&pagar=${novoPedidoId}`);
-
-        } catch (error) {
-            alert("Erro ao enviar, verifique os dados.")
-
-        } finally {
-            setGlobalLoading(false);
-            setIsSending(true);
+            } finally {
+                setGlobalLoading(false);
+                setIsSending(true);
+            }
         }
     }
 

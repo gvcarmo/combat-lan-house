@@ -3,6 +3,7 @@ import api from '../../services/api';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import { Prazos } from '../../hooks/Prazos';
+import { useConfirm } from 'react-use-confirming-dialog'
 
 interface Pedido {
     id: any;
@@ -60,7 +61,7 @@ export const MeusPedidos = () => {
                     const response = await api.get(`/pedido/status/${pedidoAtivoId}`)
 
                     if (response.data.status === 'pendente') {
-                        alert("Pagamento confirmado com sucesso! Seu pedido está sendo processado.");
+                        handlePagamentoOk();
                         setModalAberto(false);
                         setPedidoAtivoId(null);
                         window.location.reload();
@@ -72,6 +73,27 @@ export const MeusPedidos = () => {
         }
         return () => clearInterval(intervalo);
     }, [modalAberto, pedidoAtivoId]);
+
+    const confirm = useConfirm()
+
+    const handlePagamentoOk = async () => {
+        if (!isLogged) {
+            const proceed = await confirm({
+                title: "PAGAMENTO CONFIRMADO",
+                message: "Pagamento confirmado com sucesso! Seu pedido está sendo processado, acompanhe em meus pedidos.",
+                confirmText: "Ir para Meus Pedidos",
+                cancelText: "Ok",
+                confirmColor: "#f97316",
+                confirmTextFont: "Inter, sans-serif",
+                cancelTextFont: "Inter, sans-serif",
+                dialogTextFont: "Georgia, serif"
+            })
+            if (proceed) {
+                navigate(`/${user?.nick}?aba=meus_pedidos`)
+                return;
+            }
+        }
+    }
 
     const handleGerarPix = async (pedidoId: number) => {
         setCarregando(pedidoId);
@@ -134,13 +156,33 @@ export const MeusPedidos = () => {
     }
 
     const handleDeleteOrder = async (id: Pedido) => {
-        if (window.confirm(`Tem certeza que deseja excluir o pedido?`)) {
-
+        const proceed = await confirm({
+            title: "EXCLUIR PEDIDO",
+            message: "Tem certeza que deseja excluir o pedido?",
+            confirmText: "Excluir",
+            cancelText: "Cancelar",
+            confirmColor: "#f97316",
+            confirmTextFont: "Inter, sans-serif",
+            cancelTextFont: "Inter, sans-serif",
+            dialogTextFont: "Georgia, serif"
+        })
+        if (proceed) {
             setGlobalLoading(true);
             try {
                 await api.delete(`/pedidos/${id}`);
-                alert("Pedido excluido com sucesso!");
-                fetchPedidos();
+                const proceed = await confirm({
+                    title: "PEDIDO EXCLUIDO",
+                    message: "Pedido foi excluido com sucesso!",
+                    confirmText: "Atualizar Lista",
+                    cancelText: "Ok",
+                    confirmColor: "#f97316",
+                    confirmTextFont: "Inter, sans-serif",
+                    cancelTextFont: "Inter, sans-serif",
+                    dialogTextFont: "Georgia, serif"
+                })
+                if (proceed) {
+                    fetchPedidos();
+                }
             } catch (err) {
                 alert("Erro ao excluir pedido.");
             } finally {

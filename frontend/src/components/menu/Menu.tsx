@@ -4,6 +4,8 @@ import api from '../../services/api'
 import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { ChatWidget } from "../chat/Chat";
+import React from 'react'
+import { useConfirm } from 'react-use-confirming-dialog'
 
 export const Menu = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -43,15 +45,45 @@ export const Menu = () => {
         navigate(`/${user?.nick}?aba=meus_pedidos`)
     }
 
-    const handleChatClick = () => {
+    const confirm = useConfirm()
+
+    const handleChatClick = async () => {
         if (!isLogged) {
-            alert("Você precisa estar Logado para falar com um Atendente.")
-            navigate('/login');
-            return;
+            const proceed = await confirm({
+                title: "CHAT COM O ATENDENTE",
+                message: "Você precisa estar Logado para falar com um Atendente.",
+                confirmText: "Logar em minha Conta",
+                cancelText: "Cancelar",
+                confirmColor: "#f97316",
+                confirmTextFont: "Inter, sans-serif",
+                cancelTextFont: "Inter, sans-serif",
+                dialogTextFont: "Georgia, serif"
+            })
+            if (proceed) {
+                navigate('/login');
+                return;
+            }
+        } else {
+            if(isChatOpen) {
+                setIsChatOpen(false);
+                return;
+            }
+            const proceed = await confirm({
+                title: "INICIAR ATENDIMENTO PELO CHAT",
+                message: "Você será atendido por um Atendente. Ao encerrar este atendimento, todas as mensagens serão apagadas sem deixar nenhum histórico. Deseja continuar?",
+                confirmText: "Iniciar Atendimento",
+                cancelText: "Vou iniciar um Ticket",
+                confirmColor: "#f97316",
+                confirmTextFont: "Inter, sans-serif",
+                cancelTextFont: "Inter, sans-serif",
+                dialogTextFont: "Georgia, serif"
+            })
+            if (proceed) {
+                setIsChatOpen(prev => !prev);
+                return;
+            }
         }
-        // Inverte o estado (se true vira false, se false vira true)
-        setIsChatOpen(prev => !prev);
-    };
+    }
 
     return (
         <header className="relative w-full flex justify-center h-22.5 bg-linear-[29deg,#101010_0%,#131313_23%,#131313_83%,#101010_100%] border-b  border-[#000000]">
@@ -139,7 +171,7 @@ export const Menu = () => {
 
             <button
                 onClick={handleChatClick}
-                className="fixed bottom-5 right-5 bg-orange-combat w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white text-2xl z-60"
+                className="cursor-pointer fixed bottom-5 right-5 bg-orange-combat w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white text-2xl z-60"
             >
                 {isChatOpen ? 'X' : '💬'}
             </button>
@@ -147,7 +179,7 @@ export const Menu = () => {
             {/* O WIDGET REAL (Renderiza apenas se logado, mas fica oculto até o toggle) */}
             {isLogged && (
                 <ChatWidget
-                    externalOpen={isChatOpen} 
+                    externalOpen={isChatOpen}
                     setExternalOpen={setIsChatOpen}
                 />
             )}
@@ -208,9 +240,7 @@ export function Login() {
                 console.error("A função login não existe no Contexto!");
             }
 
-            alert('Login realizado com sucesso!');
-
-            navigate(`/${nick}`);
+            handleLoginMsg();
 
         } catch (error: any) {
             console.error("Erro no login:", error);
@@ -222,6 +252,25 @@ export function Login() {
             }
         } finally {
             setGlobalLoading(false);
+        }
+    }
+
+    const confirm = useConfirm()
+
+    const handleLoginMsg = async () => {
+        const proceed = await confirm({
+            title: "LOGIN",
+            message: "Login realizado com sucesso! Deseja ir para o painel de controle?",
+            confirmText: "Ir para o painel",
+            cancelText: "Cancelar",
+            confirmColor: "#f97316",
+            confirmTextFont: "Inter, sans-serif",
+            cancelTextFont: "Inter, sans-serif",
+            dialogTextFont: "Georgia, serif"
+        })
+        if (proceed) {
+            navigate(`/${nick}`);
+            return;
         }
     }
 

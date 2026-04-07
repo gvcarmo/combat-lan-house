@@ -214,7 +214,7 @@ export const AdminChatDashboard = () => {
                                                     />
                                                 ) : (
                                                     <a href={msg.mensagem} target="_blank" className="flex items-center gap-2 text-xs underline bg-black/30 p-2 rounded">
-                                                        📂 Documento recebido
+                                                        📂 Documento/Arquivo recebido
                                                     </a>
                                                 )
                                             ) : (

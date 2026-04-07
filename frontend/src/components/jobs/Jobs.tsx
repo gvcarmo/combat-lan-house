@@ -142,14 +142,12 @@ export const Jobs = () => {
                     {isLogged && user ? (
 
                         <div className={`mb-6 p-4 bg-orange-combat/10 hover:bg-orange-combat/30 border-l-4 text-orange-combat w-full flex-col`}>
-                            <p className="text-xs font-bold uppercase tracking-wider mb-1">📦 Antes de fazer um pedido:</p>                           
-                            
-                            <p className="text-[11px] leading-relaxed text-white/90">* Para ser atendido na Combat <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Online'</span>, você deve se cadastrar, clicar em 'Pedir' no serviço escolhido e preencher o formulário do pedido e aguardar, qualquer dúvida entre em contato clicando no balão no canto inferior direito.</p>
-                            <p className="text-[11px] leading-relaxed text-white/90">* Caso esteja fora do horário de atendimento, abra um  <b>Ticket</b>, lá você tem permissão para enviar arquivos.</p>
+                            <p className="text-xs font-bold uppercase tracking-wider mb-1">📦 Antes de fazer um pedido:</p>
 
-                            <p className="text-[11px] leading-relaxed text-white/90">* Os serviços da categoria <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Presencial'</span>  também podem ser feitos pelo WhatsApp <a className="text-blue-400 hover:text-blue-700" href="http://wa.me/+55349996368855" target="_blank">(Clique Aqui)</a>.</p>
+                            <p className="text-[11px] leading-relaxed text-white/90">* O horário de funcionamento da <span className="h-fit px-2 text-xs font-bold uppercase bg-orange-combat">'Combat Online'</span>, é das 08:00h às 20:00h de segunda à sábado.</p>
+                            <p className="text-[11px] leading-relaxed text-white/90">* Caso esteja fora do horário de atendimento, você pode abrir um <b>Ticket</b>, qualquer dúvida você também pode chamar no Chat.</p>
 
-                            <p className="text-[11px] leading-relaxed text-white/90">* Os preços da Combat Online e da Combat Presencial podem divergir.</p>
+                            <p className="text-[11px] leading-relaxed text-white/90">* Os preços da Combat Online e da Combat Presencial podem ser diferentes.</p>
                         </div>
                     ) : ('')}
 
@@ -177,7 +175,7 @@ export const Jobs = () => {
                             <div className="flex flex-col">
                                 {searchTerm === "" ? (
                                     <p className="p-1 mr-2 text-xs  focus:border-orange-combat outline-none transition-colors resize-none">
-                                        Antes de digitar algo, selecione um filtro abaixo...
+                                        Digite o nome de um serviço...
                                     </p>
                                 ) : filteredJobs.length > 0 ? (
                                     filteredJobs.map((job: any) => (
@@ -335,14 +333,14 @@ export const Jobs = () => {
                                             onClick={() => setFiltroAtivo('online')}
                                             className={`cursor-pointer px-6 py-1 font-bold transition-all hover:bg-white hover:text-orange-combat ${filtroAtivo === 'online' ? 'bg-orange-combat text-white' : 'bg-gray-700 text-gray-300'}`}
                                         >
-                                            ONLINE
+                                            SERVIÇOS ONLINE
                                         </button>
-                                        <button
+                                        {/* <button
                                             onClick={() => setFiltroAtivo('presencial')}
                                             className={`cursor-pointer hover:bg-white hover:text-orange-combat px-6 py-1 font-bold transition-all ${filtroAtivo === 'presencial' ? 'bg-orange-combat text-white' : 'bg-gray-700 text-gray-300'}`}
                                         >
                                             PRESENCIAL
-                                        </button>
+                                        </button> */}
                                     </div>
 
                                 </div>

@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import api from "../../services/api";
 import { useNavigate, Link } from "react-router-dom";
+import { useConfirm } from "react-use-confirming-dialog";
 
 export const RegisterPage = () => {
     const [nick, setNick] = useState('');
@@ -10,27 +11,43 @@ export const RegisterPage = () => {
 
     const navigate = useNavigate();
 
+    const confirm = useConfirm()
+
     async function handleLogin(e: React.FormEvent) {
         e.preventDefault();
 
         setGlobalLoading(true);
+
         try {
-            const response = await api.post('/login', { nick, senha });
+            const proceed = await confirm({
+                title: "LOGIN",
+                message: "Login realizado com sucesso! Você será redirecionado ao seu painel.",
+                confirmText: "Confirmar",
+                cancelText: "Cancelar",
+                confirmColor: "#f97316",
+                confirmTextFont: "Inter, sans-serif",
+                cancelTextFont: "Inter, sans-serif",
+                dialogTextFont: "Georgia, serif"
+            })
 
-            const { token, user: userData } = response.data;
+            if (proceed) {
 
-            localStorage.setItem('@CombatLan:token', token);
-            localStorage.setItem('@CombatLan:user', JSON.stringify(userData));
+                const response = await api.post('/login', { nick, senha });
 
-            if (login) {
-                login(userData);
-            } else {
-                console.error("A função login não existe no Contexto!");
+                const { token, user: userData } = response.data;
+
+                localStorage.setItem('@CombatLan:token', token);
+                localStorage.setItem('@CombatLan:user', JSON.stringify(userData));
+
+                if (login) {
+                    login(userData);
+                } else {
+                    console.error("A função login não existe no Contexto!");
+                }
+
+                navigate(`/${nick}`);
+
             }
-
-            alert('Login realizado com sucesso!');
-
-            navigate('/:nick');
 
         } catch (error) {
             console.error(error);

@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
 import { useConfirm } from "react-use-confirming-dialog";
 
-export const FormIPVA = () => {
+export const DigitacaoForm = () => {
     const [isSending, setIsSending] = useState(false);
 
     const { serviceName } = useParams();
@@ -14,9 +14,8 @@ export const FormIPVA = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        nome_completo: '',
-        renavam: '',
-        exercicio: '',
+        chave_pix_tipo: '',
+        chave_pix: '',
         outras_infos: ''
     })
 
@@ -79,46 +78,45 @@ export const FormIPVA = () => {
     return (
         <div className="w-full">
             <form onSubmit={handleSubmit} id="submit" className="flex flex-col mt-5 gap-2">
+
+                <div className="mt-1 p-4 bg-blue-500/10 hover:bg-blue-500/30 border-l-4 border-blue-500 text-blue-500 w-full transition-all">
+                    <p className="text-xs font-bold uppercase tracking-wider mb-1 transition-all">🛡️ Serviço feito pelo Chat</p>
+                    <p className="text-[11px] leading-relaxed text-white/90">* Só finalize o pedido se o Atendente confirmar que está tudo certo para continuar.</p>
+                    <p className="text-[11px] leading-relaxed text-white/90">* Após a finalização do pedido você será redirecionado para seu painel, para fazer o pagamento e ter acesso ao resultado.</p>
+                </div>
+
+
                 <div className="flex flex-col p-5 max-[610px]:p-0 gap-2">
                     <h5 className="text-[18px] font-semibold text-orange-combat mb-2.5">Dados Necessários:</h5>
 
-                    <div className={`${backCampoClass}`}>
-                        <label className={`${titleClass}`}><span className="text-[16px] text-red-500">*</span> Nome Completo do Proprietário do Veículo:</label>
-                        <input
-                            required
-                            name="nome_completo"
-                            placeholder="Ex.: Marcos da Silva Santos"
-                            className={`${campoClass}`}
-                            value={formData.nome_completo}
-                            onChange={e => setFormData({ ...formData, nome_completo: e.target.value })}
-                        />
-                    </div>
+                    <div className="flex gap-4 max-[610px]:flex-col">
+                        <div className={`${backCampoClass} max-[610px]:w-full w-1/2`}>
+                            <label className={`${titleClass}`}><span className="text-[16px] text-red-500">*</span> Sua Chave Pix (Tipo):</label>
+                            <select
+                                required
+                                name="chave_pix_tipo"
+                                className={`${campoClass}`}
+                                value={formData.chave_pix_tipo}
+                                onChange={e => setFormData({ ...formData, chave_pix_tipo: e.target.value })}
+                            >
+                                <option value="">Selecionar um tipo de chave pix...</option>
+                                <option value="civel">CPF</option>
+                                <option value="criminal">Celular</option>
+                                <option value="eleitoral">E-mail</option>
+                            </select>
+                        </div>
 
-                    <div className={`${backCampoClass}`}>
-                        <label className={`${titleClass}`}><span className="text-[16px] text-red-500">*</span> Número do Renavam:</label>
-                        <input
-                            required
-                            name="renavam"
-                            type="text"
-                            maxLength={11}
-                            placeholder="Ex.: 99988899944"
-                            className={`${campoClass}`}
-                            value={formData.renavam}
-                            onChange={e => setFormData({ ...formData, renavam: e.target.value })}
-                        />
-                    </div>
-
-                    <div className={`${backCampoClass}`}>
-                        <label className={`${titleClass}`}><span className="text-[16px] text-red-500">*</span> Ano do exercício:</label>
-                        <input
-                            required
-                            name="exercicio"
-                            type="text"
-                            placeholder="Ex.: 2026"
-                            className={`${campoClass}`}
-                            value={formData.exercicio}
-                            onChange={e => setFormData({ ...formData, exercicio: e.target.value })}
-                        />
+                        <div className={`${backCampoClass} flex flex-col gap-2 max-[610px]:w-full w-1/2`}>
+                            <label className={`${titleClass}`}><span className="text-[16px] text-red-500">*</span>  Chave Pix:</label>
+                            <input
+                                required
+                                name="chave_pix"
+                                placeholder="Ex.: Celular"
+                                className={`${campoClass}`}
+                                value={formData.chave_pix}
+                                onChange={e => setFormData({ ...formData, chave_pix: e.target.value })}
+                            />
+                        </div>
                     </div>
 
                     <div className="flex flex-col border border-orange-combat max-[610px]:border-none p-5 max-[610px]:p-0 mb-5 gap-2">
@@ -133,10 +131,11 @@ export const FormIPVA = () => {
                                 value={formData.outras_infos}
                                 onChange={e => setFormData({ ...formData, outras_infos: e.target.value })}
                             />
-                            <p className="text-[12px]"><strong>Obs.:</strong> <br />* Caso não tenha certeza sobre alguma informação, sugiro que abra um ticket no painel de controle, enviando assim a foto do documento.</p>
+                            <p className="text-[12px]"><strong>Obs.:</strong> <br />* Deixe aqui quaisquer informações adicionais que queira compartilhar. </p>
 
                         </div>
                     </div>
+
                 </div>
 
                 <div className="flex flex-col items-center">

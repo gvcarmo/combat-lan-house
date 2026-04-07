@@ -83,8 +83,8 @@ export const Prazos = () => {
             {/* Renderização da Mensagem (O que faltava) */}
             {aviso && (
                 <div className={`w-full mb-6 p-4 border-l-4 transition-all ${isAdminOnline
-                        ? "bg-green-500/10 border-green-500 text-green-500"
-                        : "bg-orange-combat/10 border-orange-combat text-orange-combat"
+                    ? "bg-green-500/10 hover:bg-green/30 border-green-500 text-green-500"
+                    : "bg-orange-combat/10 hover:bg-orange-combat/30 border-orange-combat text-orange-combat"
                     }`}>
                     <p className="text-xs font-bold uppercase tracking-wider mb-1">
                         {isAdminOnline ? "🟢 Status do Atendimento:" : "📅 Informação de Prazo:"}

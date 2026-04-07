@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
+import { useConfirm } from "react-use-confirming-dialog";
 
 interface NovaArteState {
     infos_gerais: string,
@@ -21,6 +22,8 @@ export const FormCriarArte = () => {
         infos_gerais: '',
         enviarArquivo: []
     })
+
+    const confirm = useConfirm()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -42,14 +45,28 @@ export const FormCriarArte = () => {
         setIsSending(true);
         setGlobalLoading(true);
         try {
-            const response = await api.post('/pedidos', formData);
+            const proceed = await confirm({
+                title: "PEDIDO FINALIZADO",
+                message: "Pedido realizado com sucesso! Você será redirecionado para o pagamento no seu painel, onde poderá acompanhar o andamento do seu pedido.",
+                confirmText: "Confirmar",
+                cancelText: "Cancelar",
+                confirmColor: "#f97316",
+                confirmTextFont: "Inter, sans-serif",
+                cancelTextFont: "Inter, sans-serif",
+                dialogTextFont: "Georgia, serif"
+            })
+            if (proceed) {
+                const response = await api.post('/pedidos', {
+                    jobSlug: serviceName,
+                    dadosForm: {
+                        ...formData
+                    }
+                });
 
-            const novoPedidoId = response.data.id;
+                const novoPedidoId = response.data.id;
 
-            alert(`Pedido realizado com sucesso! Realize o pagamento.`);
-
-            navigate(`/${user?.nick}?aba=meus_pedidos&pagar=${novoPedidoId}`);
-
+                navigate(`/${user?.nick}?aba=meus_pedidos&pagar=${novoPedidoId}`);
+            }
         } catch (error) {
             alert("Erro ao enviar, verifique os dados.")
 
@@ -69,6 +86,8 @@ export const FormCriarArte = () => {
 
                 <div className="flex flex-col p-5 max-[610px]:p-0 gap-2">
                     <h5 className="text-[18px] font-semibold text-orange-combat mb-2.5">Dados Necessários:</h5>
+
+                    <p className="text-[12px]">* Selecione todas as imagens que deseja enviar de uma só vez (basta colocar todas em uma pasta para selecionar):</p>
 
                     <div className={`${backCampoClass} mb-6`}>
                         <label className={`${titleClass}`}>Escolher imagens:</label>
