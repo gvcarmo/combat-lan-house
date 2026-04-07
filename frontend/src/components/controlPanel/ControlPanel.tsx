@@ -118,7 +118,7 @@ export const ControlPanel = () => {
 
                             </div>
                             <div>
-                                {abaAtiva === 'fazer_pedido' && <FazerPedido />}
+                                {abaAtiva === 'fazer_pedido' && <FazerPedido id={0} />}
                                 {abaAtiva === 'meus_pedidos' && <MeusPedidos />}
                                 {abaAtiva === 'infos_usuario' && <UserInfos />}
                                 {abaAtiva === 'ticket' && <EnviarMensagem />}
